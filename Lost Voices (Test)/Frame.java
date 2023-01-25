@@ -14,7 +14,7 @@ public class Frame extends JFrame{
     private JButton record = new JButton("Record");
     private JButton play = new JButton("Play");
     private JButton stop = new JButton("Stop");
-    File file = new File("Test/Audio.wav");
+    File file = new File("Lost Voices (Test)/Test/Audio.wav");
     public static Clip clip;
     static boolean sonON = true;
     AudioInputStream ais;

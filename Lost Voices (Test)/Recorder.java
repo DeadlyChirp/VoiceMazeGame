@@ -14,7 +14,7 @@ public class Recorder {
     static final long RECORD_TIME = 6000;  // 5 secondes
  
     // Path du fichier de départ (car on crée un objet File uniquement avec un fichier déja présent)
-    File wavFile = new File("Test/Audio.wav");
+    File wavFile = new File("Lost Voices (Test)/Test/Audio.wav");
  
     //Typage du fichier 
     AudioFileFormat.Type fileType = AudioFileFormat.Type.WAVE;
