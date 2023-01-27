@@ -1,5 +1,3 @@
-import java.awt.*;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import java.io.File;
@@ -14,10 +12,9 @@ public class Frame extends JFrame{
     private JButton record = new JButton("Record");
     private JButton play = new JButton("Play");
     private JButton stop = new JButton("Stop");
-    File file = new File("Lost Voices (Test)/Test/Audio.wav");
-    public static Clip clip;
-    static boolean sonON = true;
-    AudioInputStream ais;
+    private File file = new File("Lost Voices (Test)/Test/Audio.wav");
+    private Clip clip;
+    private AudioInputStream ais;
 
 
     Frame() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
@@ -40,65 +37,48 @@ public class Frame extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
+    public void refresh () {
+        try {
+            clip = AudioSystem.getClip() ;
+        } catch (Exception e) {
+        }
+    }
+
     public void setActionButtons(){
-
         play.addActionListener(ev -> {
-
-                clip.start();
-                sonON = false;
-            
-        });
-
-        record.addActionListener(ev -> {
-            Recorder recorder = new Recorder();
-
-        
-            Thread stopper = new Thread(new Runnable() {
-                public void run() {
-                    try {
-                        Thread.sleep(recorder.RECORD_TIME);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                    recorder.finish();
-                }
-            });
-     
-            stopper.start();
-            recorder.j.setBounds(100, 50, 500, 20);
-            add(recorder.j);
-            recorder.j.setVisible(true);
-            //Ligne de commencement de l'enregistrement. 
-            recorder.record();  
-            
             try {
                 ais = AudioSystem.getAudioInputStream(file);
             } catch (UnsupportedAudioFileException | IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             try {
                 clip = AudioSystem.getClip();
             } catch (LineUnavailableException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             try {
                 clip.open(ais);
             } catch (LineUnavailableException | IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+            clip.start();
+        });
+
+        record.addActionListener(ev -> {
+            Recorder recorder = new Recorder();
+            recorder.record();
+            recorder.j.setBounds(100, 50, 500, 20);
+            add(recorder.j);
+            recorder.j.setVisible(true);
         });
 
         stop.addActionListener(ev -> {
             clip.stop();
-            sonON = true;
         });
-
     }
 
     public static void main(String[] args) throws UnsupportedAudioFileException, IOException, LineUnavailableException{
+        @SuppressWarnings("unused")
         Frame a = new Frame();
     }
 }
