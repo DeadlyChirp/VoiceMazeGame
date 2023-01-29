@@ -78,7 +78,7 @@ public class Recorder {
             System.out.println("Enregistrement du son en cours...");
 
             //Ici on va simplement prendre tout les bits qu'on a capturé juste avant et on va les écrire sur le fichier AUDIO
-            AudioSystem.write(ais,AudioFileFormat.Type.WAVE, new File("Lost Voices (Test)/Test/Audio.wav"));
+            AudioSystem.write(ais,AudioFileFormat.Type.WAVE, new File("Records/Audio.wav"));
         } catch (LineUnavailableException ex) {
             ex.printStackTrace();
         } catch (IOException ioe) {
@@ -90,5 +90,6 @@ public class Recorder {
         //ici on ferme le dateline pour finaliser le traitement du son et finaliser l'enregistrement. 
         line.stop(); // arrete de capturer le son
         line.close(); // libere les ressources audio que le systeme utilise
+        System.out.println("Entregistrement Fini .");
     }
 }
