@@ -1,18 +1,10 @@
 import javax.sound.sampled.*;
-import javax.swing.JLabel;
-
 import java.io.*;
  
 
 public class Recorder {
-    JLabel j = new JLabel();
-
     //Durée du record en long 
-    static final long RECORD_TIME = 6000;  // 5 secondes
- 
-    // Path du fichier de départ (car on crée un objet File uniquement avec un fichier déja présent)
-    private File wavFile = new File("Lost Voices (Test)/Test/Audio.wav");
-
+    static final long RECORD_TIME = 6000;  // 5 secondes 
     // the line from which audio data is captured
     private TargetDataLine line;
  
@@ -23,8 +15,7 @@ public class Recorder {
         int channels = 2; //Fichier stéréo
         boolean signed = true;
         boolean bigEndian = true;
-        AudioFormat format = new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
-        return format;
+        return new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
     }
 
     public void record () {
@@ -76,7 +67,6 @@ public class Recorder {
             // checks if system supports the data line
             if (!AudioSystem.isLineSupported(info)) {
                 System.out.println("DataLine incorrecte ou non supporté");
-                j.setText("DataLine incorrecte ou non supporté");
                 System.exit(0);
             }
             line = (TargetDataLine) AudioSystem.getLine(info);
@@ -84,16 +74,11 @@ public class Recorder {
             line.start();   // start capturing
  
             System.out.println("Captation du son en cours...");
-            j.setText("Captation du son en cours...");
- 
             AudioInputStream ais = new AudioInputStream(line);
- 
             System.out.println("Enregistrement du son en cours...");
-            j.setText("Enregistrement du son en cours...");
- 
+
             //Ici on va simplement prendre tout les bits qu'on a capturé juste avant et on va les écrire sur le fichier AUDIO
-            AudioSystem.write(ais,AudioFileFormat.Type.WAVE, wavFile);
- 
+            AudioSystem.write(ais,AudioFileFormat.Type.WAVE, new File("Lost Voices (Test)/Test/Audio.wav"));
         } catch (LineUnavailableException ex) {
             ex.printStackTrace();
         } catch (IOException ioe) {
@@ -105,9 +90,5 @@ public class Recorder {
         //ici on ferme le dateline pour finaliser le traitement du son et finaliser l'enregistrement. 
         line.stop(); // arrete de capturer le son
         line.close(); // libere les ressources audio que le systeme utilise
-        System.out.println("Enregistrement fini, Consultez le fichier Audio dans le Dossier TEST");
-        j.setText("Enregistrement fini, Consultez le fichier Audio dans le Dossier TEST");
-
     }
-
 }
