@@ -1,12 +1,8 @@
 import javax.sound.sampled.*;
 import java.io.*;
  
-
 public class Recorder {
-    //Durée du record en long 
-    static final long RECORD_TIME = 6000;  // 5 secondes 
-    // the line from which audio data is captured
-    private TargetDataLine line;
+    private TargetDataLine line;// the line from which audio data is captured
  
     //Format audio. 
     private AudioFormat getAudioFormat() {
@@ -18,25 +14,13 @@ public class Recorder {
         return new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
     }
 
-    public void record () {
-        Thread threadStopper = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    Thread.sleep(Recorder.RECORD_TIME);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-                finishRecording();
-            }
-        });
-
+    public void startRecord () {
         Thread threadRecorder = new Thread(new Runnable() {
             public void run () {
-                startRecording();
+                record();
             }
         }) ; 
         threadRecorder.start();
-        threadStopper.start();
         /* IMPORTANT
             Chose a savoir :
                 startRecording() , va interrompre l'execution du Thread actuel
@@ -58,8 +42,8 @@ public class Recorder {
             A voir plus tard         
         */
     }
- 
-    private void startRecording() {
+
+    private void record() {
         try {
             AudioFormat format = getAudioFormat();
             DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
@@ -86,10 +70,11 @@ public class Recorder {
         }
     }
  
-    private void finishRecording() {
+    public void stopRecording() {
         //ici on ferme le dateline pour finaliser le traitement du son et finaliser l'enregistrement. 
         line.stop(); // arrete de capturer le son
         line.close(); // libere les ressources audio que le systeme utilise
         System.out.println("Entregistrement Fini .");
     }
+
 }
