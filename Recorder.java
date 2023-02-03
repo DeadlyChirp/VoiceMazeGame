@@ -1,20 +1,8 @@
 import javax.sound.sampled.*;
-import javax.swing.JLabel;
-
 import java.io.*;
  
-
 public class Recorder {
-    JLabel j = new JLabel();
-
-    //Durée du record en long 
-    static final long RECORD_TIME = 6000;  // 5 secondes
- 
-    // Path du fichier de départ (car on crée un objet File uniquement avec un fichier déja présent)
-    private File wavFile = new File("Lost Voices (Test)/Test/Audio.wav");
-
-    // the line from which audio data is captured
-    private TargetDataLine line;
+    private TargetDataLine line;// the line from which audio data is captured
  
     //Format audio. 
     private AudioFormat getAudioFormat() {
@@ -23,29 +11,16 @@ public class Recorder {
         int channels = 2; //Fichier stéréo
         boolean signed = true;
         boolean bigEndian = true;
-        AudioFormat format = new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
-        return format;
+        return new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
     }
 
-    public void record () {
-        Thread threadStopper = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    Thread.sleep(Recorder.RECORD_TIME);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-                finishRecording();
-            }
-        });
-
+    public void startRecord () {
         Thread threadRecorder = new Thread(new Runnable() {
             public void run () {
-                startRecording();
+                record();
             }
         }) ; 
         threadRecorder.start();
-        threadStopper.start();
         /* IMPORTANT
             Chose a savoir :
                 startRecording() , va interrompre l'execution du Thread actuel
@@ -67,8 +42,8 @@ public class Recorder {
             A voir plus tard         
         */
     }
- 
-    private void startRecording() {
+
+    private void record() {
         try {
             AudioFormat format = getAudioFormat();
             DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
@@ -76,7 +51,6 @@ public class Recorder {
             // checks if system supports the data line
             if (!AudioSystem.isLineSupported(info)) {
                 System.out.println("DataLine incorrecte ou non supporté");
-                j.setText("DataLine incorrecte ou non supporté");
                 System.exit(0);
             }
             line = (TargetDataLine) AudioSystem.getLine(info);
@@ -84,16 +58,11 @@ public class Recorder {
             line.start();   // start capturing
  
             System.out.println("Captation du son en cours...");
-            j.setText("Captation du son en cours...");
- 
             AudioInputStream ais = new AudioInputStream(line);
- 
             System.out.println("Enregistrement du son en cours...");
-            j.setText("Enregistrement du son en cours...");
- 
+
             //Ici on va simplement prendre tout les bits qu'on a capturé juste avant et on va les écrire sur le fichier AUDIO
-            AudioSystem.write(ais,AudioFileFormat.Type.WAVE, wavFile);
- 
+            AudioSystem.write(ais,AudioFileFormat.Type.WAVE, new File("Records/Audio.wav"));
         } catch (LineUnavailableException ex) {
             ex.printStackTrace();
         } catch (IOException ioe) {
@@ -101,13 +70,11 @@ public class Recorder {
         }
     }
  
-    private void finishRecording() {
+    public void stopRecording() {
         //ici on ferme le dateline pour finaliser le traitement du son et finaliser l'enregistrement. 
         line.stop(); // arrete de capturer le son
         line.close(); // libere les ressources audio que le systeme utilise
-        System.out.println("Enregistrement fini, Consultez le fichier Audio dans le Dossier TEST");
-        j.setText("Enregistrement fini, Consultez le fichier Audio dans le Dossier TEST");
-
+        System.out.println("Entregistrement Fini .");
     }
 
 }
