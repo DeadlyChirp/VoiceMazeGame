@@ -4,9 +4,13 @@ import java.util.Random;
 public class Labyrinthe {
     
     private Case[][] plateau;
+    private Joueur joueur;
+    private Case pointArrivee;
 
-    Labyrinthe() {
-        plateau = new Case[20][20];
+
+    Labyrinthe(Joueur joueur) {
+        this.joueur = joueur;
+        plateau = new Case[80][80];
         for (int i = 0; i < plateau.length; i++) {
             for (int j = 0; j < plateau[i].length; j++) {
                 plateau[i][j] = new Case(i, j);
@@ -161,6 +165,103 @@ public class Labyrinthe {
             caseFrontiere.remove(c);
             ajouteLiensEntreCase(c);
         }
+        
+        verifPoints();
+    }
+
+    public void verifPoints() {
+        boolean caseTrouvee = false;
+
+        for (int i = 0; i < plateau.length; i++) {
+            for (int j = 0; j < plateau[i].length; j++) {
+                if (plateau[i][j].getOuvert()) {
+                    joueur.setX(i);
+                    joueur.setY(j);
+                    caseTrouvee = true;
+                    break;
+                }
+            }
+            if (caseTrouvee) break;
+        }
+        caseTrouvee = false;
+        for (int i = plateau.length-1; i >= 0; i--) {
+            for (int j = plateau[i].length-1; j >= 0; j--){
+                if (plateau[i][j].getOuvert()){
+                    pointArrivee = plateau[i][j];
+                    caseTrouvee = true;
+                    break;
+                }
+            }
+            if (caseTrouvee) break;
+        }
+    }
+
+    boolean possible(Direction dir , int steps) {
+        int sens = 0; // 
+        switch(dir) {
+            case HAUT : sens = -1; break;
+            case BAS : sens = 1; break;
+            case GAUCHE : sens = -1; break;
+            default : sens = 1; break;
+        }
+        if (dir == Direction.HAUT || dir == Direction.BAS) {
+            for (int i = 0; i < steps; i++) {
+                if (joueur.getX()+sens < 0 || joueur.getX()+sens >= plateau.length || !plateau[joueur.getX()+sens][joueur.getY()].getOuvert()) {
+                    return false;
+                }
+            }
+        } else {
+            for (int i = 0; i < steps; i++) {
+                if (joueur.getY()+sens < 0 || joueur.getY()+sens >= plateau[joueur.getX()].length || !plateau[joueur.getX()][joueur.getY()+sens].getOuvert()) {
+                    return false;
+                }
+            }
+        }
+        joueur.move(dir, steps);
+        return true;
+    }
+
+    void possible2(Direction dir , int steps) {
+        int cpt = 0;
+        switch(dir) {
+            case HAUT : for(int i = joueur.getX()-1; i>=0;i--) {
+                if(plateau[i][joueur.getY()].getOuvert()) {
+                    cpt++;
+                } else { 
+                    break;
+                }
+            }
+                break;
+            case BAS : for(int i = joueur.getX()+1; i<plateau.length;i++) {
+                if(plateau[i][joueur.getY()].getOuvert()) {
+                    cpt++;
+                } else { 
+                    break;
+                }
+            }
+                break;
+            case GAUCHE : for(int i = joueur.getY()-1; i>=0;i--) {
+                if(plateau[joueur.getX()][i].getOuvert()) {
+                    cpt++;
+                } else { 
+                    break;
+                }
+            }
+                break;
+            default : for(int i = joueur.getY()+1; i<plateau[joueur.getX()].length;i++) {
+                if(plateau[i][joueur.getX()].getOuvert()) {
+                    cpt++;
+                } else { 
+                    break;
+                }
+            }
+                break;
+        }
+        if(cpt >= steps){
+            joueur.move(dir, steps);
+        } else {
+            joueur.move(dir, cpt);
+        }
     }
 
     public void printLabyrinthe() {
@@ -168,14 +269,20 @@ public class Labyrinthe {
         for (int i = 0; i< plateau.length+2; i++) {
             System.out.print("▓");
         }
-
         System.out.println();
         for (int i = 0; i < plateau.length; i++) {
             for (int j = 0; j < plateau[i].length; j++) {
                 c = plateau[i][j];
-               if (j == 0) System.out.print("▓");
-                if (c.getOuvert()) System.out.print(" ");
-                else System.out.print("▓");
+                if (j == 0) System.out.print("▓");
+                if (c.getOuvert()) {
+                    if (joueur.getX() == i && joueur.getY() == j) {
+                        System.out.print("|");
+                     } else if (c == pointArrivee) {
+                        System.out.print("A");
+                     } else {
+                        System.out.print(" ");
+                     }
+                } else System.out.print("▓");
             }
             System.out.println("▓");
         }
@@ -189,9 +296,14 @@ public class Labyrinthe {
     }
 
     public static void main(String[] args) {
-        Labyrinthe l = new Labyrinthe();
+        Joueur j = new Joueur("Bawww");
+        Labyrinthe l = new Labyrinthe(j);
         l.genereLabyrinthe();
         l.printLabyrinthe();
+        System.out.println(l.joueur.getX() + " " + l.joueur.getY());
+        l.possible2(Direction.BAS, 90);
+        l.printLabyrinthe();
+        System.out.println(l.joueur.getX() + " " + l.joueur.getY());
     }
 
 
