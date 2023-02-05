@@ -10,7 +10,7 @@ public class Labyrinthe {
 
     Labyrinthe(Joueur joueur) {
         this.joueur = joueur;
-        plateau = new Case[80][80];
+        plateau = new Case[20][30];
         for (int i = 0; i < plateau.length; i++) {
             for (int j = 0; j < plateau[i].length; j++) {
                 plateau[i][j] = new Case(i, j);
@@ -35,7 +35,7 @@ public class Labyrinthe {
             if (i+x < plateau.length && i+x >= 0 && !plateau[i+x][y].getOuvert()) {
                 caseFrontiere.add(plateau[i+x][y]);
             } 
-            if (i+y < plateau.length && i+y >= 0  && !plateau[x][i+y].getOuvert()) {
+            if (i+y < plateau[x].length && i+y >= 0  && !plateau[x][i+y].getOuvert()) {
                 caseFrontiere.add(plateau[x][i+y]);
             }
         }
@@ -60,7 +60,7 @@ public class Labyrinthe {
         for (int i = -2; i <= 2; i += 4) {
             if ( i+c.getX() < plateau.length && i+c.getX() >= 0 && plateau[i+c.getX()][c.getY()].getOuvert()) {
                 voisin.add(plateau[i+c.getX()][c.getY()]);
-            } else if (i+c.getY() < plateau.length && i+c.getY() >= 0 && plateau[c.getX()][i+c.getY()].getOuvert()) {
+            } else if (i+c.getY() < plateau[c.getX()].length && i+c.getY() >= 0 && plateau[c.getX()][i+c.getY()].getOuvert()) {
                 voisin.add(plateau[c.getX()][i+c.getY()]);
             }
         }
@@ -266,7 +266,7 @@ public class Labyrinthe {
 
     public void printLabyrinthe() {
         Case c;
-        for (int i = 0; i< plateau.length+2; i++) {
+        for (int i = 0; i< plateau[0].length+2; i++) {
             System.out.print("▓");
         }
         System.out.println();
@@ -287,7 +287,7 @@ public class Labyrinthe {
             System.out.println("▓");
         }
        
-        for (int i = 0; i< plateau.length+2; i++) {
+        for (int i = 0; i< plateau[0].length+2; i++) {
             System.out.print("▓");
         }
 
