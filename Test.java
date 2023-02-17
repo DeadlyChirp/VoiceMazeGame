@@ -17,7 +17,7 @@ public class Test {
 
         do {
             System.out.println("Que voulez-vous faire ?");
-            res = sc.next() ; 
+            res = sc.nextLine() ; 
             switch(res) {
                 case "1" :
                     rec.startRecord();
@@ -27,9 +27,9 @@ public class Test {
                     break ;
                 case "exec" :
                     System.out.println("Veuillez entrer la commande a executer :");
-                    res = sc.nextLine() ; 
+                    String cmd = sc.nextLine() ; 
                     try {
-                        term.execCommand(res);
+                        term.execCommand(cmd);
                     } catch (Exception e) {
                         System.out.println("Une erreur a eu lieu lors de l'execution de la commande");
                         e.printStackTrace();
