@@ -16,7 +16,7 @@ public class Terminal {
 
     // Transforme la commande en String []
     private static String [] getCommand (String command) {
-        return command.split(" ") ; 
+        return command.trim().split(" ") ; 
     }
 
     // Affiche le resultat de la commande sur la Sortie de commande
@@ -28,8 +28,7 @@ public class Terminal {
     }
 
     // Execute une commande Shell
-    @SuppressWarnings("unused") 
-    private void execCommand (String command) {
+    public void execCommand (String command) {
         processBuilder.command(getCommand(command)) ; 
         processBuilder.directory(null) ;
         try {
