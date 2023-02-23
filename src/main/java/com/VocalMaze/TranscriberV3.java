@@ -2,16 +2,19 @@ package com.VocalMaze;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.ByteBuffer;
 import java.util.concurrent.ExecutionException;
-
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.transcribe.AmazonTranscribe;
 import com.amazonaws.services.transcribe.AmazonTranscribeClientBuilder;
 import com.amazonaws.services.transcribe.model.LanguageCode;
@@ -21,18 +24,26 @@ import com.amazonaws.services.transcribe.model.StartTranscriptionJobRequest;
 import com.amazonaws.services.transcribe.model.StartTranscriptionJobResult;
 import com.amazonaws.services.transcribe.model.Transcript;
 import com.amazonaws.services.transcribe.model.TranscriptionJob;
-import com.amazonaws.services.transcribe.model.TranscriptionJobStatus;
-import java.util.Base64;
+import java.util.Random;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
-import com.amazonaws.ClientConfiguration;
-
-
+import com.amazonaws.SdkClientException;
 
 public class TranscriberV3 {
-    public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
+
+    String result; 
+
+    TranscriberV3(String path) throws IOException, InterruptedException, ExecutionException, URISyntaxException{
+        result = Transcriber(path); //path du fichier WAV
+    }
+
+    // public static void main(String[] args) throws IOException, InterruptedException, ExecutionException, URISyntaxException{
+    //     TranscriberV3 test = new TranscriberV3("src/main/java/com/VocalMaze/Records/Audio.wav");
+    //     System.out.println(test.result);
+    // }
+   
+   public String Transcriber(String path) throws IOException, InterruptedException, ExecutionException, URISyntaxException {
 
         // Configurer les  AWS Credentials
         String accessKey = "AKIAVXTIJKHOAUWCIXFF";
@@ -45,17 +56,46 @@ public class TranscriberV3 {
                 .withRegion(Regions.EU_WEST_3)
                 .build();
 
+        //Création du  Amazon S3 client pour transférer le fichier vers le cloud
+        AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
+        .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
+        .withRegion(Regions.EU_WEST_3)
+        .build();
        
         // On ecrit le nom du job et le language de traduction
-        String jobName = "vocalmaze5";
+        char a = ' ';
+        String b = "";
+        Random rd = new Random();
+        for (int i = 0; i< 10; i++) {
+            a = (char) rd.nextInt(97, 123);
+            b += a;
+        }
+        String jobName = b; 
         LanguageCode languageCode = LanguageCode.FrFR;
 
         //On choisis le format du fichier auudio
         MediaFormat mediaFormat = MediaFormat.Wav;
 
-        // On place le fichier audio
-        Media media = new Media().withMediaFileUri("s3://vocalmaze/Audio(1).wav");
+        // On tranfère le fichier audio dans un bucket dont le nom est aléatoire
+        String bucketName = "vocalmaze";
+        String keyName = b;
+        String filePath = path; //chemin vers l'audio local
+        try {
+            File file = new File(filePath);
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType("audio/mpeg");
+            PutObjectRequest request = new PutObjectRequest(bucketName, keyName, file)
+                    .withMetadata(metadata);
+            s3Client.putObject(request);
+            System.out.println("Upload réussi");
+        } catch (AmazonServiceException e) {
+            e.printStackTrace();
+        } catch (SdkClientException e) {
+            e.printStackTrace();
+        }
 
+        System.out.println(keyName);
+        Media media = new Media().withMediaFileUri("s3://vocalmaze/" + keyName);
         // On met en place la requete pour la traduction
         StartTranscriptionJobRequest transcriptionJobRequest = new StartTranscriptionJobRequest()
                 .withMedia(media)
@@ -98,7 +138,7 @@ public class TranscriberV3 {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                System.out.println("\n\nTRADUCTION : " + transcriptText);
+        return ("\nTRADUCTION : " + transcriptText);
    
     }
 }
