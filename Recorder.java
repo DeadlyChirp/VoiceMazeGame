@@ -8,7 +8,7 @@ public class Recorder {
     private AudioFormat getAudioFormat() {
         float sampleRate = 16000;//Fréquence d'échantillonage du son, CAD la compression du nombre de 0 ou 1 du signal binaire 
         int sampleSizeInBits = 8; //Bitrate du fichier (Nombre de bit par seconde du fichier)
-        int channels = 2; //Fichier stéréo
+        int channels = 1; //Fichier stéréo
         boolean signed = true;
         boolean bigEndian = true;
         return new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
