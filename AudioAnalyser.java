@@ -8,6 +8,9 @@ public class AudioAnalyser {
 
     public void reset () {
         // TODO
+        // la fonction va reset tous les champs
+        // a null pour les objets
+        // car on va utiliser le meme truc puour tous les audios
     }
 
     public int getNbLocFemale() {
@@ -20,10 +23,13 @@ public class AudioAnalyser {
 
     public void loadFile (String path) throws ErrorLoadingFileException {
         // TODO
+        // si jamais c'est pas possible de load le file.seg avec le path
+        // il faut lancer l'exception
     }
 
     public void analysis () {
         // TODO
+        // tu parse le champs File
     }
     
 }
