@@ -70,7 +70,7 @@ public class TranscriberV3 {
             a = (char) rd.nextInt(97, 123);
             b += a;
         }
-        String jobName = b; 
+        String jobName = b; //le nom du travail de transcription est généré de manière aléatoire
         LanguageCode languageCode = LanguageCode.FrFR;
 
         //On choisis le format du fichier auudio
@@ -87,14 +87,13 @@ public class TranscriberV3 {
             PutObjectRequest request = new PutObjectRequest(bucketName, keyName, file)
                     .withMetadata(metadata);
             s3Client.putObject(request);
-            System.out.println("Upload réussi");
+            //System.out.println("Upload réussi");
         } catch (AmazonServiceException e) {
             e.printStackTrace();
         } catch (SdkClientException e) {
             e.printStackTrace();
         }
 
-        System.out.println(keyName);
         Media media = new Media().withMediaFileUri("s3://vocalmaze/" + keyName);
         // On met en place la requete pour la traduction
         StartTranscriptionJobRequest transcriptionJobRequest = new StartTranscriptionJobRequest()
@@ -138,7 +137,19 @@ public class TranscriberV3 {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-        return ("\nTRADUCTION : " + transcriptText);
+        
+                String newString = "";
+                String[] words = transcriptText.split("\\s+");
+
+                for (String word : words) {
+                    if (word.contains("haut") || word.contains("bas") || word.contains("gauche") || word.contains("droite")) {
+                        newString += word + " ";
+                    }
+                }
+
+                              
+                return ("\nMOT DE DEPLACEMENT TROUVE : " + newString + "\n\n" + "TRADUCTION INITIAL : " + transcriptText);
+       
    
     }
 }
