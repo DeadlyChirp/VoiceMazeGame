@@ -146,8 +146,7 @@ public class TranscriberV3 {
                         newString += word + " ";
                     }
                 }
-
-                              
+          
                 return ("\nMOT DE DEPLACEMENT TROUVE : " + newString + "\n\n" + "TRADUCTION INITIAL : " + transcriptText);
        
    
