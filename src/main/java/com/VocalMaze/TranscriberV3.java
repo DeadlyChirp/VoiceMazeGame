@@ -24,9 +24,12 @@ import com.amazonaws.services.transcribe.model.StartTranscriptionJobRequest;
 import com.amazonaws.services.transcribe.model.StartTranscriptionJobResult;
 import com.amazonaws.services.transcribe.model.Transcript;
 import com.amazonaws.services.transcribe.model.TranscriptionJob;
+
+import java.util.ArrayList;
 import java.util.Random;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.VocalMaze.ModeleUtils.Direction;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
 
@@ -135,11 +138,17 @@ public class TranscriberV3 {
         
                 String newString = "";
                 String[] words = transcriptText.split("\\s+");
-
+                ArrayList<Direction> direction =  new ArrayList<Direction>();
+                int i =0;
                 for (String word : words) {
                     if (word.contains("haut") || word.contains("bas") || word.contains("gauche") || word.contains("droite")) {
                         newString += word + " ";
+                        if(word.contains("haut")){direction.add(Direction.HAUT);}
+                        if(word.contains("bas")){direction.add(Direction.BAS);}
+                        if(word.contains("gauche")){direction.add(Direction.GAUCHE);}
+                        if(word.contains("droite")){direction.add(Direction.DROITE);}
                     }
+                    i++;
                 }
           
                 return ("\nMOT DE DEPLACEMENT TROUVE : " + newString + "\n\n" + "TRADUCTION INITIAL : " + transcriptText);
