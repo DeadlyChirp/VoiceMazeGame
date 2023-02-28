@@ -39,7 +39,7 @@
       <scope>test</scope>
   </dependency> 
   <dependency>
-    <groupId>LIUM_SpkDiarization-4.2</groupId>
+    <groupId>lium_spkdiarization</groupId>
     <artifactId>LIUM_4.2</artifactId>
     <version>4.2</version>
   </dependency>

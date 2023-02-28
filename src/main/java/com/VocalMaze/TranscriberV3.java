@@ -38,11 +38,6 @@ public class TranscriberV3 {
         result = Transcriber(path); //path du fichier WAV
     }
 
-    // public static void main(String[] args) throws IOException, InterruptedException, ExecutionException, URISyntaxException{
-    //     TranscriberV3 test = new TranscriberV3("src/main/java/com/VocalMaze/Records/Audio.wav");
-    //     System.out.println(test.result);
-    // }
-   
    public String Transcriber(String path) throws IOException, InterruptedException, ExecutionException, URISyntaxException {
 
         // Configurer les  AWS Credentials
