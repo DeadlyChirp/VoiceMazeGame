@@ -6,6 +6,8 @@ import javax.swing.JPanel;
 
 import com.VocalMaze.ModeleUtils.Joueur;
 import com.VocalMaze.ModeleUtils.Labyrinthe;
+import com.VocalMaze.ViewUtils.LabyrintheView;
+import com.VocalMaze.ViewUtils.SlideBar;
 
 public class GameView extends JPanel{
     private Controller controller;
