@@ -37,15 +37,12 @@
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
       <scope>test</scope>
-  </dependency>
- 
+  </dependency> 
   <dependency>
     <groupId>LIUM_SpkDiarization-4.2</groupId>
     <artifactId>LIUM_4.2</artifactId>
     <version>4.2</version>
   </dependency>
-
-
   <dependency>
     <groupId>com.amazonaws</groupId>
     <artifactId>aws-java-sdk-transcribe</artifactId>
