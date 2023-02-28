@@ -9,7 +9,7 @@ public class Test {
         Recorder rec = new Recorder() ; 
         Terminal term = new Terminal() ; 
         @SuppressWarnings("unused")
-        String com = "/usr/bin/java -Xmx2024m -jar ./LIUM_SpkDiarization-4.2.jar --fInputMask=./Records/Audio.wav --sOutputMask=./Analysis/Audio.seg --fInputDesc=audio2sphinx,1:1:0:0:0:0,21,0:0:0:0 --doCEClustering Audio --help" ; 
+        String com = "/usr/bin/java -Xmx2024m -jar ./LIUM_SpkDiarization-4.2.jar --fInputMask=./Records/Audio.wav --sOutputMask=./Analysis/Audio.seg --fInputDesc=audio16Khz2sphinx:sphinx,1:1:0:0:0:0,16,0:0:0:0 --doCEClustering Audio --help" ; 
 
         System.out.print("voici les commandes dispo :\na) '1' : pour commencer a enregistrer un vocal\n");
         System.out.println("b) '0' : pour arreter l'enregistrement du vocal");
