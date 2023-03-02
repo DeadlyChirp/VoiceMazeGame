@@ -1,7 +1,9 @@
+package com.VocalMaze.ModeleUtils;
+
 import java.io.File;
 import java.util.Scanner;
 
-import Exceptions.ErrorLoadingFileException;
+import com.VocalMaze.Exceptions.ErrorLoadingFileException;;
 
 public class SegAnalyser {
     private File segFile ;
