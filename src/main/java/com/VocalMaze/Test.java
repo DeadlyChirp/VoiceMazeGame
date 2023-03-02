@@ -49,6 +49,7 @@ public class Test {
                     break;
             }
         }while (!res.equals("exit"));
+        sc.close();
     }
 
 }

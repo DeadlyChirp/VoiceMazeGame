@@ -2,8 +2,6 @@ package com.VocalMaze;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
@@ -45,14 +43,10 @@ public class TranscriberV3 {
     }
 
     public ArrayList<Direction> parse(String transcriptText) {
-
-        String newString = "";
         String[] words = transcriptText.split("\\s+");
         direction = new ArrayList<Direction>();
-        int i = 0;
         for (String word : words) {
             if (word.contains("haut") || word.contains("bas") || word.contains("gauche") || word.contains("droite")) {
-                newString += word + " ";
                 if (word.contains("haut")) {
                     direction.add(Direction.HAUT);
                 }
@@ -66,7 +60,6 @@ public class TranscriberV3 {
                     direction.add(Direction.DROITE);
                 }
             }
-            i++;
         }
         return direction;
     }
@@ -161,6 +154,7 @@ public class TranscriberV3 {
             BufferedReader in = new BufferedReader(new InputStreamReader(transcriptUrl.openStream()));
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
+                @SuppressWarnings("deprecation")
                 JsonObject jsonObject = new JsonParser().parse(inputLine).getAsJsonObject();
                 transcriptText += jsonObject.get("results").getAsJsonObject().get("transcripts").getAsJsonArray().get(0)
                         .getAsJsonObject().get("transcript").getAsString();

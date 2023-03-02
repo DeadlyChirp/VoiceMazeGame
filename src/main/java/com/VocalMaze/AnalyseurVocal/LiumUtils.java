@@ -77,11 +77,10 @@ public class LiumUtils {
         return result;
     }
 
-    private static void execute(final String[] args) {
+    public static void execute(final String[] args) {
         if (args == null || args.length == 0) {
             return;
         }
-
         Diarization.main(args);
     }
 
@@ -89,6 +88,7 @@ public class LiumUtils {
         Diarization diarization = new Diarization();
         Result result = new Result();
         final Parameter parameter = Diarization.getParameter(args);
+        parameter.getParameterInputFeature().setFeaturesDescription("audio16Khz2sphinx:sphinx,1:1:0:0:0:0,18,0:0:0:0");
         if (Objects.equals(parameter.getParameterDiarization().getSystem(), ParameterBNDiarization.SystemString[1])) {
             parameter.getParameterSegmentationSplit().setSegmentMaximumLength(10 * parameter.getParameterSegmentationInputFile().getRate());
         }

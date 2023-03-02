@@ -1,11 +1,9 @@
 package com.VocalMaze;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import com.VocalMaze.ModeleUtils.Joueur;
-import com.VocalMaze.ModeleUtils.Labyrinthe;
 import com.VocalMaze.ViewUtils.LabyrintheView;
 import com.VocalMaze.ViewUtils.SlideBar;
 
