@@ -2,7 +2,7 @@ package Exceptions;
 
 public class ErrorLoadingFileException extends RuntimeException{
     
-    ErrorLoadingFileException () {
+    public ErrorLoadingFileException () {
         super() ; 
     }
 }

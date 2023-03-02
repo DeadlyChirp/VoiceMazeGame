@@ -1,4 +1,6 @@
 import java.io.File;
+import java.util.Scanner;
+
 import Exceptions.ErrorLoadingFileException;
 
 public class AudioAnalyser {
@@ -6,11 +8,10 @@ public class AudioAnalyser {
     private int nbLocMale ;
     private int nbLocFemale ;
 
-    public void reset () {
-        // TODO
-        // la fonction va reset tous les champs
-        // a null pour les objets
-        // car on va utiliser le meme truc puour tous les audios
+    private void reset () {
+        nbLocMale = 0 ;
+        nbLocFemale = 0 ; 
+        segFile = null ; 
     }
 
     public int getNbLocFemale() {
@@ -21,15 +22,27 @@ public class AudioAnalyser {
         return nbLocMale;
     }
 
-    public void loadFile (String path) throws ErrorLoadingFileException {
-        // TODO
-        // si jamais c'est pas possible de load le file.seg avec le path
-        // il faut lancer l'exception
+    private void loadFile (String path){
+        segFile = new File(path) ; 
     }
 
-    public void analysis () {
-        // TODO
-        // tu parse le champs File
+    public void analysis (String path) throws ErrorLoadingFileException {
+        reset();
+        loadFile(path);
+        Scanner sc ;
+        String line ; 
+        try {
+            sc = new Scanner(segFile) ; 
+        } catch (Exception e) {
+           throw new ErrorLoadingFileException() ;
+        }
+        sc.useDelimiter(";;") ; 
+        while(sc.hasNext()) {
+            line = sc.next() ; 
+            if (line.contains(" M ")) nbLocMale++ ;
+            if (line.contains(" F ")) nbLocFemale++ ; 
+        }
+        sc.close();
     }
     
 }
