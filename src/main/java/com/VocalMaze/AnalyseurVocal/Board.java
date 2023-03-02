@@ -1,4 +1,4 @@
-package com.VocalMaze.src;
+package com.VocalMaze.AnalyseurVocal;
 
 import javax.swing.*;
 import java.awt.*;

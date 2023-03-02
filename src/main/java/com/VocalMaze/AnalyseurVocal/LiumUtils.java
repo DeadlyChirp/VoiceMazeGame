@@ -1,4 +1,4 @@
-package com.VocalMaze.src;
+package com.VocalMaze.AnalyseurVocal;
 
 import fr.lium.spkDiarization.lib.MainTools;
 import fr.lium.spkDiarization.libClusteringData.Cluster;

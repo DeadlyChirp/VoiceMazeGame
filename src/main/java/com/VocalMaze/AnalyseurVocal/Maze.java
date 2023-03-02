@@ -1,7 +1,10 @@
-package com.VocalMaze.src;
+package com.VocalMaze.AnalyseurVocal;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import com.VocalMaze.Recorder;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -82,14 +85,14 @@ public class Maze {
             if (isRunning) {
                 start.setText("Start");
                 isRunning = false;
-                recorder.stop();
+                recorder.stopRecording();
 
                 auto.setEnabled(false);
                 start.setEnabled(false);
                 test.setEnabled(false);
 
                 new Thread(() -> {
-                    try {
+                    try { 
                         String segment = "test.seg";
                         LiumUtils.Result result = LiumUtils.resultFromSegment(segment);
                         int step = result.male + result.female * 2;
@@ -108,7 +111,7 @@ public class Maze {
             } else {
                 start.setText("Stop");
                 isRunning = true;
-                recorder.start();
+                recorder.startRecord ();
             }
         });
 
