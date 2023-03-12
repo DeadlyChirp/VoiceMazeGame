@@ -1,5 +1,3 @@
-package com.VocalMaze.AnalyseurVocal;
-
 import fr.lium.spkDiarization.lib.MainTools;
 import fr.lium.spkDiarization.libClusteringData.Cluster;
 import fr.lium.spkDiarization.libClusteringData.ClusterSet;
@@ -12,10 +10,7 @@ import fr.lium.spkDiarization.system.Diarization;
 
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioSystem;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -39,6 +34,14 @@ public class LiumUtils {
         }
 
         return executeForResult(new String[]{"--fInputMask=" + audioFile});
+    }
+
+    public static void executeCommand(String command) {
+        if (command == null) {
+            return;
+        }
+
+        execute(command.split("\\s+"));
     }
 
     public static Result resultFromSegment(String segmentFile) {
@@ -77,10 +80,11 @@ public class LiumUtils {
         return result;
     }
 
-    public static void execute(final String[] args) {
+    private static void execute(final String[] args) {
         if (args == null || args.length == 0) {
             return;
         }
+
         Diarization.main(args);
     }
 
@@ -122,14 +126,12 @@ public class LiumUtils {
         return result;
     }
 
+    //Test LiumUtil seulement, pas d'utilisation dans le jeu
     public static void main(String[] args) throws Exception {
         args = new String[]{
                 "--fInputMask=test/test(3).wav",
-                // "--fInputMask=test/test.wav",
-                // "--fInputMask=test/Audio.wav",
         };
 
-        // String filename = "test/test(2).wav";
         String filename = "audio.wav";
 
         Result result = new Result();
@@ -139,6 +141,7 @@ public class LiumUtils {
             e.printStackTrace();
         }
 
+        executeCommand("--fInputMask=" + filename + " --sOutputMask=test.seg --doCEClustering show");
 
         System.out.println("1: " + result);
         System.out.println("2: " + resultFromSegment("test.seg"));
