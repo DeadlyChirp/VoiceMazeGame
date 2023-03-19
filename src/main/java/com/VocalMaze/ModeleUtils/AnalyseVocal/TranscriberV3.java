@@ -1,4 +1,4 @@
-package com.VocalMaze.ModeleUtils.AnalyseurVocal;
+package com.VocalMaze.ModeleUtils.AnalyseVocal;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -34,37 +34,46 @@ import com.amazonaws.SdkClientException;
 
 public class TranscriberV3 {
 
-    public String result;
-    public ArrayList<Direction> direction;
-
-    public TranscriberV3(String path) throws IOException, InterruptedException, ExecutionException, URISyntaxException{
-        result = Transcriber(path); //path du fichier WAV
-        direction = parse(Transcriber(path));
+    public TranscriberV3 () {
+    
     }
 
-    public ArrayList<Direction> parse(String transcriptText) {
+    public Direction [] transcription () {
+        Direction [] res = {} ; 
+        try {
+            res = getDirections(transcriber("src/main/java/com/VocalMaze/Records/Audio.wav")); 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return res ; 
+    }
+
+    private Direction[] getDirections (String transcriptText) {
         String[] words = transcriptText.split("\\s+");
-        direction = new ArrayList<Direction>();
+        ArrayList<Direction> direction = new ArrayList<Direction>();
         for (String word : words) {
-            if (word.contains("haut") || word.contains("bas") || word.contains("gauche") || word.contains("droite")) {
-                if (word.contains("haut")) {
-                    direction.add(Direction.HAUT);
-                }
-                if (word.contains("bas")) {
-                    direction.add(Direction.BAS);
-                }
-                if (word.contains("gauche")) {
-                    direction.add(Direction.GAUCHE);
-                }
-                if (word.contains("droite")) {
-                    direction.add(Direction.DROITE);
-                }
+            if (word.contains("haut")) {
+                direction.add(Direction.HAUT);
+                continue ; 
+            }
+            if (word.contains("bas")) {
+                direction.add(Direction.BAS);
+                continue ; 
+            }
+            if (word.contains("gauche")) {
+                direction.add(Direction.GAUCHE);
+                continue ; 
+            }
+            if (word.contains("droite")) {
+                direction.add(Direction.DROITE);
+                continue ; 
             }
         }
-        return direction;
+        Direction [] res = new Direction[direction.size()] ; 
+        return direction.toArray(res) ; 
     }
 
-    public String Transcriber(String path)
+    private String transcriber(String path)
             throws IOException, InterruptedException, ExecutionException, URISyntaxException {
 
         // Configurer les AWS Credentials

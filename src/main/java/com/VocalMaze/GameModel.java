@@ -1,15 +1,15 @@
 package com.VocalMaze;
 
-import com.VocalMaze.ModeleUtils.Direction;
-import com.VocalMaze.ModeleUtils.Joueur;
-import com.VocalMaze.ModeleUtils.Labyrinthe;
-import com.VocalMaze.ModeleUtils.AnalyseurVocal.Recorder;
+import com.VocalMaze.ModeleUtils.*;
+import com.VocalMaze.ModeleUtils.AnalyseVocal.Recorder;
+
 
 public class GameModel {
     
     private Labyrinthe labyrinthe;
     private Joueur joueur;
     private Recorder recorder ; 
+    private AudioAnalyser audioAnalyser ;
     private int nbMaleTotal ; 
     private int nbFemellesTotal ; 
 
@@ -43,6 +43,18 @@ public class GameModel {
 
     public void stopRecording () {
         recorder.stopRecording();
+    }
+
+    public int [] analyse1 () {
+        return audioAnalyser.analyse1() ; 
+    }
+
+    public int [] analyse2 () {
+        return audioAnalyser.analyse2() ; 
+    }
+
+    public Direction [] transcrire () {
+        return audioAnalyser.transcrire() ; 
     }
 
 }

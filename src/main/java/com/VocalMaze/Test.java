@@ -5,9 +5,9 @@ import java.net.URISyntaxException;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
-import com.VocalMaze.ModeleUtils.AnalyseurVocal.Recorder;
-import com.VocalMaze.ModeleUtils.AnalyseurVocal.Terminal;
-import com.VocalMaze.ModeleUtils.AnalyseurVocal.TranscriberV3;
+import com.VocalMaze.ModeleUtils.AnalyseVocal.Recorder;
+import com.VocalMaze.ModeleUtils.AnalyseVocal.Terminal;
+import com.VocalMaze.ModeleUtils.AnalyseVocal.TranscriberV3;
 
 public class Test {
 
@@ -48,8 +48,8 @@ public class Test {
                     break ;       
                 
                 case "transcrire" : 
-                    TranscriberV3 test = new TranscriberV3("src/main/java/com/VocalMaze/Records/Audio.wav");
-                    System.out.println(test.result);
+                    TranscriberV3 test = new TranscriberV3();
+                    System.out.println(test.transcription());
                     break;
             }
         }while (!res.equals("exit"));

@@ -1,4 +1,4 @@
-package com.VocalMaze.ModeleUtils.AnalyseurVocal ; 
+package com.VocalMaze.ModeleUtils.AnalyseVocal ; 
 
 import fr.lium.spkDiarization.lib.MainTools;
 import fr.lium.spkDiarization.libClusteringData.Cluster;
@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class LiumUtils {
-
-    private LiumUtils() {}
 
     public static Result executeForResult(String audioFile) throws Exception {
         if (audioFile == null) {
