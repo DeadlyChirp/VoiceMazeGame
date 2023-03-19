@@ -5,6 +5,10 @@ import java.net.URISyntaxException;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
+import com.VocalMaze.ModeleUtils.AnalyseurVocal.Recorder;
+import com.VocalMaze.ModeleUtils.AnalyseurVocal.Terminal;
+import com.VocalMaze.ModeleUtils.AnalyseurVocal.TranscriberV3;
+
 public class Test {
 
     public static void main(String[] args) throws IOException, InterruptedException, ExecutionException, URISyntaxException {

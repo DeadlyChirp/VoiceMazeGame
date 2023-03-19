@@ -1,4 +1,4 @@
-package com.VocalMaze;
+package com.VocalMaze.ModeleUtils.AnalyseurVocal;
 
 import javax.sound.sampled.*;
 import java.io.*;

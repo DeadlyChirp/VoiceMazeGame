@@ -1,4 +1,4 @@
-package com.VocalMaze;
+package com.VocalMaze.ModeleUtils.AnalyseurVocal;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -34,10 +34,10 @@ import com.amazonaws.SdkClientException;
 
 public class TranscriberV3 {
 
-    String result;
-    ArrayList<Direction> direction;
+    public String result;
+    public ArrayList<Direction> direction;
 
-    TranscriberV3(String path) throws IOException, InterruptedException, ExecutionException, URISyntaxException{
+    public TranscriberV3(String path) throws IOException, InterruptedException, ExecutionException, URISyntaxException{
         result = Transcriber(path); //path du fichier WAV
         direction = parse(Transcriber(path));
     }

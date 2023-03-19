@@ -1,9 +1,7 @@
-package com.VocalMaze.AnalyseurVocal;
+package com.VocalMaze.ModeleUtils.AnalyseurVocal;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-import com.VocalMaze.Recorder;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;

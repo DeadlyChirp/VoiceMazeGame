@@ -1,3 +1,5 @@
+package com.VocalMaze.ModeleUtils.AnalyseurVocal ; 
+
 import fr.lium.spkDiarization.lib.MainTools;
 import fr.lium.spkDiarization.libClusteringData.Cluster;
 import fr.lium.spkDiarization.libClusteringData.ClusterSet;

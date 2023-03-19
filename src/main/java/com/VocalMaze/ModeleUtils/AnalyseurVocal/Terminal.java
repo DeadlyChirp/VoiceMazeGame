@@ -1,4 +1,4 @@
-package com.VocalMaze;
+package com.VocalMaze.ModeleUtils.AnalyseurVocal;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,7 +10,7 @@ public class Terminal {
     private Process process ; 
     private BufferedReader output ; 
 
-    Terminal () {
+    public Terminal () {
         command = new String[1] ;
         command[0] = "" ; 
         processBuilder = new ProcessBuilder(command) ; 

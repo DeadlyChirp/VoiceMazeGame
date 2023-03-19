@@ -1,4 +1,4 @@
-package com.VocalMaze.ModeleUtils;
+package com.VocalMaze.ModeleUtils.AnalyseurVocal;
 
 import java.io.File;
 import java.util.Scanner;
