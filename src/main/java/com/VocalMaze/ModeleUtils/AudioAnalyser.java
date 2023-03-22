@@ -43,30 +43,8 @@ public class AudioAnalyser {
         return transcriber.transcription() ; 
     }
 
-    public static int[] analyse2(String audioFile) throws Exception {
-        if (audioFile == null) {
-            throw new IllegalArgumentException("audioFile must not be null");
-        }
 
-        File file = new File(audioFile);
-        if (!file.exists()) {
-            throw new IllegalArgumentException("audioFile is not exists");
-        }
-
-        AudioFileFormat format = AudioSystem.getAudioFileFormat(file);
-        if (!format.getType().equals(AudioFileFormat.Type.WAVE)) {
-            throw new IllegalArgumentException(format.getType() + " is not supported");
-        }
-
-        LiumUtils.Result result = executeForResult(Arrays.toString(new String[]{"--fInputMask=" + audioFile}));
-        int[] analysis = new int[2];
-        analysis[0] = result.female;
-        analysis[1] = result.male;
-
-        return analysis;
-    }
-
-    public int[] analyse3() {
+    public int[] analyse2() {
         try {
             LiumUtils.Result result = LiumUtils.executeForResult("./src/main/java/com/VocalMaze/Records/Audio.wav");
             int[] res = {result.female, result.male};
