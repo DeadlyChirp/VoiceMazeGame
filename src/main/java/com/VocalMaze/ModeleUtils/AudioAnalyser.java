@@ -5,6 +5,13 @@ import com.VocalMaze.ModeleUtils.AnalyseVocal.SegAnalyser;
 import com.VocalMaze.ModeleUtils.AnalyseVocal.Terminal;
 import com.VocalMaze.ModeleUtils.AnalyseVocal.TranscriberV3;
 
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioSystem;
+import java.io.File;
+import java.util.Arrays;
+
+import static com.VocalMaze.ModeleUtils.AnalyseVocal.LiumUtils.executeForResult;
+
 public class AudioAnalyser {
     private LiumUtils liumUtils ; 
     private Terminal terminal ;
@@ -36,10 +43,39 @@ public class AudioAnalyser {
         return transcriber.transcription() ; 
     }
 
-    public int [] analyse2 () {
-        return null ;
-        //TODO
-        // version avec lium utils
+    public static int[] analyse2(String audioFile) throws Exception {
+        if (audioFile == null) {
+            throw new IllegalArgumentException("audioFile must not be null");
+        }
+
+        File file = new File(audioFile);
+        if (!file.exists()) {
+            throw new IllegalArgumentException("audioFile is not exists");
+        }
+
+        AudioFileFormat format = AudioSystem.getAudioFileFormat(file);
+        if (!format.getType().equals(AudioFileFormat.Type.WAVE)) {
+            throw new IllegalArgumentException(format.getType() + " is not supported");
+        }
+
+        LiumUtils.Result result = executeForResult(Arrays.toString(new String[]{"--fInputMask=" + audioFile}));
+        int[] analysis = new int[2];
+        analysis[0] = result.female;
+        analysis[1] = result.male;
+
+        return analysis;
     }
+
+    public int[] analyse3() {
+        try {
+            LiumUtils.Result result = LiumUtils.executeForResult("./src/main/java/com/VocalMaze/Records/Audio.wav");
+            int[] res = {result.female, result.male};
+            return res;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new int[]{0, 0};
+    }
+
 
 }
