@@ -11,6 +11,10 @@ public class Controller {
         this.gameView = gameView;
     }
 
+    public GameModel getGameModel() {
+        return model;
+    }
+
     public void movePlayer (Direction dir , int steps) {
         model.movePlayer(dir, steps);
     }
