@@ -34,10 +34,10 @@ public class GameView extends JPanel implements Runnable  {
   
 
     public GameView() throws IOException {
-        imageSprite = ImageIO.read(new File("/home/ismael/Téléchargements/professor_walk_cycle_no_hat.png"));
+        imageSprite = ImageIO.read(new File("/home/ismael/Cours/L2/S4/PI4/2022-sb2-g2-lost_voices/src/main/java/com/VocalMaze/Images/professor_walk_cycle_no_hat.png"));
         sprites = new BufferedImage[4][9];
-        imagePorte = ImageIO.read(new File("/home/ismael/Téléchargements/doors.png"));
-        imagePassage = ImageIO.read(new File("/home/ismael/Téléchargements/M484ShmupTileset1.png"));
+        imagePorte = ImageIO.read(new File("/home/ismael/Cours/L2/S4/PI4/2022-sb2-g2-lost_voices/src/main/java/com/VocalMaze/Images/doors.png"));
+        imagePassage = ImageIO.read(new File("/home/ismael/Cours/L2/S4/PI4/2022-sb2-g2-lost_voices/src/main/java/com/VocalMaze/Images/M484ShmupTileset1.png"));
         porteLabyrinthe = new BufferedImage[30][30];
     }  
 
