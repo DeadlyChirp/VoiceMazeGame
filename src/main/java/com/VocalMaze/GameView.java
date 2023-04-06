@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -15,14 +16,18 @@ import com.VocalMaze.ModeleUtils.Direction;
 public class GameView extends JPanel{
     private Controller controller ; 
     private LabyrintheView labyrintheView ; 
-  
+    private static final Dimension TAILLE_ECRAN = Toolkit.getDefaultToolkit().getScreenSize();
+    
     public GameView(String pseudo , int nbMaleTotal , int nbFemelleTotal) throws IOException {
+        setSize(TAILLE_ECRAN);
         controller = new Controller(new GameModel(pseudo, nbMaleTotal, nbFemelleTotal), this) ; 
         labyrintheView = new LabyrintheView() ; 
         labyrintheView.decoupeImage();
-        labyrintheView.setLocation(250, 100);
+        //labyrintheView.setLocation(250, 100);
         add(labyrintheView) ; 
         labyrintheView.setVisible(true);
+        setVisible(true);
+        
     }  
 
     public void movePlayer (Direction dir , int steps) {
@@ -44,6 +49,7 @@ public class GameView extends JPanel{
         private int stepsAnim;
 
         public LabyrintheView () throws IOException{
+            setPreferredSize(TAILLE_ECRAN);
             imageSprite = ImageIO.read(new File("src/main/java/com/VocalMaze/Images/professor_walk_cycle_no_hat.png"));
             sprites = new BufferedImage[4][9];
             imagePorte = ImageIO.read(new File("src/main/java/com/VocalMaze/Images/doors.png"));
@@ -171,11 +177,20 @@ public class GameView extends JPanel{
 
   public static void main(String[] args) throws IOException {
     JFrame frame = new JFrame();
-    frame.setPreferredSize(new Dimension(800, 800));
+    frame.getContentPane().setLayout(null);
+    frame.setPreferredSize(TAILLE_ECRAN);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     GameView gameView = new GameView("test" , 2 , 2);
     frame.add(gameView);
     frame.pack();
     frame.setVisible(true);
+    gameView.movePlayer(Direction.BAS, 5);
+
+    gameView.movePlayer(Direction.DROITE, 5);
+
+    gameView.movePlayer(Direction.DROITE, 5);
+
+    gameView.movePlayer(Direction.BAS , 10);
+
   }
 }
