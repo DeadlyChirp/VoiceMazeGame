@@ -72,11 +72,32 @@ public class Recorder {
         }
     }
  
+    public void startRecord (int timeMs) {
+        Thread threadRecorder = new Thread(new Runnable() {
+            @Override
+            public void run () {
+                record();
+            }
+        }) ; 
+        Thread threadTimer = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(timeMs+1000);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }                
+                stopRecording();
+            }
+        }) ; 
+        threadRecorder.start();
+        threadTimer.start();
+    }
+
     public void stopRecording() {
         //ici on ferme le dateline pour finaliser le traitement du son et finaliser l'enregistrement. 
         line.stop(); // arrete de capturer le son
         line.close(); // libere les ressources audio que le systeme utilise
-        System.out.println("Entregistrement Fini .");
     }
 
 }
