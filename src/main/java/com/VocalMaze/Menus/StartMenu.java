@@ -63,11 +63,18 @@ public class StartMenu extends JFrame{
         ImageIcon p = new ImageIcon("src/main/java/com/VocalMaze/Images/play.png");
         // ImageIcon q = new ImageIcon("Pictures/quitter.png");
         ImageIcon m = new ImageIcon("src/main/java/com/VocalMaze/Images/mute1.png");
+
+        //Init de play
         play = new JButton(p);
-        //play.setOpaque(false);
         play.setBorderPainted(false);
+        play.setBackground(new Color(0, 0, 0, 0));
         // quitter = new JButton(q);
+
+        //Init de Mute
         mute = new JButton(m);
+        mute.setBorderPainted(false);
+        mute.setBackground(new Color(0, 0, 0, 0));
+
         play.setBounds(870, 661, p.getIconWidth(), p.getIconHeight());
         // quitter.setBounds(405, 627, q.getIconWidth(), q.getIconHeight());
         mute.setBounds(1000, 50, m.getIconWidth(), m.getIconHeight());
