@@ -10,7 +10,9 @@ public class GameModel {
     private Joueur joueur;
     private Recorder recorder ; 
     private AudioAnalyser audioAnalyser ;
+    @SuppressWarnings("unused")
     private int nbMaleTotal ; 
+    @SuppressWarnings("unused")
     private int nbFemellesTotal ; 
 
     public GameModel (String pseudo , int nbMaleTotal , int nbFemellesTotal){

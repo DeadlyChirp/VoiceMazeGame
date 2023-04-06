@@ -1,10 +1,8 @@
 package com.VocalMaze;
 
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.xml.stream.events.EndDocument;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -13,18 +11,9 @@ import java.io.File;
 import java.io.IOException;
 
 import com.VocalMaze.ModeleUtils.Direction;
-import com.VocalMaze.ModeleUtils.Joueur;
-import com.VocalMaze.ModeleUtils.Labyrinthe;
-import com.VocalMaze.ViewUtils.LabyrintheView;
-import com.VocalMaze.ViewUtils.SlideBar;
 
 public class GameView extends JPanel implements Runnable  {
     private Controller controller;
-    private Labyrinthe labyrinthe; //Vue pour le labyrinth
-    private SlideBar slidebar; //Vue pour les mouvements effectuées precedemment
-    private Joueur joueurs;
-    private JButton mute; //Poru le son
-    private boolean sonON = false; //Pour le son    
     private boolean enDeplacement = true;
     private BufferedImage[][] sprites;
     private BufferedImage[][] porteLabyrinthe;
