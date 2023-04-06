@@ -12,6 +12,10 @@ public class Controller {
         this.gameView = gameView;
     }
 
+    public boolean getOuvert (int x , int y) {
+        return model.getLabyrinthe().getPlateau()[y][x].getOuvert() ;
+    }
+
     public GameModel getGameModel() {
         return model;
     }
