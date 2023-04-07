@@ -1,6 +1,5 @@
 package com.VocalMaze.Menus;
 import java.awt.*;
-import java.awt.event.MouseEvent;
 
 import com.VocalMaze.ViewUtils.ImagePanel;
 import javax.swing.ImageIcon;

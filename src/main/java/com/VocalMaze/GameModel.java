@@ -39,11 +39,11 @@ public class GameModel {
         return labyrinthe.endGame() ; 
     }
 
-    public void startRecording () {
+    public void startRecord () {
         recorder.startRecord();
     }
 
-    public void stopRecording () {
+    public void stopRecord () {
         recorder.stopRecording();
     }
 
@@ -57,6 +57,10 @@ public class GameModel {
 
     public Direction [] transcrire () {
         return audioAnalyser.transcrire() ; 
+    }
+
+    public void startRecord(int timeMs) {
+        recorder.startRecord(timeMs);
     }
 
 }

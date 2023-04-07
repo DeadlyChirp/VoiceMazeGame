@@ -7,9 +7,12 @@ import javax.swing.JPanel;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 import com.VocalMaze.ModeleUtils.Direction;
 
@@ -17,6 +20,9 @@ public class GameView extends JPanel{
     private Controller controller ; 
     private LabyrintheView labyrintheView ; 
     private static final Dimension TAILLE_ECRAN = Toolkit.getDefaultToolkit().getScreenSize();
+    private int [] nbLocM_F ; 
+    private int timeMs ; 
+    private boolean isRecording ; 
     
     public GameView(String pseudo , int nbMaleTotal , int nbFemelleTotal) throws IOException {
         setSize(TAILLE_ECRAN);
@@ -27,8 +33,86 @@ public class GameView extends JPanel{
         add(labyrintheView) ; 
         labyrintheView.setVisible(true);
         setVisible(true);
+        /*
+         * TODO 
+         * il y aura deux STEPS
+         * STEP 1 :
+                La premiere par defaut quand le jeu se lance , il y aura une fenetre qui doit dire au joueur ce qu'il doit faire
+                appuyer sur R pour commencer le record , afin de determiner le temps de parole du 2eme enregistrement 
+                en gros c'est un truc comme ça
+         * STEP 2 :
+                Faire apparaitre une fenetre qui annonce le nombre de locuteurs trouvés 
+                ainsi que le temps de parole pour le prochain enregistrement        
+         */
+
+        // Par defaut il y aura STEP 1 ici dans le constructeur
+        nbLocM_F = new int[2] ;
+        nbLocM_F[0] = 0 ; 
+        nbLocM_F[1] = 0 ; 
+        timeMs = -1 ; 
+        addKeyListener(new KeyListener() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                switch(e.getKeyChar()) {
+                    case 'r' : {
+                        if (isRecording) break ; 
+                        if (timeMs == -1) {
+                            controller.startRecord();
+                        }else{
+                            controller.startRecord(timeMs);
+                            try {
+                                Thread.sleep(timeMs);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                            // Faire apparaitre un petit sablier qui tourne (un gif) qui dit transcription en cours
+                            //  si besoin mais c'est optionnel , ou bien des petites images qui donnent des conseils
+                            // comme dans les menus de chargement des jeux a voir 
+                            boolean fin = controller.transcrireAndPlay() ; 
+                            if (fin) {
+                                endGame();
+                                return ; 
+                            }
+                            //TODO
+                            //Faire apparaitre STEP 1
+                            timeMs = -1 ; 
+                        }
+                        break ; 
+                    }
+                
+                    case 's' :{
+                        if (!isRecording) break ;
+                        if (timeMs == -1) {
+                            controller.stopRecord();
+                            //Analyse du vocal
+                            nbLocM_F = controller.analyse2() ; 
+                            //Entre 5 et 7.5 par Homme , et entre 6 et 9 par Femme
+                            timeMs = nbLocM_F[0]*(5000+(new Random()).nextInt(2501)) + nbLocM_F[1]*(6000+(new Random()).nextInt(3001)) ; 
+                            // TODO faire apparaitre STEP 2
+                        }
+                        break ; 
+                    }
+                    
+                    default : break ; 
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                
+            }
+            
+            @Override
+            public void keyTyped(KeyEvent e) {
+                
+            }
+        });
         
     }  
+
+    public void endGame () {
+        //TODO qui fera apparaire l'ecran de fin du jeu
+    }
 
     public void movePlayer (Direction dir , int steps) {
         labyrintheView.movePlayer(dir, steps);
@@ -70,7 +154,6 @@ public class GameView extends JPanel{
                 }
             }
 
-    
             for (int i = 0; i < porteLabyrinthe.length; i++) {
                 for (int j = 0; j < porteLabyrinthe[i].length; j++) {
                     if (controller.getOuvert(j, i)) {

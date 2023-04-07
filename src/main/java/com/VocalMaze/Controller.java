@@ -32,4 +32,37 @@ public class Controller {
         return model.possible(dir, steps) ; 
     }
 
+    public void startRecord () {
+        model.startRecord();
+    }
+
+    public void stopRecord () {
+        model.stopRecord();
+    }
+
+    public void startRecord(int timeMs) {
+        model.startRecord(timeMs);
+    }
+
+    public int [] analyse1 () {
+        return model.analyse1() ; 
+    }
+
+    public int [] analyse2 () {
+        return model.analyse2() ; 
+    }
+
+    public boolean transcrireAndPlay() {
+        //TODO
+        /*
+         * Cette methode va transcrire l'audio enregistré 
+         * Recuperer les directions
+         * Faire bouger le modele si possible 
+         * Faire correspondre la vue avec la vue si possible avec la fonctions movePlayer(Direction , int) de GameView
+         */
+
+        //TODO en cas de fin de jeu renvoyer true  , false sinon
+        return false ; 
+    }
+
 }
