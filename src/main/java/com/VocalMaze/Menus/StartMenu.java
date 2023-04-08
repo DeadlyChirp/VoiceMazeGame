@@ -76,7 +76,7 @@ public class StartMenu extends JFrame{
 
         play.setBounds(870, 661, p.getIconWidth(), p.getIconHeight());
         // quitter.setBounds(405, 627, q.getIconWidth(), q.getIconHeight());
-        mute.setBounds(1000, 50, m.getIconWidth(), m.getIconHeight());
+        mute.setBounds(1750, 50, m.getIconWidth(), m.getIconHeight());
         // add(quitter);
 
         //Init du background
@@ -123,6 +123,7 @@ public class StartMenu extends JFrame{
 				clip.stop();
 				sonON = true;
 			}
+            mute.removeAll();
 			mute.setIcon(icon2);
 		});
 
