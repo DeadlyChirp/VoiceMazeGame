@@ -22,7 +22,7 @@ public class GameView extends JPanel{
     private static final Dimension TAILLE_ECRAN = Toolkit.getDefaultToolkit().getScreenSize();
     private int [] nbLocM_F ; 
     private int timeMs ; 
-    private boolean isRecording ; 
+    private boolean isRecording , isRecordingTime ; 
     
     public GameView(String pseudo , int nbMaleTotal , int nbFemelleTotal) throws IOException {
         setSize(TAILLE_ECRAN);
@@ -60,8 +60,10 @@ public class GameView extends JPanel{
                             controller.startRecord();
                         }else{
                             controller.startRecord(timeMs);
+                            isRecordingTime = true ; 
                             try {
                                 Thread.sleep(timeMs);
+                                isRecordingTime = false ; 
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
@@ -81,7 +83,7 @@ public class GameView extends JPanel{
                     }
                 
                     case 's' :{
-                        if (!isRecording) break ;
+                        if (!isRecording || isRecordingTime) break ;
                         if (timeMs == -1) {
                             controller.stopRecord();
                             //Analyse du vocal
