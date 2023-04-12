@@ -16,18 +16,20 @@ public class AudioAnalyser {
         transcriber = new TranscriberV3() ; 
     }
 
-    public int [] analyse1 () {
-        terminal.execCommand("/usr/bin/java -Xmx2024m -jar ./LIUM_SpkDiarization-8.4.1.jar "+
-        "--finputDesc=audio16Khz2sphinx:sphinx,1:1:0:0:0:0,18,0:0:0:0 " +
-        "--fInputMask=./src/main/java/com/VocalMaze/Records/Audio.wav " +
-        "--sOutputMask=/src/main/java/com/VocalMaze/Analysis/Audio.seg --doCEClustering Audio");
+    public int[] analyse1() {
+        String command = "/usr/bin/java -Xmx2024m -jar ./LIUM_SpkDiarization-8.4.1.jar " +
+                "--finputDesc=audio16Khz2sphinx:sphinx,1:1:0:0:0:0,18,0:0:0:0 " +
+                "--fInputMask=./src/main/java/com/VocalMaze/Records/Audio.wav " +
+                "--sOutputMask=/src/main/java/com/VocalMaze/Analysis/Audio.seg --doCEClustering Audio";
+
+        terminal.execCommand(command);
+
         try {
             segAnalyser.analysis("src/main/java/com/VocalMaze/Analysis/Audio.seg");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        int [] res = {segAnalyser.getNbLocMale() , segAnalyser.getNbLocFemale()} ; 
-        return res ; 
+        return new int[]{segAnalyser.getNbLocMale(), segAnalyser.getNbLocFemale()};
     }
 
     public Direction [] transcrire () {
@@ -37,8 +39,7 @@ public class AudioAnalyser {
     public int[] analyse2() {
         try {
             LiumUtils.Result result = LiumUtils.executeForResult("./src/main/java/com/VocalMaze/Records/Audio.wav");
-            int[] res = {result.female, result.male};
-            return res;
+            return new int[]{result.female, result.male};
         } catch (Exception e) {
             e.printStackTrace();
         }
