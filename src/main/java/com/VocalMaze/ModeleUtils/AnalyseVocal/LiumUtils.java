@@ -55,9 +55,7 @@ public class LiumUtils {
         }
 
         Result result = new Result();
-        try {
-            FileReader fileReader = new FileReader(file);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
+        try (BufferedReader bufferedReader = Files.newBufferedReader(file.toPath())) {
             String line;
             boolean flag = false;
 
@@ -71,8 +69,6 @@ public class LiumUtils {
                     result.increase(line.split("\\s+")[4]);
                 }
             }
-
-            fileReader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -92,7 +88,8 @@ public class LiumUtils {
         Diarization diarization = new Diarization();
         Result result = new Result();
         final Parameter parameter = Diarization.getParameter(args);
-        parameter.getParameterInputFeature().setFeaturesDescription("audio16Khz2sphinx:sphinx,1:1:0:0:0:0,18,0:0:0:0");
+        StringBuilder featuresDescriptionBuilder = new StringBuilder("audio16Khz2sphinx:sphinx,1:1:0:0:0:0,18,0:0:0:0");
+        parameter.getParameterInputFeature().setFeaturesDescription(featuresDescriptionBuilder.toString());
         if (Objects.equals(parameter.getParameterDiarization().getSystem(), ParameterBNDiarization.SystemString[1])) {
             parameter.getParameterSegmentationSplit().setSegmentMaximumLength(10 * parameter.getParameterSegmentationInputFile().getRate());
         }
