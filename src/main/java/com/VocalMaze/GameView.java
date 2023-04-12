@@ -1,8 +1,7 @@
 package com.VocalMaze;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -40,6 +39,28 @@ public class GameView extends JPanel{
                 La premiere par defaut quand le jeu se lance , il y aura une fenetre qui doit dire au joueur ce qu'il doit faire
                 appuyer sur R pour commencer le record , afin de determiner le temps de parole du 2eme enregistrement 
                 en gros c'est un truc comme ça
+         */
+        //STEP 1 TEST
+        JDialog instructionsDialog = new JDialog();
+        instructionsDialog.setTitle("Instructions");
+        instructionsDialog.setSize(300, 100);
+        instructionsDialog.setLocationRelativeTo(null);
+        instructionsDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        JLabel instructionsLabel = new JLabel("Press R to start recording, and S to stop.", SwingConstants.CENTER);
+        instructionsDialog.add(instructionsLabel);
+
+        //Pop-up fenetre pour les instructions apres 5s avoir lance le jeu
+        Timer launchDialogTimer = new Timer(5000, e -> {
+            instructionsDialog.setVisible(true);
+
+            // Close the pop-up window automatically after 20 seconds
+            Timer closeDialogTimer = new Timer(20000, e1 -> instructionsDialog.dispose());
+            closeDialogTimer.setRepeats(false);
+            closeDialogTimer.start();
+        });
+        launchDialogTimer.setRepeats(false);
+        launchDialogTimer.start();
+        /*
          * STEP 2 :
                 Faire apparaitre une fenetre qui annonce le nombre de locuteurs trouvés 
                 ainsi que le temps de parole pour le prochain enregistrement        
