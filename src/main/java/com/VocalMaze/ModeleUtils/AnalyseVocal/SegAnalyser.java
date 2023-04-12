@@ -1,6 +1,7 @@
 package com.VocalMaze.ModeleUtils.AnalyseVocal;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import com.VocalMaze.Exceptions.ErrorLoadingFileException;;
@@ -28,23 +29,23 @@ public class SegAnalyser {
         segFile = new File(path) ; 
     }
 
-    public void analysis (String path) throws ErrorLoadingFileException {
+    public void analysis(String path) throws ErrorLoadingFileException {
         reset();
         loadFile(path);
-        Scanner sc ;
-        String line ; 
-        try {
-            sc = new Scanner(segFile) ; 
-        } catch (Exception e) {
-           throw new ErrorLoadingFileException() ;
+        try (Scanner sc = new Scanner(segFile)) {
+            sc.useDelimiter(";;");
+            while (sc.hasNext()) {
+                String line = sc.next();
+                if (line.contains(" M ")) {
+                    nbLocMale++;
+                }
+                if (line.contains(" F ")) {
+                    nbLocFemale++;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            throw new ErrorLoadingFileException();
         }
-        sc.useDelimiter(";;") ; 
-        while(sc.hasNext()) {
-            line = sc.next() ; 
-            if (line.contains(" M ")) nbLocMale++ ;
-            if (line.contains(" F ")) nbLocFemale++ ; 
-        }
-        sc.close();
     }
     
 }
