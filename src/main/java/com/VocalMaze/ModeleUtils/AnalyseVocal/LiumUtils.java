@@ -13,6 +13,7 @@ import fr.lium.spkDiarization.system.Diarization;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioSystem;
 import java.io.*;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Objects;
 
