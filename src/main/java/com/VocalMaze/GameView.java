@@ -76,8 +76,10 @@ private class InfoTextArea extends JTextArea {
         )); // Add a border to make it look like a chat dialog
         setAlignmentX(Component.RIGHT_ALIGNMENT); // Align the text area to the right
         setAlignmentY(Component.TOP_ALIGNMENT); // Align the text area to the top
-        setPreferredSize(new Dimension(300, 100));
-        setMaximumSize(new Dimension(300, 100));
+        setPreferredSize(new Dimension(200, 100));
+        setMaximumSize(new Dimension(200, 100));
+        setLineWrap(true);
+        setWrapStyleWord(true);
     }
 }
 
@@ -118,7 +120,7 @@ private class InfoTextArea extends JTextArea {
          */
         AudioAnalyser audioAnalyser = new AudioAnalyser();
         int[] maleFemaleCounts = audioAnalyser.analyse2();
-        String message = "Hello, I have found that you guys are " + maleFemaleCounts[1] + " males and " + maleFemaleCounts[0] + " females.";
+        String message = "Hello, I have found that you guys are " + maleFemaleCounts[1] + (maleFemaleCounts[1] < 2 ? " male" : " males") + " and " + maleFemaleCounts[0] + (maleFemaleCounts[0] < 2 ? " female" : " females") + ".";
         infoTextArea = new InfoTextArea(message);
         infoTextArea.setMaximumSize(new Dimension(300, 5));
         infoTextArea.setBackground(Color.RED);
