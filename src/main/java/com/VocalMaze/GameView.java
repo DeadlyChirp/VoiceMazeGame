@@ -17,12 +17,38 @@ import com.VocalMaze.ModeleUtils.Direction;
 
 public class GameView extends JPanel{
     private Controller controller ; 
-    private LabyrintheView labyrintheView ; 
+    private LabyrintheView labyrintheView ;
     private static final Dimension TAILLE_ECRAN = Toolkit.getDefaultToolkit().getScreenSize();
     private int [] nbLocM_F ; 
     private int timeMs ; 
-    private boolean isRecording , isRecordingTime ; 
-    
+    private boolean isRecording , isRecordingTime ;
+    private class PopUp1 {
+        public PopUp1() {
+            showPopUp();
+        }
+        private void showPopUp() {
+            JDialog instructionsDialog = new JDialog();
+            instructionsDialog.setTitle("Instructions");
+            instructionsDialog.setSize(300, 100);
+            instructionsDialog.setLocationRelativeTo(null);
+            instructionsDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            JLabel instructionsLabel = new JLabel("Press R to start recording, and S to stop.", SwingConstants.CENTER);
+            instructionsDialog.add(instructionsLabel);
+
+            // Pop-up window for instructions after 5s of launching the game
+            Timer launchDialogTimer = new Timer(2000, e -> {
+                instructionsDialog.setVisible(true);
+
+                // Close the pop-up window automatically after 20 seconds
+                Timer closeDialogTimer = new Timer(5000, e1 -> instructionsDialog.dispose());
+                closeDialogTimer.setRepeats(false);
+                closeDialogTimer.start();
+            });
+            launchDialogTimer.setRepeats(false);
+            launchDialogTimer.start();
+        }
+    }
+
     public GameView(String pseudo , int nbMaleTotal , int nbFemelleTotal) throws IOException {
         setSize(TAILLE_ECRAN);
         controller = new Controller(new GameModel(pseudo, nbMaleTotal, nbFemelleTotal), this) ; 
@@ -32,6 +58,8 @@ public class GameView extends JPanel{
         add(labyrintheView) ; 
         labyrintheView.setVisible(true);
         setVisible(true);
+
+        // STEP 1 class interne
         /*
          * TODO 
          * il y aura deux STEPS
@@ -41,25 +69,15 @@ public class GameView extends JPanel{
                 en gros c'est un truc comme ça
          */
         //STEP 1 TEST
-        JDialog instructionsDialog = new JDialog();
-        instructionsDialog.setTitle("Instructions");
-        instructionsDialog.setSize(300, 100);
-        instructionsDialog.setLocationRelativeTo(null);
-        instructionsDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        JLabel instructionsLabel = new JLabel("Press R to start recording, and S to stop.", SwingConstants.CENTER);
-        instructionsDialog.add(instructionsLabel);
+        new PopUp1();
 
-        //Pop-up fenetre pour les instructions apres 5s avoir lance le jeu
-        Timer launchDialogTimer = new Timer(5000, e -> {
-            instructionsDialog.setVisible(true);
 
-            // Close the pop-up window automatically after 20 seconds
-            Timer closeDialogTimer = new Timer(20000, e1 -> instructionsDialog.dispose());
-            closeDialogTimer.setRepeats(false);
-            closeDialogTimer.start();
-        });
-        launchDialogTimer.setRepeats(false);
-        launchDialogTimer.start();
+
+
+
+
+
+
         /*
          * STEP 2 :
                 Faire apparaitre une fenetre qui annonce le nombre de locuteurs trouvés 
@@ -109,7 +127,7 @@ public class GameView extends JPanel{
                             controller.stopRecord();
                             //Analyse du vocal
                             nbLocM_F = controller.analyse2() ; 
-                            //Entre 5 et 7.5 par Homme , et entre 6 et 9 par Femme
+                            //Entre 5 et 7.5 par Homme, et entre 6 et 9 par Femme
                             timeMs = nbLocM_F[0]*(5000+(new Random()).nextInt(2501)) + nbLocM_F[1]*(6000+(new Random()).nextInt(3001)) ; 
                             // TODO faire apparaitre STEP 2
                         }
@@ -131,7 +149,7 @@ public class GameView extends JPanel{
             }
         });
         
-    }  
+    }
 
     public void endGame () {
         //TODO qui fera apparaire l'ecran de fin du jeu

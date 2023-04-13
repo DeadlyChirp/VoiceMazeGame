@@ -26,8 +26,8 @@ public class AudioAnalyser {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        int [] res = {segAnalyser.getNbLocMale() , segAnalyser.getNbLocFemale()} ; 
-        return res ; 
+        return new int[] {segAnalyser.getNbLocMale() , segAnalyser.getNbLocFemale()} ;
+
     }
 
     public Direction [] transcrire () {

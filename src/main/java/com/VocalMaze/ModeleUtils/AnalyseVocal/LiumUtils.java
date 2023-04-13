@@ -96,7 +96,6 @@ public class LiumUtils {
         if (Objects.equals(parameter.getParameterDiarization().getSystem(), ParameterBNDiarization.SystemString[1])) {
             parameter.getParameterSegmentationSplit().setSegmentMaximumLength(10 * parameter.getParameterSegmentationInputFile().getRate());
         }
-
         final ClusterSet fullClusterSet = diarization.initialize(parameter);
         ArrayList<ClusterSet> clusterSets = MainTools.splitHypotesis(fullClusterSet);
         for (ClusterSet clusterSet : clusterSets) {
