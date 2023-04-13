@@ -4,10 +4,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +12,8 @@ import java.io.InputStream;
 import java.util.Random;
 
 import com.VocalMaze.ModeleUtils.Direction;
+
+import static javax.swing.text.StyleConstants.setLineSpacing;
 
 public class GameView extends JPanel{
     private Controller controller ; 
@@ -93,7 +92,7 @@ public class GameView extends JPanel{
                 Faire apparaitre une fenetre qui annonce le nombre de locuteurs trouvés 
                 ainsi que le temps de parole pour le prochain enregistrement        
          */
-        popUP = new PopUP("Grand master : Salutations, mes chers aventuriers! Préparez-vous à trembler de terreur. Maintenant, commençons le jeu. Vous devez trouver la sortie avant que je ne vous trouve. Ahahaha... Vous êtes à moi maintenant..Osez-vous relever le défi ? Hahahaha!") ;
+        popUP = new PopUP("- Grand master : Salutations, mes chers aventuriers! Préparez-vous à trembler de terreur. Maintenant, commençons le jeu. Vous devez trouver la sortie avant que je ne vous trouve. Ahahaha... Vous êtes à moi maintenant..Osez-vous relever le défi ? Hahahaha!") ;
         add(popUP, BorderLayout.EAST);
 
         // Par defaut il y aura STEP 1 ici dans le constructeur
@@ -178,8 +177,6 @@ public class GameView extends JPanel{
     public class PopUP extends JPanel {
         PopUP(String message) {
             InfoTextArea infoTextArea = new InfoTextArea(message);
-            infoTextArea.setMaximumSize(new Dimension(350, 50));
-            infoTextArea.setBackground(new Color(248, 248, 248));
             setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
             add(infoTextArea);
             add(Box.createVerticalGlue());
@@ -188,49 +185,78 @@ public class GameView extends JPanel{
         private class InfoTextArea extends JTextArea {
             private final String fullText;
             private int textIndex = 0;
+            private ImageIcon imageIcon;
 
             public InfoTextArea(String text) {
                 super("");
                 fullText = text;
                 setEditable(false);
-                setOpaque(true);
+                setOpaque(false);
+
                 try {
                     File fontFile = new File("src/main/java/com/VocalMaze/Audio&Visuel/Font-police/PressStart2P-Regular.ttf");
-                    Font pressStart2P = Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(14f);
+                    Font pressStart2P = Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(12f);
                     setFont(pressStart2P);
                 } catch (FontFormatException | IOException e) {
                     e.printStackTrace();
                 }
 
-                setForeground(new Color(0, 0, 0)); // Set the text color to black
-                setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(new Color(0, 0, 0), 3), // Change the border color to black
-                        BorderFactory.createEmptyBorder(5, 5, 5, 5)
-                ));
-
-//                setAlignmentX(Component.RIGHT_ALIGNMENT);
-//                setAlignmentY(Component.TOP_ALIGNMENT);
-                setPreferredSize(new Dimension(400, 250));
-//                setMaximumSize(new Dimension(400, 250));
+                setForeground(new Color(255, 255, 255)); // Set the text color to white
+                setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+                setPreferredSize(new Dimension(500, 300));
                 setLineWrap(true);
                 setWrapStyleWord(true);
 
+                // Load the image
+                imageIcon = new ImageIcon("src/main/java/com/VocalMaze/Audio&Visuel/ImagesTextBox/IMG_4182 (1) (1).jpg");
+
                 // Create the timer for the typing effect
                 int delay = 50; //milliseconds
-                ActionListener taskPerformer = new ActionListener() {
+                ActionListener taskPerformer2 = new ActionListener() {
+                    @Override
                     public void actionPerformed(ActionEvent evt) {
                         if (textIndex < fullText.length()) {
-                            append(String.valueOf(fullText.charAt(textIndex)));
+                            setText(fullText.substring(0, textIndex));
                             textIndex++;
                         } else {
                             ((Timer) evt.getSource()).stop();
                         }
                     }
                 };
-                new Timer(delay, taskPerformer).start();
+                new Timer(delay, taskPerformer2).start();
+
+                // Listen for size changes
+                addComponentListener(new ComponentAdapter() {
+                    @Override
+                    public void componentResized(ComponentEvent e) {
+                        repaint();
+                    }
+                });
+            }
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                if (imageIcon != null) {
+                    Image image = imageIcon.getImage();
+                    int width = this.getWidth();
+                    int height = this.getHeight();
+                    int imgWidth = imageIcon.getIconWidth();
+                    int imgHeight = imageIcon.getIconHeight();
+                    double widthRatio = (double) width / imgWidth;
+                    double heightRatio = (double) height / imgHeight;
+                    double ratio = Math.min(widthRatio, heightRatio);
+
+                    int newWidth = (int) (imgWidth * ratio);
+                    int newHeight = (int) (imgHeight * ratio);
+
+                    g.drawImage(image, 0, 0, newWidth, newHeight, this);
+                }
+                super.paintComponent(g);
             }
         }
     }
+
+
 
     private class LabyrintheView extends JPanel {
         private boolean enDeplacement ;
