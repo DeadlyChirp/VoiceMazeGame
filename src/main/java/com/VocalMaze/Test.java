@@ -23,7 +23,7 @@ public class Test {
         System.out.print("Voici les commandes dispo :\na) '1' : pour commencer a enregistrer un vocal\n");
         System.out.println("b) '0' : pour arreter l'enregistrement du vocal");
         System.out.println("c) 'exec' : pour pouvoir executer la commande voulu");
-        System.out.println("d) 'transcrire' : pour transcrire le fichier audio enregistré dans le dossier Records");
+        System.out.println("d) 'transcrire' : pour transcrire le fichier audio enregistré dans le dossier com.VocalMaze.Records");
         System.out.println("e) 'exit' : pour terminer le programme");
         System.out.println("\nREMARQUE !!!! : La commande doit être écrite comme si on l'ecrivait sur un terminal, pas d'espace au debut ni a la fin");
         

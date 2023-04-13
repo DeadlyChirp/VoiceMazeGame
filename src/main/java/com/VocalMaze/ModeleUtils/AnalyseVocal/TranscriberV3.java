@@ -41,7 +41,7 @@ public class TranscriberV3 {
     public Direction [] transcription () {
         Direction [] res = {} ; 
         try {
-            res = getDirections(transcriber("src/main/java/com/VocalMaze/Records/Audio.wav")); 
+            res = getDirections(transcriber("src/main/java/com/VocalMaze/com.VocalMaze.Records/Audio.wav"));
         } catch (Exception e) {
             e.printStackTrace();
         }
