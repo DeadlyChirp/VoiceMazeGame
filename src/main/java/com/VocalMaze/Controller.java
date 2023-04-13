@@ -52,12 +52,14 @@ public class Controller {
         return model.analyse2() ; 
     }
 
-    public boolean transcrireAndPlay() {
+    public Direction [] transcrire () {
+        return model.transcrire() ; 
+    }
+
+    public boolean play(Direction [] directioons) {
         //TODO
         /*
-         * Cette methode va transcrire l'audio enregistré 
-         * Recuperer les directions
-         * Faire bouger le modele si possible 
+         * Faire bouger le modele si possible selon le tableau de Drections
          * Faire correspondre la vue avec la vue si possible avec la fonctions movePlayer(Direction , int) de GameView
          */
 

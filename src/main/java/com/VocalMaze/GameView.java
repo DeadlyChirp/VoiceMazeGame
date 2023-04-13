@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
-import com.VocalMaze.ModeleUtils.AudioAnalyser;
 import com.VocalMaze.ModeleUtils.Direction;
 
 public class GameView extends JPanel{
@@ -93,10 +92,7 @@ public class GameView extends JPanel{
                 Faire apparaitre une fenetre qui annonce le nombre de locuteurs trouvés 
                 ainsi que le temps de parole pour le prochain enregistrement        
          */
-        AudioAnalyser audioAnalyser = new AudioAnalyser();
-        int[] maleFemaleCounts = audioAnalyser.analyse2();
-        String message = "Salutations, mes chers aventuriers ! Préparez-vous à trembler de terreur, car je vois que votre équipe est composée de  " + maleFemaleCounts[1] + (maleFemaleCounts[1] < 2 ? " homme" : " hommes") + " et " + maleFemaleCounts[0] + (maleFemaleCounts[0] < 2 ? " femme " : " femmes") + "Maintenant, commençons le jeu. Vous devez trouver la sortie avant que je ne vous trouve. Ahahaha... Vous êtes à moi maintenant..Osez-vous relever le défi ? Hahahaha !";
-        popUP = new PopUP(message) ; 
+        popUP = new PopUP("Salutations, mes chers aventuriers ! Préparez-vous à trembler de terreur .Maintenant, commençons le jeu. Vous devez trouver la sortie avant que je ne vous trouve. Ahahaha... Vous êtes à moi maintenant..Osez-vous relever le défi ? Hahahaha !") ; 
         add(popUP, BorderLayout.EAST);
 
         // Par defaut il y aura STEP 1 ici dans le constructeur
@@ -125,13 +121,14 @@ public class GameView extends JPanel{
                             // Faire apparaitre un petit sablier qui tourne (un gif) qui dit transcription en cours
                             //  si besoin mais c'est optionnel , ou bien des petites images qui donnent des conseils
                             // comme dans les menus de chargement des jeux a voir 
-                            boolean fin = controller.transcrireAndPlay() ; 
+                            Direction [] directions = controller.transcrire() ; 
+                            boolean fin = controller.play(directions) ; 
                             if (fin) {
                                 endGame();
                                 return ; 
                             }
                             //TODO
-                            //Faire apparaitre STEP 1
+                            // faire apparaitre step1
                             timeMs = -1 ; 
                         }
                         break ; 
