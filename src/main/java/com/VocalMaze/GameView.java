@@ -4,6 +4,8 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
@@ -48,7 +50,7 @@ public class GameView extends JPanel{
             launchDialogTimer.start();
         }
     }
-
+    //Pop up fenetre avec le nbr de joueur classe interne
 //    private class PopUp2 {
 //        public PopUp2() {
 //            showPopUp();
@@ -62,26 +64,44 @@ public class GameView extends JPanel{
 //            JOptionPane.showMessageDialog(null, message, "Males and Females", JOptionPane.INFORMATION_MESSAGE);
 //        }
 //    }
-private class InfoTextArea extends JTextArea {
-    public InfoTextArea(String text) {
-        super(text);
-        setEditable(false);
-        setOpaque(true);
-        setFont(new Font("Arial", Font.PLAIN, 14));
-        setForeground(Color.BLACK);
-        setPreferredSize(new Dimension(200, 80)); // Set the preferred size of the text area
-        setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.BLACK, 1),
-                BorderFactory.createEmptyBorder(5, 5, 5, 5)
-        )); // Add a border to make it look like a chat dialog
-        setAlignmentX(Component.RIGHT_ALIGNMENT); // Align the text area to the right
-        setAlignmentY(Component.TOP_ALIGNMENT); // Align the text area to the top
-        setPreferredSize(new Dimension(200, 100));
-        setMaximumSize(new Dimension(200, 100));
-        setLineWrap(true);
-        setWrapStyleWord(true);
+    private class InfoTextArea extends JTextArea {
+        private final String fullText;
+        private int textIndex = 0;
+
+        public InfoTextArea(String text) {
+            super("");
+            fullText = text;
+            setEditable(false);
+            setOpaque(true);
+            setFont(new Font("Arial", Font.PLAIN, 14));
+            setForeground(Color.BLACK);
+            setPreferredSize(new Dimension(200, 80)); // Set the preferred size of the text area
+            setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(Color.BLACK, 1),
+                    BorderFactory.createEmptyBorder(5, 5, 5, 5)
+            )); // Add a border to make it look like a chat dialog
+            setAlignmentX(Component.RIGHT_ALIGNMENT); // Align the text area to the right
+            setAlignmentY(Component.TOP_ALIGNMENT); // Align the text area to the top
+            setPreferredSize(new Dimension(200, 200));
+            setMaximumSize(new Dimension(200, 200));
+            setLineWrap(true);
+            setWrapStyleWord(true);
+
+            // Create the timer for the typing effect
+            int delay = 50; //milliseconds
+            ActionListener taskPerformer = new ActionListener() {
+                public void actionPerformed(ActionEvent evt) {
+                    if (textIndex < fullText.length()) {
+                        append(String.valueOf(fullText.charAt(textIndex)));
+                        textIndex++;
+                    } else {
+                        ((Timer) evt.getSource()).stop();
+                    }
+                }
+            };
+            new Timer(delay, taskPerformer).start();
+        }
     }
-}
 
     public GameView(String pseudo , int nbMaleTotal , int nbFemelleTotal) throws IOException {
         setSize(TAILLE_ECRAN);
@@ -105,14 +125,6 @@ private class InfoTextArea extends JTextArea {
          */
         //STEP 1 TEST
         new PopUp1();
-
-
-
-
-
-
-
-
         /*
          * STEP 2 :
                 Faire apparaitre une fenetre qui annonce le nombre de locuteurs trouvés 
@@ -120,9 +132,9 @@ private class InfoTextArea extends JTextArea {
          */
         AudioAnalyser audioAnalyser = new AudioAnalyser();
         int[] maleFemaleCounts = audioAnalyser.analyse2();
-        String message = "Hello, I have found that you guys are " + maleFemaleCounts[1] + (maleFemaleCounts[1] < 2 ? " male" : " males") + " and " + maleFemaleCounts[0] + (maleFemaleCounts[0] < 2 ? " female" : " females") + ".";
+        String message = "Salutations, mes chers aventuriers ! Préparez-vous à trembler de terreur, car je vois que votre équipe est composée de  " + maleFemaleCounts[1] + (maleFemaleCounts[1] < 2 ? " homme" : " hommes") + " et " + maleFemaleCounts[0] + (maleFemaleCounts[0] < 2 ? " femme " : " femmes") + "Maintenant, commençons le jeu. Vous devez trouver la sortie avant que je ne vous trouve. Ahahaha... Vous êtes à moi maintenant..Osez-vous relever le défi ? Hahahaha !";
         infoTextArea = new InfoTextArea(message);
-        infoTextArea.setMaximumSize(new Dimension(300, 5));
+        infoTextArea.setMaximumSize(new Dimension(350, 50));
         infoTextArea.setBackground(Color.RED);
 
 // Create a wrapper panel for the InfoTextArea
