@@ -76,6 +76,8 @@ private class InfoTextArea extends JTextArea {
         )); // Add a border to make it look like a chat dialog
         setAlignmentX(Component.RIGHT_ALIGNMENT); // Align the text area to the right
         setAlignmentY(Component.TOP_ALIGNMENT); // Align the text area to the top
+        setPreferredSize(new Dimension(300, 100));
+        setMaximumSize(new Dimension(300, 100));
     }
 }
 
@@ -118,9 +120,16 @@ private class InfoTextArea extends JTextArea {
         int[] maleFemaleCounts = audioAnalyser.analyse2();
         String message = "Hello, I have found that you guys are " + maleFemaleCounts[1] + " males and " + maleFemaleCounts[0] + " females.";
         infoTextArea = new InfoTextArea(message);
-        infoTextArea.setBounds(getWidth() - 300, 0, 300, 100);
+        infoTextArea.setMaximumSize(new Dimension(300, 5));
         infoTextArea.setBackground(Color.RED);
-        add(infoTextArea, BorderLayout.NORTH);
+
+// Create a wrapper panel for the InfoTextArea
+        JPanel infoWrapper = new JPanel();
+        infoWrapper.setLayout(new BoxLayout(infoWrapper, BoxLayout.PAGE_AXIS));
+        infoWrapper.add(infoTextArea);
+        infoWrapper.add(Box.createVerticalGlue());
+
+        add(infoWrapper, BorderLayout.EAST);
 
         // Par defaut il y aura STEP 1 ici dans le constructeur
         nbLocM_F = new int[2] ;
