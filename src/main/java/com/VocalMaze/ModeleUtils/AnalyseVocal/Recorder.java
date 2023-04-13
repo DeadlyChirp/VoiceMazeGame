@@ -64,7 +64,7 @@ public class Recorder {
             System.out.println("Enregistrement du son en cours...");
 
             //Ici on va simplement prendre tout les bits qu'on a capturé juste avant et on va les écrire sur le fichier AUDIO
-            AudioSystem.write(ais,AudioFileFormat.Type.WAVE, new File("src/main/java/com/VocalMaze/com.VocalMaze.Records/Audio.wav"));
+            AudioSystem.write(ais,AudioFileFormat.Type.WAVE, new File("src/main/java/com/VocalMaze/Records/Audio.wav"));
         } catch (LineUnavailableException ex) {
             ex.printStackTrace();
         } catch (IOException ioe) {
