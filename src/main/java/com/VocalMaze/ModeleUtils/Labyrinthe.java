@@ -24,6 +24,10 @@ public class Labyrinthe {
         return plateau;
     }
 
+    public boolean estPointArrivee(int i, int j) {
+        return pointArrivee.getX() == i && pointArrivee.getY() == j;
+    }
+
     private void ajouteCaseFrontiere(ArrayList<Case> caseFrontiere, int x, int y) {
         for (int i = -2; i <= 2; i +=4) {
             if (i+x < plateau.length && i+x >= 0 && !plateau[i+x][y].getOuvert()) {

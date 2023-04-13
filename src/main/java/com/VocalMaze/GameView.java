@@ -74,6 +74,7 @@ public class GameView extends JPanel{
         addKeyListener(new KeyListener() {
             @Override
             public void keyPressed(KeyEvent e) {
+                System.out.println("testttt");
                 switch(e.getKeyChar()) {
                     case 'r' : {
                         if (isRecording) break ; 
@@ -179,7 +180,10 @@ public class GameView extends JPanel{
 
             for (int i = 0; i < porteLabyrinthe.length; i++) {
                 for (int j = 0; j < porteLabyrinthe[i].length; j++) {
-                    if (controller.getOuvert(j, i)) {
+                    if (controller.getGameModel().getLabyrinthe().estPointArrivee(i, j)) {
+                        porteLabyrinthe[i][j] = imagePorte.getSubimage(100, 70, 20, 20);
+                    }
+                    else if (controller.getOuvert(j, i)) {
                         porteLabyrinthe[i][j] = imagePassage.getSubimage(1000, 70, 20, 20);
                     }else {
                         porteLabyrinthe[i][j] = imagePorte.getSubimage(0, 0, 20, 20);
