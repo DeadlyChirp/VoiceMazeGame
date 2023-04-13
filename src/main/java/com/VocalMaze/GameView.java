@@ -3,9 +3,7 @@ package com.VocalMaze;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
@@ -13,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
+import com.VocalMaze.ModeleUtils.AudioAnalyser;
 import com.VocalMaze.ModeleUtils.Direction;
 
 public class GameView extends JPanel{
@@ -22,6 +21,7 @@ public class GameView extends JPanel{
     private int [] nbLocM_F ; 
     private int timeMs ; 
     private boolean isRecording , isRecordingTime ;
+    private InfoTextArea infoTextArea;
     private class PopUp1 {
         public PopUp1() {
             showPopUp();
@@ -34,12 +34,12 @@ public class GameView extends JPanel{
             instructionsDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             JLabel instructionsLabel = new JLabel("Press R to start recording, and S to stop.", SwingConstants.CENTER);
             instructionsDialog.add(instructionsLabel);
+            // TODO : A MODIFIER QUAND ON LANCE LE JEU APRES LE MENU SETTING
 
-            // Pop-up window for instructions after 5s of launching the game
-            Timer launchDialogTimer = new Timer(2000, e -> {
+            Timer launchDialogTimer = new Timer(6000, e -> {
                 instructionsDialog.setVisible(true);
 
-                // Close the pop-up window automatically after 20 seconds
+                // ca se ferme tout seul apres 5 secondes
                 Timer closeDialogTimer = new Timer(5000, e1 -> instructionsDialog.dispose());
                 closeDialogTimer.setRepeats(false);
                 closeDialogTimer.start();
@@ -49,8 +49,39 @@ public class GameView extends JPanel{
         }
     }
 
+//    private class PopUp2 {
+//        public PopUp2() {
+//            showPopUp();
+//        }
+//
+//        private void showPopUp() {
+//            AudioAnalyser audioAnalyser = new AudioAnalyser();
+//            int[] maleFemaleCounts = audioAnalyser.analyse2();
+//            String message = "Hello, I have found that you guys are " + maleFemaleCounts[1] + " males and " + maleFemaleCounts[0] + " females.";
+//
+//            JOptionPane.showMessageDialog(null, message, "Males and Females", JOptionPane.INFORMATION_MESSAGE);
+//        }
+//    }
+private class InfoTextArea extends JTextArea {
+    public InfoTextArea(String text) {
+        super(text);
+        setEditable(false);
+        setOpaque(true);
+        setFont(new Font("Arial", Font.PLAIN, 14));
+        setForeground(Color.BLACK);
+        setPreferredSize(new Dimension(200, 80)); // Set the preferred size of the text area
+        setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.BLACK, 1),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)
+        )); // Add a border to make it look like a chat dialog
+        setAlignmentX(Component.RIGHT_ALIGNMENT); // Align the text area to the right
+        setAlignmentY(Component.TOP_ALIGNMENT); // Align the text area to the top
+    }
+}
+
     public GameView(String pseudo , int nbMaleTotal , int nbFemelleTotal) throws IOException {
         setSize(TAILLE_ECRAN);
+        setLayout(new BorderLayout());
         controller = new Controller(new GameModel(pseudo, nbMaleTotal, nbFemelleTotal), this) ; 
         labyrintheView = new LabyrintheView() ; 
         labyrintheView.decoupeImage();
@@ -71,18 +102,18 @@ public class GameView extends JPanel{
         //STEP 1 TEST
         new PopUp1();
 
-
-
-
-
-
-
-
         /*
          * STEP 2 :
                 Faire apparaitre une fenetre qui annonce le nombre de locuteurs trouvés 
                 ainsi que le temps de parole pour le prochain enregistrement        
          */
+        AudioAnalyser audioAnalyser = new AudioAnalyser();
+        int[] maleFemaleCounts = audioAnalyser.analyse2();
+        String message = "Hello, I have found that you guys are " + maleFemaleCounts[1] + " males and " + maleFemaleCounts[0] + " females.";
+        infoTextArea = new InfoTextArea(message);
+        infoTextArea.setBounds(getWidth() - 300, 0, 300, 100);
+        infoTextArea.setBackground(Color.RED);
+        add(infoTextArea, BorderLayout.NORTH);
 
         // Par defaut il y aura STEP 1 ici dans le constructeur
         nbLocM_F = new int[2] ;
