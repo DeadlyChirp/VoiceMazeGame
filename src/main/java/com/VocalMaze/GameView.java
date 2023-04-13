@@ -11,6 +11,7 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Random;
 
 import com.VocalMaze.ModeleUtils.Direction;
@@ -92,7 +93,7 @@ public class GameView extends JPanel{
                 Faire apparaitre une fenetre qui annonce le nombre de locuteurs trouvés 
                 ainsi que le temps de parole pour le prochain enregistrement        
          */
-        popUP = new PopUP("Salutations, mes chers aventuriers ! Préparez-vous à trembler de terreur .Maintenant, commençons le jeu. Vous devez trouver la sortie avant que je ne vous trouve. Ahahaha... Vous êtes à moi maintenant..Osez-vous relever le défi ? Hahahaha !") ; 
+        popUP = new PopUP("Grand master : Salutations, mes chers aventuriers! Préparez-vous à trembler de terreur. Maintenant, commençons le jeu. Vous devez trouver la sortie avant que je ne vous trouve. Ahahaha... Vous êtes à moi maintenant..Osez-vous relever le défi ? Hahahaha!") ;
         add(popUP, BorderLayout.EAST);
 
         // Par defaut il y aura STEP 1 ici dans le constructeur
@@ -109,6 +110,7 @@ public class GameView extends JPanel{
                         if (isRecording) break ; 
                         if (timeMs == -1) {
                             controller.startRecord();
+                            isRecording = true ;
                         }else{
                             controller.startRecord(timeMs);
                             isRecordingTime = true ; 
@@ -174,37 +176,45 @@ public class GameView extends JPanel{
     }
 
     public class PopUP extends JPanel {
-        PopUP (String message) {
+        PopUP(String message) {
             InfoTextArea infoTextArea = new InfoTextArea(message);
             infoTextArea.setMaximumSize(new Dimension(350, 50));
-            infoTextArea.setBackground(Color.RED);
+            infoTextArea.setBackground(new Color(248, 248, 248));
             setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
             add(infoTextArea);
             add(Box.createVerticalGlue());
         }
+
         private class InfoTextArea extends JTextArea {
             private final String fullText;
             private int textIndex = 0;
-    
+
             public InfoTextArea(String text) {
                 super("");
                 fullText = text;
                 setEditable(false);
                 setOpaque(true);
-                setFont(new Font("Arial", Font.PLAIN, 14));
-                setForeground(Color.BLACK);
-                setPreferredSize(new Dimension(200, 80)); // Set the preferred size of the text area
+                try {
+                    File fontFile = new File("src/main/java/com/VocalMaze/Audio&Visuel/Font-police/PressStart2P-Regular.ttf");
+                    Font pressStart2P = Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(14f);
+                    setFont(pressStart2P);
+                } catch (FontFormatException | IOException e) {
+                    e.printStackTrace();
+                }
+
+                setForeground(new Color(0, 0, 0)); // Set the text color to black
                 setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(Color.BLACK, 1),
+                        BorderFactory.createLineBorder(new Color(0, 0, 0), 3), // Change the border color to black
                         BorderFactory.createEmptyBorder(5, 5, 5, 5)
-                )); // Add a border to make it look like a chat dialog
-                setAlignmentX(Component.RIGHT_ALIGNMENT); // Align the text area to the right
-                setAlignmentY(Component.TOP_ALIGNMENT); // Align the text area to the top
-                setPreferredSize(new Dimension(200, 200));
-                setMaximumSize(new Dimension(200, 200));
+                ));
+
+//                setAlignmentX(Component.RIGHT_ALIGNMENT);
+//                setAlignmentY(Component.TOP_ALIGNMENT);
+                setPreferredSize(new Dimension(400, 250));
+//                setMaximumSize(new Dimension(400, 250));
                 setLineWrap(true);
                 setWrapStyleWord(true);
-    
+
                 // Create the timer for the typing effect
                 int delay = 50; //milliseconds
                 ActionListener taskPerformer = new ActionListener() {
