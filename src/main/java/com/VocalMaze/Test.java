@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
+import com.VocalMaze.ModeleUtils.AudioAnalyser;
 import com.VocalMaze.ModeleUtils.AnalyseVocal.Recorder;
 import com.VocalMaze.ModeleUtils.AnalyseVocal.Terminal;
 import com.VocalMaze.ModeleUtils.AnalyseVocal.TranscriberV3;
@@ -17,6 +18,7 @@ public class Test {
         
         Recorder rec = new Recorder() ; 
         Terminal term = new Terminal() ; 
+        AudioAnalyser audioAnalyser = new AudioAnalyser() ;
 
         System.out.print("Voici les commandes dispo :\na) '1' : pour commencer a enregistrer un vocal\n");
         System.out.println("b) '0' : pour arreter l'enregistrement du vocal");
@@ -51,6 +53,15 @@ public class Test {
                     TranscriberV3 test = new TranscriberV3();
                     System.out.println(test.transcription());
                     break;
+                
+                case "M1" :
+                    int [] loc = audioAnalyser.analyse1() ; 
+                    System.out.println("NbM => "+loc[0] + "\nNbF => " + loc[1] + "\nNbT => " + (loc[1]+loc[0]));
+                    break ; 
+                case "M2" :
+                    loc = audioAnalyser.analyse2() ; 
+                    System.out.println("NbM => "+loc[0] + "\nNbF => " + loc[1] + "\nNbT => " + (loc[1]+loc[0]));
+                    break ;     
             }
         }while (!res.equals("exit"));
         sc.close();
