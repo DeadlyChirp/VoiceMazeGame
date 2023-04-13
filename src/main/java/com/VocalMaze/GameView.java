@@ -19,11 +19,13 @@ import com.VocalMaze.ModeleUtils.Direction;
 public class GameView extends JPanel{
     private Controller controller ; 
     private LabyrintheView labyrintheView ;
+    private PopUP popUP ; 
     private static final Dimension TAILLE_ECRAN = Toolkit.getDefaultToolkit().getScreenSize();
     private int [] nbLocM_F ; 
     private int timeMs ; 
     private boolean isRecording , isRecordingTime ;
-    private InfoTextArea infoTextArea;
+    
+    
     private class PopUp1 {
         public PopUp1() {
             showPopUp();
@@ -64,44 +66,6 @@ public class GameView extends JPanel{
 //            JOptionPane.showMessageDialog(null, message, "Males and Females", JOptionPane.INFORMATION_MESSAGE);
 //        }
 //    }
-    private class InfoTextArea extends JTextArea {
-        private final String fullText;
-        private int textIndex = 0;
-
-        public InfoTextArea(String text) {
-            super("");
-            fullText = text;
-            setEditable(false);
-            setOpaque(true);
-            setFont(new Font("Arial", Font.PLAIN, 14));
-            setForeground(Color.BLACK);
-            setPreferredSize(new Dimension(200, 80)); // Set the preferred size of the text area
-            setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(Color.BLACK, 1),
-                    BorderFactory.createEmptyBorder(5, 5, 5, 5)
-            )); // Add a border to make it look like a chat dialog
-            setAlignmentX(Component.RIGHT_ALIGNMENT); // Align the text area to the right
-            setAlignmentY(Component.TOP_ALIGNMENT); // Align the text area to the top
-            setPreferredSize(new Dimension(200, 200));
-            setMaximumSize(new Dimension(200, 200));
-            setLineWrap(true);
-            setWrapStyleWord(true);
-
-            // Create the timer for the typing effect
-            int delay = 50; //milliseconds
-            ActionListener taskPerformer = new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
-                    if (textIndex < fullText.length()) {
-                        append(String.valueOf(fullText.charAt(textIndex)));
-                        textIndex++;
-                    } else {
-                        ((Timer) evt.getSource()).stop();
-                    }
-                }
-            };
-            new Timer(delay, taskPerformer).start();
-        }
-    }
 
     public GameView(String pseudo , int nbMaleTotal , int nbFemelleTotal) throws IOException {
         setSize(TAILLE_ECRAN);
@@ -124,7 +88,6 @@ public class GameView extends JPanel{
                 en gros c'est un truc comme ça
          */
         //STEP 1 TEST
-        new PopUp1();
         /*
          * STEP 2 :
                 Faire apparaitre une fenetre qui annonce le nombre de locuteurs trouvés 
@@ -133,17 +96,8 @@ public class GameView extends JPanel{
         AudioAnalyser audioAnalyser = new AudioAnalyser();
         int[] maleFemaleCounts = audioAnalyser.analyse2();
         String message = "Salutations, mes chers aventuriers ! Préparez-vous à trembler de terreur, car je vois que votre équipe est composée de  " + maleFemaleCounts[1] + (maleFemaleCounts[1] < 2 ? " homme" : " hommes") + " et " + maleFemaleCounts[0] + (maleFemaleCounts[0] < 2 ? " femme " : " femmes") + "Maintenant, commençons le jeu. Vous devez trouver la sortie avant que je ne vous trouve. Ahahaha... Vous êtes à moi maintenant..Osez-vous relever le défi ? Hahahaha !";
-        infoTextArea = new InfoTextArea(message);
-        infoTextArea.setMaximumSize(new Dimension(350, 50));
-        infoTextArea.setBackground(Color.RED);
-
-// Create a wrapper panel for the InfoTextArea
-        JPanel infoWrapper = new JPanel();
-        infoWrapper.setLayout(new BoxLayout(infoWrapper, BoxLayout.PAGE_AXIS));
-        infoWrapper.add(infoTextArea);
-        infoWrapper.add(Box.createVerticalGlue());
-
-        add(infoWrapper, BorderLayout.EAST);
+        popUP = new PopUP(message) ; 
+        add(popUP, BorderLayout.EAST);
 
         // Par defaut il y aura STEP 1 ici dans le constructeur
         nbLocM_F = new int[2] ;
@@ -213,12 +167,62 @@ public class GameView extends JPanel{
         
     }
 
+
     public void endGame () {
         //TODO qui fera apparaire l'ecran de fin du jeu
     }
 
     public void movePlayer (Direction dir , int steps) {
         labyrintheView.movePlayer(dir, steps);
+    }
+
+    public class PopUP extends JPanel {
+        PopUP (String message) {
+            InfoTextArea infoTextArea = new InfoTextArea(message);
+            infoTextArea.setMaximumSize(new Dimension(350, 50));
+            infoTextArea.setBackground(Color.RED);
+            setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+            add(infoTextArea);
+            add(Box.createVerticalGlue());
+        }
+        private class InfoTextArea extends JTextArea {
+            private final String fullText;
+            private int textIndex = 0;
+    
+            public InfoTextArea(String text) {
+                super("");
+                fullText = text;
+                setEditable(false);
+                setOpaque(true);
+                setFont(new Font("Arial", Font.PLAIN, 14));
+                setForeground(Color.BLACK);
+                setPreferredSize(new Dimension(200, 80)); // Set the preferred size of the text area
+                setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(Color.BLACK, 1),
+                        BorderFactory.createEmptyBorder(5, 5, 5, 5)
+                )); // Add a border to make it look like a chat dialog
+                setAlignmentX(Component.RIGHT_ALIGNMENT); // Align the text area to the right
+                setAlignmentY(Component.TOP_ALIGNMENT); // Align the text area to the top
+                setPreferredSize(new Dimension(200, 200));
+                setMaximumSize(new Dimension(200, 200));
+                setLineWrap(true);
+                setWrapStyleWord(true);
+    
+                // Create the timer for the typing effect
+                int delay = 50; //milliseconds
+                ActionListener taskPerformer = new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (textIndex < fullText.length()) {
+                            append(String.valueOf(fullText.charAt(textIndex)));
+                            textIndex++;
+                        } else {
+                            ((Timer) evt.getSource()).stop();
+                        }
+                    }
+                };
+                new Timer(delay, taskPerformer).start();
+            }
+        }
     }
 
     private class LabyrintheView extends JPanel {
