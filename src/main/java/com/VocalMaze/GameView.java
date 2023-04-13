@@ -17,13 +17,15 @@ import com.VocalMaze.ModeleUtils.AudioAnalyser;
 import com.VocalMaze.ModeleUtils.Direction;
 
 public class GameView extends JPanel{
-    private Controller controller ;
+    private Controller controller ; 
     private LabyrintheView labyrintheView ;
+    private PopUP popUP ; 
     private static final Dimension TAILLE_ECRAN = Toolkit.getDefaultToolkit().getScreenSize();
-    private int [] nbLocM_F ;
-    private int timeMs ;
+    private int [] nbLocM_F ; 
+    private int timeMs ; 
     private boolean isRecording , isRecordingTime ;
-    private InfoTextArea infoTextArea;
+    
+    
     private class PopUp1 {
         public PopUp1() {
             showPopUp();
@@ -64,153 +66,107 @@ public class GameView extends JPanel{
 //            JOptionPane.showMessageDialog(null, message, "Males and Females", JOptionPane.INFORMATION_MESSAGE);
 //        }
 //    }
-    private class InfoTextArea extends JTextArea {
-        private final String fullText;
-        private int textIndex = 0;
-
-        public InfoTextArea(String text) {
-            super("");
-            fullText = text;
-            setEditable(false);
-            setOpaque(true);
-            setFont(new Font("Arial", Font.PLAIN, 14));
-            setForeground(Color.BLACK);
-            setPreferredSize(new Dimension(200, 80)); // Set the preferred size of the text area
-            setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(Color.BLACK, 1),
-                    BorderFactory.createEmptyBorder(5, 5, 5, 5)
-            )); // Add a border to make it look like a chat dialog
-            setAlignmentX(Component.RIGHT_ALIGNMENT); // Align the text area to the right
-            setAlignmentY(Component.TOP_ALIGNMENT); // Align the text area to the top
-            setPreferredSize(new Dimension(500, 500));
-            setMaximumSize(new Dimension(500, 500));
-            setLineWrap(true);
-            setWrapStyleWord(true);
-
-            // Create the timer for the typing effect
-            int delay = 50; //milliseconds
-            ActionListener taskPerformer = new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
-                    if (textIndex < fullText.length()) {
-                        append(String.valueOf(fullText.charAt(textIndex)));
-                        textIndex++;
-                    } else {
-                        ((Timer) evt.getSource()).stop();
-                    }
-                }
-            };
-            new Timer(delay, taskPerformer).start();
-        }
-    }
 
     public GameView(String pseudo , int nbMaleTotal , int nbFemelleTotal) throws IOException {
         setSize(TAILLE_ECRAN);
         setLayout(new BorderLayout());
-        controller = new Controller(new GameModel(pseudo, nbMaleTotal, nbFemelleTotal), this) ;
-        labyrintheView = new LabyrintheView() ;
+        controller = new Controller(new GameModel(pseudo, nbMaleTotal, nbFemelleTotal), this) ; 
+        labyrintheView = new LabyrintheView() ; 
         labyrintheView.decoupeImage();
         //labyrintheView.setLocation(250, 100);
-        add(labyrintheView) ;
+        add(labyrintheView) ; 
         labyrintheView.setVisible(true);
         setVisible(true);
 
         // STEP 1 class interne
         /*
-         * TODO
+         * TODO 
          * il y aura deux STEPS
          * STEP 1 :
                 La premiere par defaut quand le jeu se lance , il y aura une fenetre qui doit dire au joueur ce qu'il doit faire
-                appuyer sur R pour commencer le record , afin de determiner le temps de parole du 2eme enregistrement
+                appuyer sur R pour commencer le record , afin de determiner le temps de parole du 2eme enregistrement 
                 en gros c'est un truc comme ça
          */
         //STEP 1 TEST
-        new PopUp1();
         /*
          * STEP 2 :
-                Faire apparaitre une fenetre qui annonce le nombre de locuteurs trouvés
-                ainsi que le temps de parole pour le prochain enregistrement
+                Faire apparaitre une fenetre qui annonce le nombre de locuteurs trouvés 
+                ainsi que le temps de parole pour le prochain enregistrement        
          */
         AudioAnalyser audioAnalyser = new AudioAnalyser();
         int[] maleFemaleCounts = audioAnalyser.analyse2();
         String message = "Salutations, mes chers aventuriers ! Préparez-vous à trembler de terreur, car je vois que votre équipe est composée de  " + maleFemaleCounts[1] + (maleFemaleCounts[1] < 2 ? " homme" : " hommes") + " et " + maleFemaleCounts[0] + (maleFemaleCounts[0] < 2 ? " femme " : " femmes") + "Maintenant, commençons le jeu. Vous devez trouver la sortie avant que je ne vous trouve. Ahahaha... Vous êtes à moi maintenant..Osez-vous relever le défi ? Hahahaha !";
-        infoTextArea = new InfoTextArea(message);
-        infoTextArea.setMaximumSize(new Dimension(800, 50));
-        infoTextArea.setBackground(Color.RED);
-
-        JPanel infoWrapper = new JPanel();
-        infoWrapper.setLayout(new BoxLayout(infoWrapper, BoxLayout.PAGE_AXIS));
-        infoWrapper.add(infoTextArea);
-        infoWrapper.add(Box.createVerticalGlue());
-
-        add(infoWrapper, BorderLayout.EAST);
+        popUP = new PopUP(message) ; 
+        add(popUP, BorderLayout.EAST);
 
         // Par defaut il y aura STEP 1 ici dans le constructeur
         nbLocM_F = new int[2] ;
-        nbLocM_F[0] = 0 ;
-        nbLocM_F[1] = 0 ;
-        timeMs = -1 ;
+        nbLocM_F[0] = 0 ; 
+        nbLocM_F[1] = 0 ; 
+        timeMs = -1 ; 
         addKeyListener(new KeyListener() {
             @Override
             public void keyPressed(KeyEvent e) {
                 System.out.println("testttt");
                 switch(e.getKeyChar()) {
                     case 'r' : {
-                        if (isRecording) break ;
+                        if (isRecording) break ; 
                         if (timeMs == -1) {
                             controller.startRecord();
                         }else{
                             controller.startRecord(timeMs);
-                            isRecordingTime = true ;
+                            isRecordingTime = true ; 
                             try {
                                 Thread.sleep(timeMs);
-                                isRecordingTime = false ;
+                                isRecordingTime = false ; 
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
                             // Faire apparaitre un petit sablier qui tourne (un gif) qui dit transcription en cours
                             //  si besoin mais c'est optionnel , ou bien des petites images qui donnent des conseils
-                            // comme dans les menus de chargement des jeux a voir
-                            boolean fin = controller.transcrireAndPlay() ;
+                            // comme dans les menus de chargement des jeux a voir 
+                            boolean fin = controller.transcrireAndPlay() ; 
                             if (fin) {
                                 endGame();
-                                return ;
+                                return ; 
                             }
                             //TODO
                             //Faire apparaitre STEP 1
-                            timeMs = -1 ;
+                            timeMs = -1 ; 
                         }
-                        break ;
+                        break ; 
                     }
-
+                
                     case 's' :{
                         if (!isRecording || isRecordingTime) break ;
                         if (timeMs == -1) {
                             controller.stopRecord();
                             //Analyse du vocal
-                            nbLocM_F = controller.analyse2() ;
+                            nbLocM_F = controller.analyse2() ; 
                             //Entre 5 et 7.5 par Homme, et entre 6 et 9 par Femme
-                            timeMs = nbLocM_F[0]*(5000+(new Random()).nextInt(2501)) + nbLocM_F[1]*(6000+(new Random()).nextInt(3001)) ;
+                            timeMs = nbLocM_F[0]*(5000+(new Random()).nextInt(2501)) + nbLocM_F[1]*(6000+(new Random()).nextInt(3001)) ; 
                             // TODO faire apparaitre STEP 2
                         }
-                        break ;
+                        break ; 
                     }
-
-                    default : break ;
+                    
+                    default : break ; 
                 }
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
-
+                
             }
-
+            
             @Override
             public void keyTyped(KeyEvent e) {
-
+                
             }
         });
-
+        
     }
+
 
     public void endGame () {
         //TODO qui fera apparaire l'ecran de fin du jeu
@@ -218,6 +174,55 @@ public class GameView extends JPanel{
 
     public void movePlayer (Direction dir , int steps) {
         labyrintheView.movePlayer(dir, steps);
+    }
+
+    public class PopUP extends JPanel {
+        PopUP (String message) {
+            InfoTextArea infoTextArea = new InfoTextArea(message);
+            infoTextArea.setMaximumSize(new Dimension(350, 50));
+            infoTextArea.setBackground(Color.RED);
+            setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+            add(infoTextArea);
+            add(Box.createVerticalGlue());
+        }
+        private class InfoTextArea extends JTextArea {
+            private final String fullText;
+            private int textIndex = 0;
+    
+            public InfoTextArea(String text) {
+                super("");
+                fullText = text;
+                setEditable(false);
+                setOpaque(true);
+                setFont(new Font("Arial", Font.PLAIN, 14));
+                setForeground(Color.BLACK);
+                setPreferredSize(new Dimension(200, 80)); // Set the preferred size of the text area
+                setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(Color.BLACK, 1),
+                        BorderFactory.createEmptyBorder(5, 5, 5, 5)
+                )); // Add a border to make it look like a chat dialog
+                setAlignmentX(Component.RIGHT_ALIGNMENT); // Align the text area to the right
+                setAlignmentY(Component.TOP_ALIGNMENT); // Align the text area to the top
+                setPreferredSize(new Dimension(200, 200));
+                setMaximumSize(new Dimension(200, 200));
+                setLineWrap(true);
+                setWrapStyleWord(true);
+    
+                // Create the timer for the typing effect
+                int delay = 50; //milliseconds
+                ActionListener taskPerformer = new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (textIndex < fullText.length()) {
+                            append(String.valueOf(fullText.charAt(textIndex)));
+                            textIndex++;
+                        } else {
+                            ((Timer) evt.getSource()).stop();
+                        }
+                    }
+                };
+                new Timer(delay, taskPerformer).start();
+            }
+        }
     }
 
     private class LabyrintheView extends JPanel {
@@ -243,12 +248,12 @@ public class GameView extends JPanel{
             porteLabyrinthe = new BufferedImage[30][30];
             caseX = 0;
             caseY = 0;
-            currentFrame = 0 ;
-            lastTime = 0 ;
-            dirAnim = Direction.BAS ;
-            enDeplacement = false ;
+            currentFrame = 0 ; 
+            lastTime = 0 ; 
+            dirAnim = Direction.BAS ; 
+            enDeplacement = false ; 
         }
-
+        
         private void decoupeImage() {
             for (int i = 0; i < sprites.length; i++) {
                 for (int j = 0; j < sprites[i].length; j++) {
@@ -269,7 +274,7 @@ public class GameView extends JPanel{
                 }
             }
       }
-
+    
         private void animateMovement () {
             while(true) {
                 if (enDeplacement) {
@@ -281,11 +286,11 @@ public class GameView extends JPanel{
                         e.printStackTrace();
                     }
                 }else{
-                    break ;
+                    break ; 
                 }
             }
         }
-
+    
         private void update() {
             long currentTime = System.currentTimeMillis();
             if (currentTime - lastTime > 500) {
@@ -297,19 +302,19 @@ public class GameView extends JPanel{
                             if (caseX + currentFrame * stepsAnim >= ancienCaseX + 20 * stepsAnim) enDeplacement = false;
                             break;
                         }
-
+    
                         case GAUCHE : {
                             caseX -= currentFrame * stepsAnim;
                             if (caseX - currentFrame * stepsAnim <= ancienCaseX - 20 * stepsAnim) enDeplacement = false;
                             break;
                         }
-
+    
                         case BAS : {
                             caseY += currentFrame * stepsAnim;
                             if (caseY + currentFrame * stepsAnim >= ancienCaseY + 20 * stepsAnim) enDeplacement = false;
                             break;
                         }
-
+    
                         case HAUT : {
                             caseY -= currentFrame * stepsAnim;
                             if (caseY - currentFrame * stepsAnim <= ancienCaseY - 20 * stepsAnim) enDeplacement = false;
@@ -321,7 +326,7 @@ public class GameView extends JPanel{
                 }
             }
         }
-
+    
         public void movePlayer(Direction dir, int steps) {
             enDeplacement = true;
             dirAnim = dir;
@@ -330,7 +335,7 @@ public class GameView extends JPanel{
             ancienCaseY = caseY;
             animateMovement();
         }
-
+      
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             for (int i = 0; i < porteLabyrinthe.length; i++) {
