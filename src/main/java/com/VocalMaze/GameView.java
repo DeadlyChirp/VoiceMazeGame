@@ -81,7 +81,7 @@ private class InfoTextArea extends JTextArea {
 
     public GameView(String pseudo , int nbMaleTotal , int nbFemelleTotal) throws IOException {
         setSize(TAILLE_ECRAN);
-        setLayout(new BorderLayout());
+
         controller = new Controller(new GameModel(pseudo, nbMaleTotal, nbFemelleTotal), this) ; 
         labyrintheView = new LabyrintheView() ; 
         labyrintheView.decoupeImage();
@@ -107,6 +107,8 @@ private class InfoTextArea extends JTextArea {
                 Faire apparaitre une fenetre qui annonce le nombre de locuteurs trouvés 
                 ainsi que le temps de parole pour le prochain enregistrement        
          */
+
+
         AudioAnalyser audioAnalyser = new AudioAnalyser();
         int[] maleFemaleCounts = audioAnalyser.analyse2();
         String message = "Hello, I have found that you guys are " + maleFemaleCounts[1] + " males and " + maleFemaleCounts[0] + " females.";
