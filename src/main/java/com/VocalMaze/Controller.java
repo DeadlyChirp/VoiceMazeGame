@@ -56,7 +56,7 @@ public class Controller {
         return model.transcrire() ; 
     }
 
-    public boolean play(Direction [] directioons) {
+    public boolean play(Direction [] directions) {
         //TODO
         /*
          * Faire bouger le modele si possible selon le tableau de Drections
@@ -64,6 +64,24 @@ public class Controller {
          */
 
         //TODO en cas de fin de jeu renvoyer true  , false sinon
+
+        int i = 1;
+        int occ = 1;
+        Direction d = null;
+        if (directions.length != 0) d = directions[0];
+        while (i < directions.length) { //Si la même direction est répétée successivement, alors on compte les occurences et 
+            if (directions[i] == d) occ++;//on appel une fois movePlayer pour cette même direction.
+            else {
+                if (possible(d, occ)) {
+                    movePlayer(d, occ);
+                    gameView.movePlayer(d, occ);
+                    if (model.endGame()) return true;
+                }
+                d = directions[i];
+                occ = 1;
+            }
+            i++;
+        }
         return false ; 
     }
 
