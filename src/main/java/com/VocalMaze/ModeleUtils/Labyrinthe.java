@@ -11,7 +11,7 @@ public class Labyrinthe {
 
     public Labyrinthe(Joueur joueur) {
         this.joueur = joueur;
-        plateau = new Case[30][30];
+        plateau = new Case[23][29];
         for (int i = 0; i < plateau.length; i++) {
             for (int j = 0; j < plateau[i].length; j++) {
                 plateau[i][j] = new Case(i, j);

@@ -13,7 +13,7 @@ public class Controller {
     }
 
     public boolean getOuvert (int x , int y) {
-        return model.getLabyrinthe().getPlateau()[y][x].getOuvert() ;
+        return model.getLabyrinthe().getPlateau()[x][y].getOuvert() ;
     }
 
     public GameModel getGameModel() {

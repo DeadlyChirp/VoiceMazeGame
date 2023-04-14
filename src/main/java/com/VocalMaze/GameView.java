@@ -271,6 +271,7 @@ public class GameView extends JPanel{
         private int caseX, ancienCaseX;
         private int caseY, ancienCaseY;
         private int stepsAnim;
+        private int pourcentTailleEcranX, pourcentTailleEcranY; 
 
         public LabyrintheView () throws IOException{
             setPreferredSize(TAILLE_ECRAN);
@@ -278,13 +279,15 @@ public class GameView extends JPanel{
             sprites = new BufferedImage[4][9];
             imagePorte = ImageIO.read(new File("src/main/java/com/VocalMaze/Images/doors.png"));
             imagePassage = ImageIO.read(new File("src/main/java/com/VocalMaze/Images/M484ShmupTileset1.png"));
-            porteLabyrinthe = new BufferedImage[30][30];
+            porteLabyrinthe = new BufferedImage[23][29];
             caseX = 0;
             caseY = 0;
             currentFrame = 0 ; 
             lastTime = 0 ; 
             dirAnim = Direction.BAS ; 
             enDeplacement = false ; 
+            pourcentTailleEcranX = (int) (2.18 * TAILLE_ECRAN.getWidth()/100);
+            pourcentTailleEcranY = (int) (3.91 * TAILLE_ECRAN.getHeight()/100);
         }
         
         private void decoupeImage() {
@@ -297,12 +300,12 @@ public class GameView extends JPanel{
             for (int i = 0; i < porteLabyrinthe.length; i++) {
                 for (int j = 0; j < porteLabyrinthe[i].length; j++) {
                     if (controller.getGameModel().getLabyrinthe().estPointArrivee(i, j)) {
-                        porteLabyrinthe[i][j] = imagePorte.getSubimage(100, 70, 20, 20);
+                        porteLabyrinthe[i][j] = imagePorte.getSubimage(100, 70, 30, 30);
                     }
-                    else if (controller.getOuvert(j, i)) {
-                        porteLabyrinthe[i][j] = imagePassage.getSubimage(1000, 70, 20, 20);
+                    else if (controller.getOuvert(i, j)) {
+                        porteLabyrinthe[i][j] = imagePassage.getSubimage(1000, 70, 30, 30);
                     }else {
-                        porteLabyrinthe[i][j] = imagePorte.getSubimage(0, 0, 20, 20);
+                        porteLabyrinthe[i][j] = imagePorte.getSubimage(0, 0, 30, 30);
                     }
                 }
             }
@@ -373,7 +376,7 @@ public class GameView extends JPanel{
             super.paintComponent(g);
             for (int i = 0; i < porteLabyrinthe.length; i++) {
                 for (int j = 0; j < porteLabyrinthe[i].length; j++) {
-                    g.drawImage(porteLabyrinthe[i][j], 20+i*20, 40+j*20, null);
+                    g.drawImage(porteLabyrinthe[i][j], j * pourcentTailleEcranX , i * pourcentTailleEcranY, null);
                 }
             }
             switch(dirAnim) {
@@ -417,6 +420,8 @@ public class GameView extends JPanel{
     gameView.movePlayer(Direction.DROITE, 5);
 
     gameView.movePlayer(Direction.BAS , 10);
+    gameView.controller.getGameModel().getLabyrinthe().printLabyrinthe();
+    System.out.println(TAILLE_ECRAN);
 
   }
 }
