@@ -271,7 +271,7 @@ public class GameView extends JPanel{
         private int caseX, ancienCaseX;
         private int caseY, ancienCaseY;
         private int stepsAnim;
-        private int pourcentTailleEcranX, pourcentTailleEcranY; 
+       // private int pourcentTailleEcranX, pourcentTailleEcranY; 
 
         public LabyrintheView () throws IOException{
             setPreferredSize(TAILLE_ECRAN);
@@ -286,8 +286,8 @@ public class GameView extends JPanel{
             lastTime = 0 ; 
             dirAnim = Direction.BAS ; 
             enDeplacement = false ; 
-            pourcentTailleEcranX = (int) (2.18 * TAILLE_ECRAN.getWidth()/100);
-            pourcentTailleEcranY = (int) (3.91 * TAILLE_ECRAN.getHeight()/100);
+            // pourcentTailleEcranX = (int) (2.18 * TAILLE_ECRAN.getWidth()/100);
+            // pourcentTailleEcranY = (int) (3.91 * TAILLE_ECRAN.getHeight()/100);
         }
         
         private void decoupeImage() {
@@ -376,7 +376,7 @@ public class GameView extends JPanel{
             super.paintComponent(g);
             for (int i = 0; i < porteLabyrinthe.length; i++) {
                 for (int j = 0; j < porteLabyrinthe[i].length; j++) {
-                    g.drawImage(porteLabyrinthe[i][j], j * pourcentTailleEcranX , i * pourcentTailleEcranY, null);
+                    g.drawImage(porteLabyrinthe[i][j], j * 30 , i * 30, null);
                 }
             }
             switch(dirAnim) {
