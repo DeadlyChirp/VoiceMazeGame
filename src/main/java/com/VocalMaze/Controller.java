@@ -57,14 +57,6 @@ public class Controller {
     }
 
     public boolean play(Direction [] directions) {
-        //TODO
-        /*
-         * Faire bouger le modele si possible selon le tableau de Drections
-         * Faire correspondre la vue avec la vue si possible avec la fonctions movePlayer(Direction , int) de GameView
-         */
-
-        //TODO en cas de fin de jeu renvoyer true  , false sinon
-
         int i = 1;
         int occ = 1;
         Direction d = null;

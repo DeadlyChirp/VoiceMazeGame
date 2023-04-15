@@ -8,14 +8,12 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Random;
 
 import com.VocalMaze.ModeleUtils.Direction;
 
-import static javax.swing.text.StyleConstants.setLineSpacing;
 
-public class GameView extends JPanel{
+public class GameView extends JPanel implements KeyListener{
     private Controller controller ; 
     private LabyrintheView labyrintheView ;
     private PopUP popUP ; 
@@ -24,48 +22,6 @@ public class GameView extends JPanel{
     private int timeMs ; 
     private boolean isRecording , isRecordingTime ;
     
-    
-    private class PopUp1 {
-        public PopUp1() {
-            showPopUp();
-        }
-        private void showPopUp() {
-            JDialog instructionsDialog = new JDialog();
-            instructionsDialog.setTitle("Instructions");
-            instructionsDialog.setSize(300, 100);
-            instructionsDialog.setLocationRelativeTo(null);
-            instructionsDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            JLabel instructionsLabel = new JLabel("Press R to start recording, and S to stop.", SwingConstants.CENTER);
-            instructionsDialog.add(instructionsLabel);
-            // TODO : A MODIFIER QUAND ON LANCE LE JEU APRES LE MENU SETTING
-
-            Timer launchDialogTimer = new Timer(6000, e -> {
-                instructionsDialog.setVisible(true);
-
-                // ca se ferme tout seul apres 5 secondes
-                Timer closeDialogTimer = new Timer(5000, e1 -> instructionsDialog.dispose());
-                closeDialogTimer.setRepeats(false);
-                closeDialogTimer.start();
-            });
-            launchDialogTimer.setRepeats(false);
-            launchDialogTimer.start();
-        }
-    }
-    //Pop up fenetre avec le nbr de joueur classe interne
-//    private class PopUp2 {
-//        public PopUp2() {
-//            showPopUp();
-//        }
-//
-//        private void showPopUp() {
-//            AudioAnalyser audioAnalyser = new AudioAnalyser();
-//            int[] maleFemaleCounts = audioAnalyser.analyse2();
-//            String message = "Hello, I have found that you guys are " + maleFemaleCounts[1] + " males and " + maleFemaleCounts[0] + " females.";
-//
-//            JOptionPane.showMessageDialog(null, message, "Males and Females", JOptionPane.INFORMATION_MESSAGE);
-//        }
-//    }
-
     public GameView(String pseudo , int nbMaleTotal , int nbFemelleTotal) throws IOException {
         setSize(TAILLE_ECRAN);
         setLayout(new BorderLayout());
@@ -92,80 +48,76 @@ public class GameView extends JPanel{
                 Faire apparaitre une fenetre qui annonce le nombre de locuteurs trouvés 
                 ainsi que le temps de parole pour le prochain enregistrement        
          */
-        popUP = new PopUP("- Grand master : Salutations, mes chers aventuriers! Préparez-vous à trembler de terreur. Maintenant, commençons le jeu. Vous devez trouver la sortie avant que je ne vous trouve. Ahahaha... Vous êtes à moi maintenant..Osez-vous relever le défi ? Hahahaha!") ;
+        popUP = new PopUP("- Grand master : Salutations, mes chers aventuriers! Préparez-vous à trembler de terreur. Maintenant, commençons le jeu. Vous devez trouver la sortie avant que je ne vous trouve. Ahahaha... Vous êtes à moi maintenant..Osez-vous relever le défi ? Hahahaha!\n" + 
+        "- Jeu : Dans un premier temps , vous devez parler chacun votre tour afin de vous reconnaitre , ainsi gagner du temps de parole . Appuyez sur R pour commencer l'enregistrement , puis appuyez sur S quand vous avez fini !") ;
         add(popUP, BorderLayout.EAST);
-
-        // Par defaut il y aura STEP 1 ici dans le constructeur
         nbLocM_F = new int[2] ;
         nbLocM_F[0] = 0 ; 
         nbLocM_F[1] = 0 ; 
         timeMs = -1 ; 
-        addKeyListener(new KeyListener() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                System.out.println("testttt");
-                switch(e.getKeyChar()) {
-                    case 'r' : {
-                        if (isRecording) break ; 
-                        if (timeMs == -1) {
-                            controller.startRecord();
-                            isRecording = true ;
-                        }else{
-                            controller.startRecord(timeMs);
-                            isRecordingTime = true ; 
-                            try {
-                                Thread.sleep(timeMs);
-                                isRecordingTime = false ; 
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                            }
-                            // Faire apparaitre un petit sablier qui tourne (un gif) qui dit transcription en cours
-                            //  si besoin mais c'est optionnel , ou bien des petites images qui donnent des conseils
-                            // comme dans les menus de chargement des jeux a voir 
-                            Direction [] directions = controller.transcrire() ; 
-                            boolean fin = controller.play(directions) ; 
-                            if (fin) {
-                                endGame();
-                                return ; 
-                            }
-                            //TODO
-                            // faire apparaitre step1
-                            timeMs = -1 ; 
-                        }
-                        break ; 
-                    }
-                
-                    case 's' :{
-                        if (!isRecording || isRecordingTime) break ;
-                        if (timeMs == -1) {
-                            controller.stopRecord();
-                            //Analyse du vocal
-                            nbLocM_F = controller.analyse2() ; 
-                            //Entre 5 et 7.5 par Homme, et entre 6 et 9 par Femme
-                            timeMs = nbLocM_F[0]*(5000+(new Random()).nextInt(2501)) + nbLocM_F[1]*(6000+(new Random()).nextInt(3001)) ; 
-                            // TODO faire apparaitre STEP 2
-                        }
-                        break ; 
-                    }
-                    
-                    default : break ; 
-                }
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                
-            }
-            
-            @Override
-            public void keyTyped(KeyEvent e) {
-                
-            }
-        });
-        
+        addKeyListener(this) ;    
     }
 
+    @Override
+    public void keyTyped(KeyEvent e) {
+        switch(e.getKeyChar()) {
+            case 'r' : {
+                if (isRecording) break ; 
+                if (timeMs == -1) {
+                    controller.startRecord();
+                    isRecording = true ;
+                }else{
+                    controller.startRecord(timeMs);
+                    isRecordingTime = true ; 
+                    try {
+                        Thread.sleep(timeMs);
+                        isRecordingTime = false ; 
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    // Faire apparaitre un petit sablier qui tourne (un gif) qui dit transcription en cours
+                    //  si besoin mais c'est optionnel , ou bien des petites images qui donnent des conseils
+                    // comme dans les menus de chargement des jeux a voir 
+                    Direction [] directions = controller.transcrire() ; 
+                    boolean fin = controller.play(directions) ; 
+                    if (fin) {
+                        endGame();
+                        return ; 
+                    }
+                    //TODO
+                    // faire apparaitre step1
+                    timeMs = -1 ; 
+                }
+                break ; 
+            }
+        
+            case 's' :{
+                if (!isRecording || isRecordingTime) break ;
+                if (timeMs == -1) {
+                    controller.stopRecord();
+                    //Analyse du vocal
+                    nbLocM_F = controller.analyse2() ; 
+                    //Entre 5 et 7.5 par Homme, et entre 6 et 9 par Femme
+                    timeMs = nbLocM_F[0]*(5000+(new Random()).nextInt(2501)) + nbLocM_F[1]*(6000+(new Random()).nextInt(3001)) ; 
+                    // TODO faire apparaitre STEP 2
+                }
+                break ; 
+            }
+            
+            default : break ; 
+        }
+    }
+    
+    @Override
+    public void keyPressed(KeyEvent e) {
+        return ; 
+    }
 
+    @Override
+    public void keyReleased(KeyEvent e) {
+        return ; 
+    }
+    
     public void endGame () {
         //TODO qui fera apparaire l'ecran de fin du jeu
     }
@@ -255,8 +207,6 @@ public class GameView extends JPanel{
             }
         }
     }
-
-
 
     private class LabyrintheView extends JPanel {
         private boolean enDeplacement ;
@@ -405,13 +355,15 @@ public class GameView extends JPanel{
     }
 
   public static void main(String[] args) throws IOException {
-    JFrame frame = new JFrame();
+    JFrame frame = new JFrame() ; 
     frame.getContentPane().setLayout(null);
     frame.setPreferredSize(TAILLE_ECRAN);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     GameView gameView = new GameView("test" , 2 , 2);
     frame.add(gameView);
+    frame.addKeyListener(gameView); // important
     frame.pack();
+    frame.setFocusable(true);// tres tres important 
     frame.setVisible(true);
     gameView.movePlayer(Direction.BAS, 5);
 
@@ -424,4 +376,5 @@ public class GameView extends JPanel{
     System.out.println(TAILLE_ECRAN);
 
   }
+
 }
