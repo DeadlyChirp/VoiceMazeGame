@@ -2,7 +2,8 @@ package com.VocalMaze;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -21,7 +22,8 @@ public class GameView extends JPanel implements KeyListener{
     private int [] nbLocM_F ; 
     private int timeMs ; 
     private boolean isRecording , isRecordingTime ;
-    
+    static GraphicsDevice device;
+
     public GameView(String pseudo , int nbMaleTotal , int nbFemelleTotal) throws IOException {
         setSize(TAILLE_ECRAN);
         setLayout(new BorderLayout());
@@ -357,6 +359,15 @@ public class GameView extends JPanel implements KeyListener{
   public static void main(String[] args) throws IOException {
     JFrame frame = new JFrame() ; 
     frame.getContentPane().setLayout(null);
+
+    //Pour le plein écran
+    device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+    if(device.isFullScreenSupported()){
+        device.setFullScreenWindow(frame);
+    }else{
+        System.err.println("Le mode plein écran n'est pas compatible");
+    }
+    
     frame.setPreferredSize(TAILLE_ECRAN);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     GameView gameView = new GameView("test" , 2 , 2);
