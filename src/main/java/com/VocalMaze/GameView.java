@@ -223,7 +223,7 @@ public class GameView extends JPanel implements KeyListener{
         private int caseX, ancienCaseX;
         private int caseY, ancienCaseY;
         private int stepsAnim;
-       // private int pourcentTailleEcranX, pourcentTailleEcranY; 
+        private int pourcentTailleEcranX, pourcentTailleEcranY; 
 
         public LabyrintheView () throws IOException{
             setPreferredSize(TAILLE_ECRAN);
@@ -231,15 +231,15 @@ public class GameView extends JPanel implements KeyListener{
             sprites = new BufferedImage[4][9];
             imagePorte = ImageIO.read(new File("src/main/java/com/VocalMaze/Images/doors.png"));
             imagePassage = ImageIO.read(new File("src/main/java/com/VocalMaze/Images/M484ShmupTileset1.png"));
-            porteLabyrinthe = new BufferedImage[23][29];
+            porteLabyrinthe = new BufferedImage[25][29];
             caseX = 0;
             caseY = 0;
             currentFrame = 0 ; 
             lastTime = 0 ; 
             dirAnim = Direction.BAS ; 
             enDeplacement = false ; 
-            // pourcentTailleEcranX = (int) (2.18 * TAILLE_ECRAN.getWidth()/100);
-            // pourcentTailleEcranY = (int) (3.91 * TAILLE_ECRAN.getHeight()/100);
+            pourcentTailleEcranX = (int) (2.18 * TAILLE_ECRAN.getWidth()/100);
+            pourcentTailleEcranY = (int) (3.91 * TAILLE_ECRAN.getHeight()/100);
         }
         
         private void decoupeImage() {
@@ -252,12 +252,12 @@ public class GameView extends JPanel implements KeyListener{
             for (int i = 0; i < porteLabyrinthe.length; i++) {
                 for (int j = 0; j < porteLabyrinthe[i].length; j++) {
                     if (controller.getGameModel().getLabyrinthe().estPointArrivee(i, j)) {
-                        porteLabyrinthe[i][j] = imagePorte.getSubimage(100, 70, 30, 30);
+                        porteLabyrinthe[i][j] = imagePorte.getSubimage(100, 70, pourcentTailleEcranX, pourcentTailleEcranY);
                     }
                     else if (controller.getOuvert(i, j)) {
-                        porteLabyrinthe[i][j] = imagePassage.getSubimage(1000, 70, 30, 30);
+                        porteLabyrinthe[i][j] = imagePassage.getSubimage(1000, 70, pourcentTailleEcranX, pourcentTailleEcranY);
                     }else {
-                        porteLabyrinthe[i][j] = imagePorte.getSubimage(0, 0, 30, 30);
+                        porteLabyrinthe[i][j] = imagePorte.getSubimage(0, 0, pourcentTailleEcranX, pourcentTailleEcranY);
                     }
                 }
             }
@@ -287,25 +287,25 @@ public class GameView extends JPanel implements KeyListener{
                     switch(dirAnim) {
                         case DROITE : {
                             caseX += currentFrame * stepsAnim;
-                            if (caseX + currentFrame * stepsAnim >= ancienCaseX + 20 * stepsAnim) enDeplacement = false;
+                            if (caseX + currentFrame * stepsAnim >= ancienCaseX + pourcentTailleEcranX * stepsAnim) enDeplacement = false;
                             break;
                         }
     
                         case GAUCHE : {
                             caseX -= currentFrame * stepsAnim;
-                            if (caseX - currentFrame * stepsAnim <= ancienCaseX - 20 * stepsAnim) enDeplacement = false;
+                            if (caseX - currentFrame * stepsAnim <= ancienCaseX - pourcentTailleEcranX * stepsAnim) enDeplacement = false;
                             break;
                         }
     
                         case BAS : {
                             caseY += currentFrame * stepsAnim;
-                            if (caseY + currentFrame * stepsAnim >= ancienCaseY + 20 * stepsAnim) enDeplacement = false;
+                            if (caseY + currentFrame * stepsAnim >= ancienCaseY + pourcentTailleEcranY * stepsAnim) enDeplacement = false;
                             break;
                         }
     
                         case HAUT : {
                             caseY -= currentFrame * stepsAnim;
-                            if (caseY - currentFrame * stepsAnim <= ancienCaseY - 20 * stepsAnim) enDeplacement = false;
+                            if (caseY - currentFrame * stepsAnim <= ancienCaseY - pourcentTailleEcranY * stepsAnim) enDeplacement = false;
                             break;
                         }
                     }
@@ -328,7 +328,7 @@ public class GameView extends JPanel implements KeyListener{
             super.paintComponent(g);
             for (int i = 0; i < porteLabyrinthe.length; i++) {
                 for (int j = 0; j < porteLabyrinthe[i].length; j++) {
-                    g.drawImage(porteLabyrinthe[i][j], j * 30 , i * 30, null);
+                    g.drawImage(porteLabyrinthe[i][j], j * pourcentTailleEcranX , i * pourcentTailleEcranY, null);
                 }
             }
             switch(dirAnim) {
@@ -344,12 +344,12 @@ public class GameView extends JPanel implements KeyListener{
             }
             case HAUT : {
                 if (enDeplacement) g.drawImage(sprites[dirAnim.ordinal()][currentFrame], caseX, caseY - currentFrame * stepsAnim, null);
-                else g.drawImage(sprites[dirAnim.ordinal()][0], caseX + currentFrame*2, caseY - currentFrame * stepsAnim, null);
+                else g.drawImage(sprites[dirAnim.ordinal()][0], caseX, caseY - currentFrame * stepsAnim, null);
                 break;
             }
             case BAS : {
                 if (enDeplacement) g.drawImage(sprites[dirAnim.ordinal()][currentFrame], caseX, caseY + currentFrame * stepsAnim, null);
-                else g.drawImage(sprites[dirAnim.ordinal()][0], caseX + currentFrame*2, caseY + currentFrame * stepsAnim, null);
+                else g.drawImage(sprites[dirAnim.ordinal()][0], caseX, caseY + currentFrame * stepsAnim, null);
                 break;
             }
             }
@@ -378,11 +378,11 @@ public class GameView extends JPanel implements KeyListener{
     frame.setVisible(true);
     gameView.movePlayer(Direction.BAS, 5);
 
-    gameView.movePlayer(Direction.DROITE, 5);
+    // gameView.movePlayer(Direction.DROITE, 5);
 
-    gameView.movePlayer(Direction.DROITE, 5);
+    // gameView.movePlayer(Direction.DROITE, 5);
 
-    gameView.movePlayer(Direction.BAS , 10);
+    // gameView.movePlayer(Direction.BAS , 10);
     gameView.controller.getGameModel().getLabyrinthe().printLabyrinthe();
     System.out.println(TAILLE_ECRAN);
 

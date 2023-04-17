@@ -7,11 +7,12 @@ public class Labyrinthe {
     private Case[][] plateau;
     private Joueur joueur;
     private Case pointArrivee;
+    private Case pointDepart;
 
 
     public Labyrinthe(Joueur joueur) {
         this.joueur = joueur;
-        plateau = new Case[23][29];
+        plateau = new Case[25][29];
         for (int i = 0; i < plateau.length; i++) {
             for (int j = 0; j < plateau[i].length; j++) {
                 plateau[i][j] = new Case(i, j);
@@ -22,6 +23,10 @@ public class Labyrinthe {
 
     public Case[][] getPlateau() {
         return plateau;
+    }
+
+    public Case getPointDepart() {
+        return pointDepart;
     }
 
     public boolean estPointArrivee(int i, int j) {
@@ -106,6 +111,7 @@ public class Labyrinthe {
                 if (plateau[i][j].getOuvert()) {
                     joueur.setX(i);
                     joueur.setY(j);
+                    pointDepart = plateau[i][j];
                     caseTrouvee = true;
                     break;
                 }
