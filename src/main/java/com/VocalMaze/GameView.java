@@ -59,8 +59,8 @@ public class GameView extends JPanel implements KeyListener{
         "- Jeu : Dans un premier temps , vous devez parler chacun votre tour afin de vous reconnaitre , ainsi gagner du temps de parole . Appuyez sur R pour commencer l'enregistrement , puis appuyez sur S quand vous avez fini !") ;
         add(popUP, BorderLayout.EAST);
         nbLocM_F = new int[2] ;
-        nbLocM_F[0] = 0 ; 
-        nbLocM_F[1] = 0 ; 
+        nbLocM_F[0] = 0 ; // nbLocM
+        nbLocM_F[1] = 0 ; // nbLocF
         timeMs = -1 ; 
         addKeyListener(this) ;    
     }
@@ -93,22 +93,24 @@ public class GameView extends JPanel implements KeyListener{
                     }
                     //TODO
                     // faire apparaitre step1
+                    popUP.appendMessage("Spirited Voice: please type on R then S, we don't have much time");
                     timeMs = -1 ; 
                 }
                 break ; 
             }
-        
+
             case 's' :{
                 if (!isRecording || isRecordingTime) break ;
                 if (timeMs == -1) {
                     controller.stopRecord();
                     //Analyse du vocal
-                    nbLocM_F = controller.analyse2() ; 
+                    nbLocM_F = controller.analyse2() ;
                     //Entre 5 et 7.5 par Homme, et entre 6 et 9 par Femme
-                    timeMs = nbLocM_F[0]*(5000+(new Random()).nextInt(2501)) + nbLocM_F[1]*(6000+(new Random()).nextInt(3001)) ; 
+                    timeMs = nbLocM_F[0]*(5000+(new Random()).nextInt(2501)) + nbLocM_F[1]*(6000+(new Random()).nextInt(3001)) ;
                     // TODO faire apparaitre STEP 2
+                    popUP.appendMessage("\n\nI have detected " + nbLocM_F[0] + " male speakers and " + nbLocM_F[1] + " female speakers. TimeMs: " + timeMs/100 + "s\n\n");
                 }
-                break ; 
+                break ;
             }
             
             default : break ; 
@@ -134,9 +136,18 @@ public class GameView extends JPanel implements KeyListener{
     }
 
     public class PopUP extends JPanel {
+        private InfoTextArea infoTextArea;
+        private JScrollPane scrollPane;
+
         PopUP(String message) {
-            InfoTextArea infoTextArea = new InfoTextArea(message);
+
+            infoTextArea = new InfoTextArea(message);
             setLayout(new GridBagLayout());
+
+            scrollPane = new JScrollPane(infoTextArea);
+            scrollPane.setOpaque(false);
+            scrollPane.getViewport().setOpaque(false);
+            scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
             GridBagConstraints gbc = new GridBagConstraints(); // pour placer les composants
             gbc.gridx = 0;
@@ -146,10 +157,16 @@ public class GameView extends JPanel implements KeyListener{
             gbc.anchor = GridBagConstraints.NORTH; // aligner le texte en haut
 
             add(infoTextArea, gbc);
+            add(scrollPane, gbc);
             setBackground(new Color(0, 0, 0, 0));
             setOpaque(false);
             setMaximumSize(new Dimension(600, 400)); // Adjust the maximum size of the PopUP panel
             setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
+
+        }
+        public void appendMessage(String message) {
+            System.out.println("Appending message: " + message); // Add this line to check if appendMessage in PopUP is called
+            infoTextArea.appendMessage(message);
         }
 
         private class InfoTextArea extends JTextArea {
@@ -264,6 +281,10 @@ public class GameView extends JPanel implements KeyListener{
                 Map<TextAttribute, Object> attributes = new HashMap<>(font.getAttributes());
                 attributes.put(TextAttribute.SIZE, font.getSize() + spacing);
                 return font.deriveFont(attributes);
+            }
+            public void appendMessage(String message) {
+                System.out.println("Appending message in InfoTextArea: " + message);
+                this.append(message + "\n");
             }
         }
     }

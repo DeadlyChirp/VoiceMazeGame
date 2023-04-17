@@ -20,7 +20,8 @@ public class GameModel {
         this.labyrinthe = new Labyrinthe(joueur);
         this.nbMaleTotal = nbMaleTotal ; 
         this.nbFemellesTotal = nbFemellesTotal ; 
-        recorder = new Recorder() ; 
+        recorder = new Recorder() ;
+        audioAnalyser = new AudioAnalyser();
     }
 
     public Labyrinthe getLabyrinthe(){
