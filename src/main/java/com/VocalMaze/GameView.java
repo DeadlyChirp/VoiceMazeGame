@@ -99,17 +99,15 @@ public class GameView extends JPanel implements KeyListener{
             }
 
             case 's' :{
-                if (!isRecording || isRecordingTime) break ;
-                if (timeMs == -1) {
-                    controller.stopRecord();
-                    //Analyse du vocal
-                    nbLocM_F = controller.analyse2() ;
-                    //Entre 5 et 7.5 par Homme, et entre 6 et 9 par Femme
-                    timeMs = nbLocM_F[0]*(5000+(new Random()).nextInt(2501)) + nbLocM_F[1]*(6000+(new Random()).nextInt(3001)) ;
-                    // TODO faire apparaitre STEP 2
-                    popUP.appendMessage("\n\nI have detected " + nbLocM_F[0] + " male speakers and " + nbLocM_F[1] + " female speakers. TimeMs: " + timeMs/100 + "s\n\n");
-                    isRecording = false ; 
-                }
+            if (!isRecording || isRecordingTime) break ;
+                controller.stopRecord();
+                //Analyse du vocal
+                nbLocM_F = controller.analyse2() ;
+                //Entre 5 et 7.5 par Homme, et entre 6 et 9 par Femme
+                timeMs = nbLocM_F[0]*(5000+(new Random()).nextInt(2501)) + nbLocM_F[1]*(6000+(new Random()).nextInt(3001)) ;
+                // TODO faire apparaitre STEP 2
+                popUP.appendMessage("\n\nI have detected " + nbLocM_F[0] + " male speakers and " + nbLocM_F[1] + " female speakers. TimeMs: " + timeMs/100 + "s\n\n");
+                isRecording = false ; 
                 break ;
             }
             
