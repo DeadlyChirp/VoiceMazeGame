@@ -4,6 +4,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.AbstractBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -137,33 +138,26 @@ public class GameView extends JPanel implements KeyListener{
 
     public class PopUP extends JPanel {
         private InfoTextArea infoTextArea;
-        private JScrollPane scrollPane;
 
         PopUP(String message) {
 
             infoTextArea = new InfoTextArea(message);
             setLayout(new GridBagLayout());
 
-            scrollPane = new JScrollPane(infoTextArea);
-            scrollPane.setOpaque(false);
-            scrollPane.getViewport().setOpaque(false);
-            scrollPane.setBorder(BorderFactory.createEmptyBorder());
-
-            GridBagConstraints gbc = new GridBagConstraints(); // pour placer les composants
+            GridBagConstraints gbc = new GridBagConstraints(); // for placing components
             gbc.gridx = 0;
             gbc.gridy = 0;
             gbc.weightx = 1;
             gbc.weighty = 1;
-            gbc.anchor = GridBagConstraints.NORTH; // aligner le texte en haut
+            gbc.anchor = GridBagConstraints.NORTH; // align the text at the top
 
             add(infoTextArea, gbc);
-            add(scrollPane, gbc);
             setBackground(new Color(0, 0, 0, 0));
             setOpaque(false);
             setMaximumSize(new Dimension(600, 400)); // Adjust the maximum size of the PopUP panel
             setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
-
         }
+
         public void appendMessage(String message) {
             System.out.println("Appending message: " + message); // Add this line to check if appendMessage in PopUP is called
             infoTextArea.appendMessage(message);
@@ -187,7 +181,6 @@ public class GameView extends JPanel implements KeyListener{
 
                 setBorder(BorderFactory.createCompoundBorder(new RoundedBorder(15, 5), BorderFactory.createEmptyBorder(paddingTop, paddingLeft, paddingBottom, paddingRight)));
 
-
                 try {
                     File fontFile = new File("src/main/java/com/VocalMaze/Audio&Visuel/Font-police/PressStart2P-Regular.ttf");
                     Font pressStart2P = Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(12f);
@@ -198,8 +191,6 @@ public class GameView extends JPanel implements KeyListener{
                 }
 
                 setForeground(new Color(0, 0, 0)); // Set the text color to white
-//                setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); // Add a border
-//                setBorder(new RoundedBorder(15, 5));
                 setPreferredSize(new Dimension(600, 400));
                 setLineWrap(true);
                 setWrapStyleWord(true);
@@ -208,10 +199,6 @@ public class GameView extends JPanel implements KeyListener{
 
                 // Add some space around the text inside the JTextArea
                 setMargin(new Insets(10, 10, 10, 10));
-
-
-                // Load the image
-//                imageIcon = new ImageIcon("src/main/java/com/VocalMaze/Audio&Visuel/ImagesTextBox/IMG_4182 (1) (1).jpg");
 
                 // Create the timer for the typing effect
                 int delay = 50; //milliseconds
@@ -283,11 +270,27 @@ public class GameView extends JPanel implements KeyListener{
                 return font.deriveFont(attributes);
             }
             public void appendMessage(String message) {
-                System.out.println("Appending message in InfoTextArea: " + message);
-                this.append(message + "\n");
+                int delay = 50; //milliseconds
+                int[] messageIndex = new int[]{0};
+
+                ActionListener taskPerformer = new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        if (messageIndex[0] < message.length()) {
+                            infoTextArea.append(String.valueOf(message.charAt(messageIndex[0])));
+                            messageIndex[0]++;
+                        } else {
+                            ((Timer) evt.getSource()).stop();
+                        }
+                    }
+                };
+
+                new Timer(delay, taskPerformer).start();
             }
+
         }
     }
+
 
     private class LabyrintheView extends JPanel {
         private boolean enDeplacement ;
