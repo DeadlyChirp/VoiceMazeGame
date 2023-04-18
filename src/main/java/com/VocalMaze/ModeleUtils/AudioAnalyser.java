@@ -37,7 +37,7 @@ public class AudioAnalyser {
     public int[] analyse2() {
         try {
             LiumUtils.Result result = LiumUtils.executeForResult("src/main/java/com/VocalMaze/Records/Audio.wav");
-            int[] res = {result.female, result.male};
+            int[] res = {result.male, result.female};
             return res;
         } catch (Exception e) {
             e.printStackTrace();
