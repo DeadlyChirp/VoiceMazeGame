@@ -1,12 +1,18 @@
 package com.VocalMaze.Menus;
 import java.awt.*;
+import java.awt.geom.RoundRectangle2D;
 
 import com.VocalMaze.ViewUtils.ImagePanel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -15,14 +21,26 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class StartMenu extends JFrame{
 
+    //Pour le 1er Menu
     private  JButton play ; 
     private JButton quitter;
     private  JButton mute;
+    //Pour le 2eme Menu
+    private  JButton Record ; 
+    private JButton exit;
+    private  JButton stop;
+    //Pour le 3eme Menu 
+    private int homme, femme;
+    private JButton playB;
+    private JButton retryB;
+
     static boolean sonON;
     static GraphicsDevice device ;
-	File file = new File("src/main/java/com/VocalMaze/Sounds/Lost Voice OP - BigJay.wav");
+	File file = new File("src/main/java/com/VocalMaze/Audio&Visuel/Musiques/Lost Voice OP - BigJay.wav");
     public static File file2 = new File("chemin a renseigné"); //Chemin de la musique en plein jeu
     ImagePanel background = new ImagePanel("src/main/java/com/VocalMaze/Images/Menu Lost Voice.png");
+    ImagePanel back2 = new ImagePanel("src/main/java/com/VocalMaze/Images/back2.png");
+    ImagePanel back3 = new ImagePanel("src/main/java/com/VocalMaze/Images/back3.png");
     AudioInputStream ais = AudioSystem.getAudioInputStream(file);
     public static AudioInputStream game;
     private static final Dimension TAILLE_ECRAN = Toolkit.getDefaultToolkit().getScreenSize();
@@ -30,6 +48,8 @@ public class StartMenu extends JFrame{
 
     public static Clip clip;
 
+/*************************************************Fonction Principale*************************************************************** */
+    //Menu Principale
     public StartMenu() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
         super();
         
@@ -100,16 +120,63 @@ public class StartMenu extends JFrame{
 
     }
 
-
+    //Menu Secondaire
     public void setActionButtons(){
         play.addActionListener(ev -> {
-            this.dispose();
-            // try {
-            //     @SuppressWarnings("unused")
-            //     //MenuInterne a = new MenuInterne(background, sonON, mute);
-            // }catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            //     e.printStackTrace();
-            // }
+
+            //Remove des anciens boutons/images
+            remove(play);
+            remove(mute);
+            remove(background);
+
+            //Resize et ajout du background
+            back2.setSize(TAILLE_ECRAN);
+            add(back2);
+           
+            //Init du panel de texte
+            CustomPanel panel = new CustomPanel();
+            String[] paragraphs = {
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eget massa quis risus bibendum luctus in non quam. Suspendisse posuere, enim sed hendrerit laoreet, tellus nunc lobortis diam, vitae pretium sapien nunc ac odio.",
+                "Etiam et accumsan libero. Integer in felis ipsum. Duis molestie, sem a feugiat tristique, sapien ex dictum mauris, vel interdum quam tortor sit amet magna. Duis imperdiet enim id aliquam fringilla. Aliquam at convallis elit.",
+                "Donec pharetra nulla vel sodales dapibus. Nullam vulputate felis ut turpis tempus, in facilisis tortor pulvinar. Nunc vel purus id mauris bibendum dictum. Sed eget erat faucibus, consectetur nisl non, accumsan justo.",
+                "Sed sagittis enim quis nibh maximus auctor. Aliquam sit amet sem ac massa tempor rhoncus non eu ex. Suspendisse ultricies enim vitae quam egestas, at blandit dolor efficitur. Donec et tristique lectus. Aliquam erat volutpat."
+            };
+            for (int i = 0; i < paragraphs.length; i++) {
+                panel.addParagraph(paragraphs[i]);
+            }
+
+            
+            //INIT des boutons
+            ImageIcon r = new ImageIcon("src/main/java/com/VocalMaze/Images/rec.png");
+            ImageIcon s = new ImageIcon("src/main/java/com/VocalMaze/Images/stop.png");
+            ImageIcon q = new ImageIcon("src/main/java/com/VocalMaze/Images/quitter.png");
+            //Init de rec
+            Record = new JButton(r);
+            Record.setBorderPainted(false);
+            Record.setBackground(new Color(0, 0, 0, 0));
+            //Init de stop
+            stop = new JButton(s);
+            stop.setBorderPainted(false);
+            stop.setBackground(new Color(0, 0, 0, 0));
+            //Init de quitter
+            exit = new JButton(q);
+            exit.setBorderPainted(false);
+            exit.setBackground(new Color(0, 0, 0, 0));
+            Record.setBounds(460, 957, r.getIconWidth(), r.getIconHeight());
+            exit.setBounds(1431, 957, q.getIconWidth(), q.getIconHeight());
+            stop.setBounds(955, 957, s.getIconWidth(), s.getIconHeight());
+            
+
+            //Ajout du panel de texte et des boutons
+            back2.add(panel);
+            panel.setLocation(100, (int) TAILLE_ECRAN.getWidth()/100);
+            back2.add(Record);
+            back2.add(stop);
+            back2.add(exit);
+            pack();
+            panel.setVisible(true);
+            setVisible(true);
+            setActionButtonsBis();
         });
 
         mute.addActionListener(ev ->{
@@ -127,11 +194,161 @@ public class StartMenu extends JFrame{
 			mute.setIcon(icon2);
 		});
 
-        quitter.addActionListener(ev->{
-            System.exit(0);
+        // quitter.addActionListener(ev->{
+        //     System.exit(0);
+        // });
+    }
+
+    //Menu Tertiaire
+    public void setActionButtonsBis(){
+
+        Record.addActionListener(ev->{
+            //Stop de la musique avant de rec
+            clip.stop();
+            sonON=true;
+            //Faire ce que Lium et recorder doit faire pour cvapter le son. 
+        });
+
+        stop.addActionListener(ev->{
+            //Reprise de la musique
+            clip.start();
+            sonON = false;
+
+            //ecrire commande pour stopper record et donner aux variables homme, femme les valeurs que l'on va utiliser pour le prochain menu et pour GameView
+            
+            //Cleaning du menu 3
+            back2.remove(stop);
+            back2.remove(Record);
+            back2.remove(exit);
+            remove(back2);
+            back3.setSize(TAILLE_ECRAN);
+            add(back3);
+            back3.setVisible(true);
+
+            homme = 4;
+            femme = 2;
+
+            // Init des Scores
+            JPanel chiffresPanel = new JPanel();
+            chiffresPanel.setLayout(null);
+            JLabel hommeLabel = new JLabel(String.valueOf(homme));
+            JLabel femmeLabel = new JLabel(String.valueOf(femme));
+            Font font = new Font("Arial", Font.PLAIN, 40);
+            hommeLabel.setFont(font);
+            femmeLabel.setFont(font);
+            hommeLabel.setSize(60, 60);
+            femmeLabel.setSize(60,60);
+            JPanel ScoreH = new JPanel();
+            ScoreH.add(hommeLabel);
+            ScoreH.setSize(60, 60);
+            ScoreH.setLocation(295, 504);
+            JPanel ScoreF = new JPanel();
+            ScoreF.add(femmeLabel);
+            ScoreF.setSize(60, 60);
+            ScoreF.setLocation(1550, 504);
+
+            ImageIcon p = new ImageIcon("src/main/java/com/VocalMaze/Images/playB.png");
+            playB = new JButton(p);
+            playB.setBorderPainted(false);
+            playB.setBackground(new Color(0, 0, 0, 0));
+            playB.setBounds(755, 892, p.getIconWidth(), p.getIconHeight());
+
+            ImageIcon r = new ImageIcon("src/main/java/com/VocalMaze/Images/retryB.png");
+            retryB = new JButton(r);
+            retryB.setBorderPainted(false);
+            retryB.setBackground(new Color(0, 0, 0, 0));
+            retryB.setBounds(1130, 892, r.getIconWidth(), r.getIconHeight());
+
+            // Ajout du JPanel chiffresPanel au back3
+            back3.add(ScoreH);
+            ScoreH.setVisible(true);
+            back3.add(ScoreF);
+            ScoreF.setVisible(true);
+            back3.add(playB);
+            back3.add(retryB);
+            pack();
+            setVisible(true);
+
+        });
+
+        exit.addActionListener(ev->{
+            //316,504  et 1582et504
         });
     }
+
+
+/*************************************************Fonction ANNEXE************************************************************ */
+    public class CustomPanel extends JPanel {
+        
+        private ArrayList<String> paragraphs;
     
+        public CustomPanel() {
+            super();
+            setSize(new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.9), (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() * 0.66)));
+            paragraphs = new ArrayList<String>();
+        }
+    
+        public void addParagraph(String paragraph) {
+            paragraphs.add(paragraph);
+            repaint();
+        }
+    
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g;
+    
+            // dessiner le fond avec des coins arrondis
+            int arc = 20;
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.setColor(Color.WHITE);
+            g2d.fill(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), arc, arc));
+    
+            // afficher les paragraphes avec des couleurs différentes
+            int x = 50;
+            int y = 50;
+            for (int i = 0; i < paragraphs.size(); i++) {
+                g2d.setColor(getColorForParagraph(i));
+                g2d.drawString(paragraphs.get(i), x, y);
+                y += 30; // ajuster la position verticale pour le paragraphe suivant
+            }
+        }
+    
+        private Color getColorForParagraph(int index) {
+            switch (index % 3) { // changer la couleur toutes les trois paragraphes
+                case 0:
+                    return Color.RED;
+                case 1:
+                    return Color.GREEN;
+                case 2:
+                    return Color.BLUE;
+                default:
+                    return Color.BLACK;
+            }
+        }
+    }
+
+    private static class TextPanel extends JPanel {
+        private final String text;
+        private final Color color;
+    
+        public TextPanel(String text, Color color, int x, int y, int width, Font font) {
+            this.text = text;
+            this.color = color;
+            setBounds(x, y, width, 0);
+            setFont(font);
+        }
+    
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.setColor(color);
+            g.drawString(text, 0, g.getFontMetrics().getHeight());
+            setPreferredSize(new Dimension(getWidth(), g.getFontMetrics().getHeight()));
+        }
+    }
+    
+/****************************************************************************************************************************** */
     public static void main(String[] args) throws UnsupportedAudioFileException, IOException, LineUnavailableException{
         @SuppressWarnings("unused")
         StartMenu background = new StartMenu();
