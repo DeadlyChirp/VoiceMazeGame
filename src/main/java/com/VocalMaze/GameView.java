@@ -55,7 +55,10 @@ public class GameView extends JPanel implements KeyListener{
                 ainsi que le temps de parole pour le prochain enregistrement        
          */
         popUP = new PopUP("- Grand master : Salutations, mes chers aventuriers! Préparez-vous à trembler de terreur. Maintenant, commençons le jeu. Vous devez trouver la sortie avant que je ne vous trouve. Ahahaha... Vous êtes à moi maintenant..Osez-vous relever le défi ? Hahahaha!\n\n" +
-        "- Jeu : Dans un premier temps , vous devez parler chacun votre tour afin de vous reconnaitre , ainsi gagner du temps de parole . Appuyez sur R pour commencer l'enregistrement , puis appuyez sur S quand vous avez fini !") ;
+        "- Jeu : Dans un premier temps , vous devez parler chacun votre tour afin de vous reconnaitre , ainsi gagner du temps de parole . Appuyez sur R pour commencer l'enregistrement , puis appuyez sur S quand vous avez fini !"
+                + "\n \nRandom text Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n\n") ;
+
+
         add(popUP, BorderLayout.EAST);
         nbLocM_F = new int[2] ;
         nbLocM_F[0] = 0 ; // nbLocM
@@ -107,7 +110,7 @@ public class GameView extends JPanel implements KeyListener{
                     //Entre 5 et 7.5 par Homme, et entre 6 et 9 par Femme
                     timeMs = nbLocM_F[0]*(5000+(new Random()).nextInt(2501)) + nbLocM_F[1]*(6000+(new Random()).nextInt(3001)) ;
                     // TODO faire apparaitre STEP 2
-                    popUP.appendMessage("\n\nI have detected " + nbLocM_F[0] + " male speakers and " + nbLocM_F[1] + " female speakers. TimeMs: " + timeMs/100 + "s\n\n");
+                    popUP.appendMessage("\n\nI have detected " + nbLocM_F[0] + " male speakers and " + nbLocM_F[1] + " female speakers. TimeMs: " + timeMs/1000 + "s\n\n");
                     isRecording = false ; 
                 }
                 break ;
@@ -139,8 +142,8 @@ public class GameView extends JPanel implements KeyListener{
         private InfoTextArea infoTextArea;
 
         PopUP(String message) {
-
             infoTextArea = new InfoTextArea(message);
+
             setLayout(new GridBagLayout());
 
             GridBagConstraints gbc = new GridBagConstraints(); // for placing components
@@ -148,12 +151,13 @@ public class GameView extends JPanel implements KeyListener{
             gbc.gridy = 0;
             gbc.weightx = 1;
             gbc.weighty = 1;
-            gbc.anchor = GridBagConstraints.NORTH; // align the text at the top
+            gbc.anchor = GridBagConstraints.NORTHEAST; // align the text at the top right corner
+            gbc.fill = GridBagConstraints.NONE;
 
             add(infoTextArea, gbc);
             setBackground(new Color(0, 0, 0, 0));
             setOpaque(false);
-            setMaximumSize(new Dimension(600, 400)); // Adjust the maximum size of the PopUP panel
+            setPreferredSize(new Dimension(800, 600)); // Set the preferred size of the PopUP panel
             setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
         }
 

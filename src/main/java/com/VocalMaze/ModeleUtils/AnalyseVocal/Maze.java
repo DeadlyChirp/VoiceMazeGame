@@ -6,7 +6,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 
 public class Maze {
 
@@ -142,8 +144,23 @@ public class Maze {
         frame.setBackground(Color.green);
         frame.setVisible(true);
     }
+    private static void configureLogging() {
+        java.util.logging.Filter noLoggingFilter = new java.util.logging.Filter() {
+            @Override
+            public boolean isLoggable(java.util.logging.LogRecord record) {
+                return false;
+            }
+        };
+
+        java.util.logging.Logger logger = java.util.logging.Logger.getLogger("fr.lium.spkDiarization");
+        logger.setFilter(noLoggingFilter);
+    }
+
+
 
     public static void main(String[] args) {
+        System.setProperty("java.util.logging.config.file", "src/main/java/logging.properties");
+        configureLogging();
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (Exception ignored) {}
