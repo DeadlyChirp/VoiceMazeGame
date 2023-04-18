@@ -18,8 +18,8 @@ public class AudioAnalyser {
 
     public int [] analyse1 () {
         terminal.execCommand("/usr/bin/java -Xmx2024m -jar ./LIUM_SpkDiarization-8.4.1.jar "+
-        "--finputDesc=audio16Khz2sphinx:sphinx,1:1:0:0:0:0,18,0:0:0:0 " +
-        "--fInputMask=./src/main/java/com/VocalMaze/com.VocalMaze.Records/Audio.wav " +
+        "--fInputDesc=audio16Khz2sphinx:sphinx,1:1:0:0:0:0,18,0:0:0:0 " +
+        "--fInputMask=./src/main/java/com/VocalMaze/Records/Audio.wav " +
         "--sOutputMask=/src/main/java/com/VocalMaze/Analysis/Audio.seg --doCEClustering Audio");
         try {
             segAnalyser.analysis("src/main/java/com/VocalMaze/Analysis/Audio.seg");

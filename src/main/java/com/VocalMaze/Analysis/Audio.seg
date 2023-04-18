@@ -1,4 +1,2 @@
-;; cluster:S0 [ score:FS = -25.16687807088949 ] [ score:FT = -26.78372448599475 ] [ score:MS = -26.10584076294111 ] [ score:MT = -26.408559703490052 ]
-Audio 1 7 364 F S U S0
-;; cluster:S1 [ score:FS = -33.512216980203846 ] [ score:FT = -34.10305150365373 ] [ score:MS = -33.504799580848776 ] [ score:MT = -34.31802904398759 ]
-Audio 1 371 1129 M S U S1
+;; cluster S1 [ score:FS = -Infinity ] [ score:FT = -Infinity ] [ score:MS = -Infinity ] [ score:MT = -Infinity ] 
+Audio 1 36 1165 M S U S1
