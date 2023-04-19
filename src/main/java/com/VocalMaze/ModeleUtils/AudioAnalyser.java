@@ -35,6 +35,7 @@ public class AudioAnalyser {
     }
 
     public int[] analyse2() {
+        System.setProperty("java.util.logging.config.file", "src/main/java/logging.properties");
         try {
             LiumUtils.Result result = LiumUtils.executeForResult("src/main/java/com/VocalMaze/Records/Audio.wav");
             int[] res = {result.male, result.female};

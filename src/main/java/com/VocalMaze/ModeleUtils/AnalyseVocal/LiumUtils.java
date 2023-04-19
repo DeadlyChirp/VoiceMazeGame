@@ -127,7 +127,7 @@ public class LiumUtils {
 
     //Test LiumUtil seulement, pas d'utilisation dans le jeu
     public static void main(String[] args) throws Exception {
-
+        System.setProperty("java.util.logging.config.file", "src/main/java/logging.properties");
 
         args = new String[]{
                 "--fInputMask=test/test(3).wav",
