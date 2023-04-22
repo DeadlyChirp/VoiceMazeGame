@@ -53,23 +53,8 @@ public class GameView extends JPanel implements KeyListener{
         labyrintheView.setVisible(true);
         setVisible(true);
 
-        // STEP 1 class interne
-        /*
-         * TODO 
-         * il y aura deux STEPS
-         * STEP 1 :
-                La premiere par defaut quand le jeu se lance , il y aura une fenetre qui doit dire au joueur ce qu'il doit faire
-                appuyer sur R pour commencer le record , afin de determiner le temps de parole du 2eme enregistrement 
-                en gros c'est un truc comme ça
-         */
-        //STEP 1 TEST
-        /*
-         * STEP 2 :
-                Faire apparaitre une fenetre qui annonce le nombre de locuteurs trouvés 
-                ainsi que le temps de parole pour le prochain enregistrement        
-         */
         popUP = new PopUP("- Grand master : Salutations, mes chers aventuriers! Préparez-vous à trembler de terreur. Maintenant, commençons le jeu. Vous devez trouver la sortie avant que je ne vous trouve. Ahahaha... Vous êtes à moi maintenant..Osez-vous relever le défi ? Hahahaha!\n\n" +
-        "- Jeu : Dans un premier temps , vous devez parler chacun votre tour afin de vous reconnaitre , ainsi gagner du temps de parole . Appuyez sur R pour commencer l'enregistrement , puis appuyez sur S quand vous avez fini !") ;
+        "- Jeu : Dans un premier temps , vous devez parler chacun votre tour afin de vous reconnaitre , ainsi gagner du temps de parole . Appuyez sur R pour commencer l'enregistrement , puis appuyez sur S quand vous avez fini !\n\n") ;
         add(popUP, BorderLayout.EAST);
         nbLocM_F = new int[2] ;
         nbLocM_F[0] = 0 ; // nbLocM
@@ -78,11 +63,35 @@ public class GameView extends JPanel implements KeyListener{
         addKeyListener(this) ;    
     }
 
+    public String step2 (int nbLocM , int nbLocF) {
+        Random rm = new Random() ; 
+        if (nbLocF == 0 && nbLocM == 0) {
+            switch(rm.nextInt(2)) {
+                case 0 : return "- Grand Master : Le silence est pas is mal que ça parfois , entre temps personnes peut sortir d'ici .\n\n" ; 
+                case 1 : return "- Grand Master : Vous etes timides ? Vous voulez que je ferme mes yeux pour que vous parliez ? Si vous voulez pas partir vous allez juste mourir ici...\n\n" ; 
+            }
+        }
+        switch(rm.nextInt(5)) {
+            case 0 : return "- Grand Master : A ce que j'ai pu entendre vous etes " + nbLocM + " hommes ainsi que " + nbLocF + " femmes à etre coinsés ici .\n\n" ; 
+            case 1 : return "- Grand Master : Ohh , vous etes que " + nbLocF + "femmes et " + nbLocM + "hommes , je pensais avoir plus de personnes coinsés ici avec moi .\n\n" ; 
+            case 2 : return "- Grand Master : C'est toujours agréable de voir " + nbLocM + "hommes ainsi que " + nbLocF + " femmes essayer de s'échapper de ma demeure après etre entrés dedans avec tant d'insouciance...\n\n" ; 
+            case 3 : return "- Grand Master : Que " + nbLocF + " femmes et " + nbLocM + " hommes ? ça fait pas beaucoup de monde , vous voulez pas vous échapper alors ?\n\n" ; 
+            case 4 : return "- Grand Master : " + nbLocM + "hommes et " + nbLocF + " femmes , moi je dis plus on est nombreux , plus on est heureux !\n\n" ;
+            case 5 : return "- Grand Master : Tang de personnes , Mootivés pour s'échapper , c'est Bel et bien " + nbLocF + "femmes et " + nbLocM + "hommes que j'entend...\n\n" ; 
+        }
+        return "" ; 
+    }
+
+    public String step1 () {
+        return null ; 
+    }
+
     @Override
     public void keyTyped(KeyEvent e) {
         switch(e.getKeyChar()) {
-            case 'r' : {
+            case 'r' : {                
                 if (isRecording) break ; 
+                popUP.appendMessage("- Jeu : Enregistrement en cours...\n\n");
                 if (timeMs == -1) {
                     controller.startRecord();
                     isRecording = true ;
@@ -106,21 +115,20 @@ public class GameView extends JPanel implements KeyListener{
                     }
                     //TODO
                     // faire apparaitre step1
-                    popUP.appendMessage("Spirited Voice: please type on R then S, we don't have much time");
                     timeMs = -1 ; 
                 }
                 break ; 
             }
 
             case 's' :{
-            if (!isRecording || isRecordingTime) break ;
+                if (!isRecording || isRecordingTime) break ;
                 controller.stopRecord();
                 //Analyse du vocal
-                nbLocM_F = controller.analyse2() ;
+                nbLocM_F = controller.analyse1() ;
+                // System.out.println("Mec => " + nbLocM_F[0] + " Meuf => " + nbLocM_F[1]);
                 //Entre 5 et 7.5 par Homme, et entre 6 et 9 par Femme
                 timeMs = nbLocM_F[0]*(5000+(new Random()).nextInt(2501)) + nbLocM_F[1]*(6000+(new Random()).nextInt(3001)) ;
-                // TODO faire apparaitre STEP 2
-                popUP.appendMessage("\n\nI have detected " + nbLocM_F[0] + " male speakers and " + nbLocM_F[1] + " female speakers. TimeMs: " + timeMs/100 + "s\n\n");
+                popUP.appendMessage(step2(nbLocM_F[0], nbLocM_F[1]));
                 isRecording = false ; 
                 break ;
             }
@@ -275,11 +283,13 @@ public class GameView extends JPanel implements KeyListener{
                     }
                 }
             }
+
             private Font createFontWithIncreasedLineSpacing(Font font, float spacing) {
                 Map<TextAttribute, Object> attributes = new HashMap<>(font.getAttributes());
                 attributes.put(TextAttribute.SIZE, font.getSize() + spacing);
                 return font.deriveFont(attributes);
             }
+
             public void appendMessage(String message) {
                 int delay = 50; //milliseconds
                 int[] messageIndex = new int[]{0};
@@ -300,8 +310,8 @@ public class GameView extends JPanel implements KeyListener{
             }
 
         }
+    
     }
-
 
     private class LabyrintheView extends JPanel {
         private boolean enDeplacement ;
@@ -452,6 +462,7 @@ public class GameView extends JPanel implements KeyListener{
             }
         }
     }
+    
     private static void configureLogging() {
         try {
             FileInputStream configFile = new FileInputStream("src/main/java/logging.properties");
@@ -486,7 +497,7 @@ public class GameView extends JPanel implements KeyListener{
     frame.add(gameView);
     frame.addKeyListener(gameView); // important
     frame.pack();
-    frame.setFocusable(true);// tres tres important
+    //frame.setFocusable(true);// pas tres important au final jsp a voir
     frame.setVisible(true);
     gameView.controller.getGameModel().getLabyrinthe().printLabyrinthe();
     System.out.println(TAILLE_ECRAN);
