@@ -57,10 +57,10 @@ public class Controller {
     }
 
     public boolean play(Direction [] directions) {
+        if (directions.length == 0) return false ; 
         int i = 1;
         int occ = 1;
-        Direction d = null;
-        if (directions.length != 0) d = directions[0];
+        Direction d = directions[0];
         while (i < directions.length) { //Si la même direction est répétée successivement, alors on compte les occurences et 
             if (directions[i] == d) occ++;//on appel une fois movePlayer pour cette même direction.
             else {

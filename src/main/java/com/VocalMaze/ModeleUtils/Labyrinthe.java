@@ -140,14 +140,14 @@ public class Labyrinthe {
             default : sens = 1; break;
         }
         if (dir == Direction.HAUT || dir == Direction.BAS) {
-            for (int i = 0; i < steps; i++) {
-                if (joueur.getX()+sens < 0 || joueur.getX()+sens >= plateau.length || !plateau[joueur.getX()+sens][joueur.getY()].getOuvert()) {
+            for (int i = 1; i <= steps; i++) {
+                if (joueur.getX()+i*sens < 0 || joueur.getX()+i*sens >= plateau.length || !plateau[joueur.getX()+i*sens][joueur.getY()].getOuvert()) {
                     return false;
                 }
             }
         } else {
             for (int i = 0; i < steps; i++) {
-                if (joueur.getY()+sens < 0 || joueur.getY()+sens >= plateau[joueur.getX()].length || !plateau[joueur.getX()][joueur.getY()+sens].getOuvert()) {
+                if (joueur.getY()+i*sens < 0 || joueur.getY()+i*sens >= plateau[joueur.getX()].length || !plateau[joueur.getX()][joueur.getY()+i*sens].getOuvert()) {
                     return false;
                 }
             }
