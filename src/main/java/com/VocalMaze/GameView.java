@@ -429,7 +429,7 @@ public class GameView extends JPanel implements KeyListener{
             ancienCaseX = caseX;
             ancienCaseY = caseY;
             animateMovement();
-        }
+            }
       
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
