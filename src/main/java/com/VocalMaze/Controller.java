@@ -61,6 +61,13 @@ public class Controller {
         int i = 1;
         int occ = 1;
         Direction d = directions[0];
+        if (i == directions.length) {
+            if (possible(d, occ)) {
+                movePlayer(d, occ);
+                gameView.movePlayer(d, occ);
+                if (model.endGame()) return true;
+            }
+        }
         while (i < directions.length) { //Si la même direction est répétée successivement, alors on compte les occurences et 
             if (directions[i] == d) occ++;//on appel une fois movePlayer pour cette même direction.
             if (directions[i] != d || i+1 == directions.length) {
