@@ -88,53 +88,58 @@ public class GameView extends JPanel implements KeyListener{
 
     @Override
     public void keyTyped(KeyEvent e) {
-        switch(e.getKeyChar()) {
-            case 'r' : {                
-                if (isRecording) break ; 
-                popUP.appendMessage("- Jeu : Enregistrement en cours...\n\n");
-                if (timeMs == -1) {
-                    controller.startRecord();
-                    isRecording = true ;
-                }else{
-                    controller.startRecord(timeMs);
-                    isRecordingTime = true ; 
-                    try {
-                        Thread.sleep(timeMs);
-                        isRecordingTime = false ; 
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
+        Thread th = new Thread(new Runnable() {
+            public void run() {
+                switch(e.getKeyChar()) {
+                    case 'r' : {                
+                        if (isRecording) break ; 
+                        popUP.appendMessage("- Jeu : Enregistrement en cours...\n\n");
+                        if (timeMs == -1) {
+                            controller.startRecord();
+                            isRecording = true ;
+                        }else{
+                            controller.startRecord(timeMs);
+                            isRecordingTime = true ; 
+                            try {
+                                Thread.sleep(timeMs);
+                                isRecordingTime = false ; 
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                            // Faire apparaitre un petit sablier qui tourne (un gif) qui dit transcription en cours
+                            //  si besoin mais c'est optionnel , ou bien des petites images qui donnent des conseils
+                            // comme dans les menus de chargement des jeux a voir 
+                            Direction [] directions = controller.transcrire() ; 
+                            boolean fin = controller.play(directions) ; 
+                            if (fin) {
+                                endGame();
+                                return ; 
+                            }
+                            //TODO
+                            // faire apparaitre step1
+                            timeMs = -1 ; 
+                        }
+                        break ; 
                     }
-                    // Faire apparaitre un petit sablier qui tourne (un gif) qui dit transcription en cours
-                    //  si besoin mais c'est optionnel , ou bien des petites images qui donnent des conseils
-                    // comme dans les menus de chargement des jeux a voir 
-                    Direction [] directions = controller.transcrire() ; 
-                    boolean fin = controller.play(directions) ; 
-                    if (fin) {
-                        endGame();
-                        return ; 
-                    }
-                    //TODO
-                    // faire apparaitre step1
-                    timeMs = -1 ; 
-                }
-                break ; 
-            }
 
-            case 's' :{
-                if (!isRecording || isRecordingTime) break ;
-                controller.stopRecord();
-                //Analyse du vocal
-                nbLocM_F = controller.analyse1() ;
-                // System.out.println("Mec => " + nbLocM_F[0] + " Meuf => " + nbLocM_F[1]);
-                //Entre 5 et 7.5 par Homme, et entre 6 et 9 par Femme
-                timeMs = nbLocM_F[0]*(5000+(new Random()).nextInt(2501)) + nbLocM_F[1]*(6000+(new Random()).nextInt(3001)) ;
-                popUP.appendMessage(step2(nbLocM_F[0], nbLocM_F[1]));
-                isRecording = false ; 
-                break ;
-            }
-            
-            default : break ; 
+                    case 's' :{
+                        if (!isRecording || isRecordingTime) break ;
+                        controller.stopRecord();
+                        //Analyse du vocal
+                        nbLocM_F = controller.analyse1() ;
+                        // System.out.println("Mec => " + nbLocM_F[0] + " Meuf => " + nbLocM_F[1]);
+                        //Entre 5 et 7.5 par Homme, et entre 6 et 9 par Femme
+                        timeMs = nbLocM_F[0]*(5000+(new Random()).nextInt(2501)) + nbLocM_F[1]*(6000+(new Random()).nextInt(3001)) ;
+                        popUP.appendMessage(step2(nbLocM_F[0], nbLocM_F[1]));
+                        isRecording = false ; 
+                        break ;
+                    }
+                    
+                    default : break ; 
+                }
         }
+    });
+    th.start();
     }
     
     @Override
