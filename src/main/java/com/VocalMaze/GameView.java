@@ -340,14 +340,14 @@ public class GameView extends JPanel implements KeyListener{
             imagePorte = ImageIO.read(new File("src/main/java/com/VocalMaze/Images/doors.png"));
             imagePassage = ImageIO.read(new File("src/main/java/com/VocalMaze/Images/M484ShmupTileset1.png"));
             porteLabyrinthe = new BufferedImage[25][26];
-            caseX = (int) -(1.24 * TAILLE_ECRAN.getWidth()/100);
-            caseY = (int) -(3.56 * TAILLE_ECRAN.getHeight()/100);
             currentFrame = 0 ; 
             lastTime = 0 ; 
             dirAnim = Direction.BAS ; 
             enDeplacement = false ; 
-            pourcentTailleEcranX = (int) (2.18 * TAILLE_ECRAN.getWidth()/100);
+            pourcentTailleEcranX = (int) (2.18 * TAILLE_ECRAN.getWidth()/100); // proportion que doit occuper une case.
             pourcentTailleEcranY = (int) (3.91 * TAILLE_ECRAN.getHeight()/100);
+            caseX = (int) -(1.24 * TAILLE_ECRAN.getWidth()/100) + pourcentTailleEcranX * controller.getGameModel().getLabyrinthe().getPointDepart().getY(); //place l'animation sur le point de départ.
+            caseY =  0;
         }
         
         private void decoupeImage() {
@@ -359,7 +359,6 @@ public class GameView extends JPanel implements KeyListener{
 
             for (int i = 0; i < porteLabyrinthe.length; i++) {
                 for (int j = 0; j < porteLabyrinthe[i].length; j++) {
-                    System.out.println(i+" "+j);
                     if (controller.getGameModel().getLabyrinthe().estPointArrivee(i, j)) {
                         porteLabyrinthe[i][j] = imagePorte.getSubimage(100, 70, pourcentTailleEcranX, pourcentTailleEcranY);
                     }
