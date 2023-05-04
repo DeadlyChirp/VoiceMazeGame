@@ -12,7 +12,7 @@ public class Labyrinthe {
 
     public Labyrinthe(Joueur joueur) {
         this.joueur = joueur;
-        plateau = new Case[25][29];
+        plateau = new Case[25][26];
         for (int i = 0; i < plateau.length; i++) {
             for (int j = 0; j < plateau[i].length; j++) {
                 plateau[i][j] = new Case(i, j);
@@ -80,7 +80,54 @@ public class Labyrinthe {
         }
     }
         
-       
+
+    public void fermeBordsHautBas() {
+        int i = 0;
+        int a = 0;
+        boolean premierPassage = true;
+        while(i < plateau[0].length) {
+            if (plateau[a][i].getOuvert()) {
+                for (int j = 0; j < plateau[0].length; j++) {
+                    plateau[a][j].setOuvert(false);
+                }
+                i = -1;
+                a = plateau.length - 1;
+                if (premierPassage == false) break;
+                premierPassage = false;
+            }
+            if (i == plateau[0].length - 1 && premierPassage) {
+                i = -1;
+                a = plateau.length -1;
+                premierPassage = false;
+            }
+            i++;
+        }
+    }
+
+    public void fermeBordsCotes() {
+        int i = 0;
+        int a = 0;
+        boolean premierPassage = true;
+        while(i < plateau.length) {
+            if (plateau[i][a].getOuvert()) {
+                for (int j = 0; j < plateau.length; j++) {
+                    plateau[j][a].setOuvert(false);
+                }
+                i = -1;
+                a = plateau[0].length - 1;
+                if (premierPassage == false) break;
+                premierPassage = false;
+            }
+            if (i == plateau.length - 1 && premierPassage) {
+                i = -1;
+                a = plateau[0].length -1;
+                premierPassage = false;
+            }
+            i++;
+        }
+    }
+    
+    
     private void genereLabyrinthe() { //genere un labyrinthe aleatoire avec l'algorithme de Prim.
         ArrayList<Case> ensembleCaseTraitée = new ArrayList<Case>();
         ArrayList<Case> caseFrontiere = new ArrayList<Case>();
@@ -99,7 +146,8 @@ public class Labyrinthe {
             caseFrontiere.remove(c);
             ajouteLiensEntreCase(c);
         }
-        
+        fermeBordsHautBas();
+        fermeBordsCotes();
         verifPoints();
     }
 

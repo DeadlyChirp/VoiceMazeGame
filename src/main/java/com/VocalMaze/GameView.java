@@ -179,7 +179,7 @@ public class GameView extends JPanel implements KeyListener{
             setBackground(new Color(0, 0, 0, 0));
             setOpaque(false);
             setMaximumSize(new Dimension(600, 400)); // Adjust the maximum size of the PopUP panel
-            setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
+            setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
         }
 
         public void appendMessage(String message) {
@@ -339,7 +339,7 @@ public class GameView extends JPanel implements KeyListener{
             sprites = new BufferedImage[4][9];
             imagePorte = ImageIO.read(new File("src/main/java/com/VocalMaze/Images/doors.png"));
             imagePassage = ImageIO.read(new File("src/main/java/com/VocalMaze/Images/M484ShmupTileset1.png"));
-            porteLabyrinthe = new BufferedImage[25][29];
+            porteLabyrinthe = new BufferedImage[25][26];
             caseX = (int) -(1.24 * TAILLE_ECRAN.getWidth()/100);
             caseY = (int) -(3.56 * TAILLE_ECRAN.getHeight()/100);
             currentFrame = 0 ; 
@@ -359,6 +359,7 @@ public class GameView extends JPanel implements KeyListener{
 
             for (int i = 0; i < porteLabyrinthe.length; i++) {
                 for (int j = 0; j < porteLabyrinthe[i].length; j++) {
+                    System.out.println(i+" "+j);
                     if (controller.getGameModel().getLabyrinthe().estPointArrivee(i, j)) {
                         porteLabyrinthe[i][j] = imagePorte.getSubimage(100, 70, pourcentTailleEcranX, pourcentTailleEcranY);
                     }
