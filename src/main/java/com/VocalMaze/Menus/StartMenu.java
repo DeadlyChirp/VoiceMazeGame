@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 
 import com.VocalMaze.ViewUtils.ImagePanel;
+import com.fasterxml.jackson.databind.ser.impl.StringArraySerializer;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -25,11 +27,14 @@ public class StartMenu extends JFrame{
     private  JButton play ; 
     private JButton quitter;
     private  JButton mute;
-    //Pour le 2eme Menu
+    //Pour le 2ème Menu
+    private JButton onep;
+    private JButton twop;
+    //Pour le 3eme Menu
     private  JButton Record ; 
     private JButton exit;
     private  JButton stop;
-    //Pour le 3eme Menu 
+    //Pour le 4eme Menu 
     private int homme, femme;
     private JButton playB;
     private JButton retryB;
@@ -120,9 +125,38 @@ public class StartMenu extends JFrame{
 
     }
 
-    //Menu Secondaire
+    //Menu 2
     public void setActionButtons(){
         play.addActionListener(ev -> {
+            remove(play);
+            ImageIcon one = new ImageIcon("src/main/java/com/VocalMaze/Images/1p.png");
+            ImageIcon two = new ImageIcon("src/main/java/com/VocalMaze/Images/2p.png");
+            //Init des boutons
+            onep = new JButton(one);
+            twop = new JButton(two);
+
+            //Init de onep
+            onep.setBorderPainted(false);
+            onep.setBackground(new Color(0, 0, 0, 0));
+            onep.setBounds(460, 957, one.getIconWidth(), one.getIconHeight());
+
+            //Init de twop
+            twop.setBorderPainted(false);
+            twop.setBackground(new Color(0, 0, 0, 0));
+            twop.setBounds(1431, 957, two.getIconWidth(), two.getIconHeight());
+
+            //Init du back 
+            background.add(onep);
+            background.add(twop);
+            pack();
+            setVisible(true);
+            setActionButtons1();
+        });
+    }
+    
+    //Menu 3
+    public void setActionButtons1(){
+        onep.addActionListener(ev -> {
 
             //Remove des anciens boutons/images
             remove(play);
@@ -146,7 +180,7 @@ public class StartMenu extends JFrame{
             }
 
             
-            //INIT des boutons
+            //Init des boutons
             ImageIcon r = new ImageIcon("src/main/java/com/VocalMaze/Images/rec.png");
             ImageIcon s = new ImageIcon("src/main/java/com/VocalMaze/Images/stop.png");
             ImageIcon q = new ImageIcon("src/main/java/com/VocalMaze/Images/quitter.png");
@@ -199,7 +233,7 @@ public class StartMenu extends JFrame{
         // });
     }
 
-    //Menu Tertiaire
+    //Menu 4
     public void setActionButtonsBis(){
 
         Record.addActionListener(ev->{
