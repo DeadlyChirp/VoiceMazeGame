@@ -6,12 +6,30 @@ public class Labyrinthe {
     
     private Case[][] plateau;
     private Joueur joueur;
+    private Joueur joueur2;
     private Case pointArrivee;
+    private Case pointArrivee2;
     private Case pointDepart;
+    private Case pointDepart2;
+    private boolean multi;
 
 
-    public Labyrinthe(Joueur joueur) {
+    public Labyrinthe(Joueur joueur, boolean multi) {
         this.joueur = joueur;
+        this.joueur2 = new Joueur("");
+        plateau = new Case[25][26];
+        for (int i = 0; i < plateau.length; i++) {
+            for (int j = 0; j < plateau[i].length; j++) {
+                plateau[i][j] = new Case(i, j);
+            }
+        }
+        genereLabyrinthe();
+    }
+
+    public Labyrinthe(Joueur joueur,Joueur joueur2, boolean multi) {
+        this.joueur = joueur;
+        this.joueur2 = joueur2;
+        this.multi = multi;
         plateau = new Case[25][26];
         for (int i = 0; i < plateau.length; i++) {
             for (int j = 0; j < plateau[i].length; j++) {
@@ -29,8 +47,17 @@ public class Labyrinthe {
         return pointDepart;
     }
 
+    public Case getPointDepart2() {
+        return pointDepart2;
+    }
+
+
     public boolean estPointArrivee(int i, int j) {
         return pointArrivee.getX() == i && pointArrivee.getY() == j;
+    }
+
+    public boolean estPointArrivee2(int i, int j) {
+        return pointArrivee2.getX() == i && pointArrivee2.getY() == j;
     }
 
     private void ajouteCaseFrontiere(ArrayList<Case> caseFrontiere, int x, int y) {
@@ -164,6 +191,16 @@ public class Labyrinthe {
                     break;
                 }
             }
+            if(multi) {
+                for (int j = plateau[i].length -1 ; j >= 0; j--) {
+                    if (plateau[i][j].getOuvert()) {
+                        joueur2.setX(i);
+                        joueur2.setY(j);
+                        pointDepart2 = plateau[i][j];
+                        break;
+                    }
+                }
+            }
             if (caseTrouvee) break;
         }
         caseTrouvee = false;
@@ -175,12 +212,21 @@ public class Labyrinthe {
                     break;
                 }
             }
+            if(multi){
+                for (int j = 0; j < plateau[i].length; j++){
+                    if (plateau[i][j].getOuvert()){
+                        pointArrivee2 = plateau[i][j];
+                        break;
+                    }
+                }    
+            }
             if (caseTrouvee) break;
         }
     }
 
-    public boolean possible(Direction dir , int steps) { //True si le deplacement est possible false sinon.
-        int sens = 0;
+
+    public boolean possible(Direction dir , int steps, boolean deuxieme) { //True si le deplacement est possible false sinon.
+        int sens = 0; // 
         switch(dir) {
             case HAUT : sens = -1; break;
             case BAS : sens = 1; break;
@@ -189,21 +235,33 @@ public class Labyrinthe {
         }
         if (dir == Direction.HAUT || dir == Direction.BAS) {
             for (int i = 1; i <= steps; i++) {
-                if (joueur.getX()+i*sens < 0 || joueur.getX()+i*sens >= plateau.length || !plateau[joueur.getX()+i*sens][joueur.getY()].getOuvert()) {
+                if(deuxieme){
+                    if (joueur2.getX()+i*sens < 0 || joueur2.getX()+i*sens >= plateau.length || !plateau[joueur2.getX()+i*sens][joueur2.getY()].getOuvert()) {
+                        return false;
+                } else if (joueur.getX()+i*sens < 0 || joueur.getX()+i*sens >= plateau.length || !plateau[joueur.getX()+i*sens][joueur.getY()].getOuvert()) {
                     return false;
+                }
                 }
             }
         } else {
-            for (int i = 1; i <= steps; i++) {
-                if (joueur.getY()+i*sens < 0 || joueur.getY()+i*sens >= plateau[joueur.getX()].length || !plateau[joueur.getX()][joueur.getY()+i*sens].getOuvert()) {
+            for (int i = 0; i < steps; i++) {
+                if(deuxieme){
+                    if (joueur2.getY()+i*sens < 0 || joueur2.getY()+i*sens >= plateau[joueur2.getX()].length || !plateau[joueur2.getX()][joueur2.getY()+i*sens].getOuvert()) {
+                        return false;
+                } else if (joueur.getY()+i*sens < 0 || joueur.getY()+i*sens >= plateau[joueur.getX()].length || !plateau[joueur.getX()][joueur.getY()+i*sens].getOuvert()) {
                     return false;
+                }
                 }
             }
         }
         return true;
     }
 
-    public boolean endGame() { // verifie si la partie est terminé.
+    public boolean endGame1() { // verifie si la partie est terminé par le joueur 1.
+        return joueur.getX() == pointArrivee.getX() && joueur.getY() == pointArrivee.getY();
+    }
+
+    public boolean endGame2() { // verifie si la partie est terminé par le joueur 2.
         return joueur.getX() == pointArrivee.getX() && joueur.getY() == pointArrivee.getY();
     }
 
@@ -222,6 +280,14 @@ public class Labyrinthe {
                         System.out.print("|");
                      } else if (c == pointArrivee) {
                         System.out.print("A");
+                     } else if (multi){
+                        if (joueur2.getX() == i && joueur2.getY() == j) {
+                            System.out.print("x");
+                         } else if (c == pointArrivee2) {
+                            System.out.print("P");
+                         } else {
+                            System.out.print(" ");
+                         }
                      } else {
                         System.out.print(" ");
                      }
@@ -240,10 +306,14 @@ public class Labyrinthe {
 
     public static void main(String[] args) {
         Joueur j = new Joueur("Bawww");
-        Labyrinthe l = new Labyrinthe(j);
+        Joueur j2 = new Joueur("test");
+        Labyrinthe l = new Labyrinthe(j,j2,true);
         l.genereLabyrinthe();
         l.printLabyrinthe();
         System.out.println(l.joueur.getX() + " " + l.joueur.getY());
+        System.out.println("\n" + l.pointArrivee.getX() + " " + l.pointArrivee.getY());
+        System.out.println("\n" + l.joueur2.getX() + " " + l.joueur2.getY());
+       // System.out.println("\n" + l.pointArrivee2.getX() + " " + l.pointArrivee2.getY());
         // l.possible2(Direction.BAS, 90);
         // l.printLabyrinthe();
         //System.out.println(l.joueur.getX() + " " + l.joueur.getY());
