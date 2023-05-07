@@ -24,7 +24,7 @@ import com.sun.tools.javac.Main;
 
 
 public class GameView extends JPanel implements KeyListener{
-    private Controller controller ; 
+    public Controller controller ; 
     private LabyrintheView labyrintheView ;
     private PopUP popUP ; 
     private static final Dimension TAILLE_ECRAN = Toolkit.getDefaultToolkit().getScreenSize();
