@@ -135,6 +135,7 @@ public class GameView extends JPanel implements KeyListener{
                                 endGame(fin);
                                 return ; 
                             } 
+                            if(multi)controller.getGameModel().changeTour();
                             popUP.appendMessage(step1()+"- Jeu : Appuyez sur R pour vous enregistrer et S pour arrêter afin de gagner du temps de parole .\n\n");
                             timeMs = -1 ; 
                         }
@@ -438,7 +439,6 @@ public class GameView extends JPanel implements KeyListener{
                     break ; 
                 }
             }
-            controller.getGameModel().changeTour();
         }
     
         private void update() {
