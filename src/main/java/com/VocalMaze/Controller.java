@@ -24,8 +24,12 @@ public class Controller {
         model.movePlayer(dir, steps);
     }
 
-    public boolean endGame () {
-        return model.endGame() ; 
+    public boolean endGame1 () {
+        return model.endGame1() ; 
+    }
+
+    public boolean endGame2 () {
+        return model.endGame2();
     }
 
     public boolean possible(Direction dir, int steps) {
@@ -56,8 +60,8 @@ public class Controller {
         return model.transcrire() ; 
     }
 
-    public boolean play(Direction [] directions) {
-        if (directions.length == 0) return false ; 
+    public int play(Direction [] directions) {
+        if (directions.length == 0) return 0 ; 
         int i = 1;
         int occ = 1;
         Direction d = directions[0];
@@ -65,7 +69,10 @@ public class Controller {
             if (possible(d, occ)) {
                 movePlayer(d, occ);
                 gameView.movePlayer(d, occ);
-                if (model.endGame()) return true;
+                if (model.endGame1()) return 1;
+                if(getGameModel().getMulti()){
+                     if (model.endGame2())  return 2;
+                }
             }
         }
         while (i < directions.length) { //Si la même direction est répétée successivement, alors on compte les occurences et 
@@ -74,14 +81,17 @@ public class Controller {
                 if (possible(d, occ)) {
                     movePlayer(d, occ);
                     gameView.movePlayer(d, occ);
-                    if (model.endGame()) return true;
+                    if (model.endGame1()) return 1;
+                    if(getGameModel().getMulti()){
+                        if (model.endGame2())  return 2;
+                   }
                 }
                 d = directions[i];
                 occ = 1;
             }
             i++;
         }
-        return false ; 
+        return 0 ; 
     }
 
 }
