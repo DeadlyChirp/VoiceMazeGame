@@ -3,6 +3,9 @@ package com.VocalMaze;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.AbstractBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -244,6 +247,34 @@ public class GameView extends JPanel implements KeyListener{
                     @Override
                     public void componentResized(ComponentEvent e) {
                         repaint();
+                    }
+                });
+
+                //reset chat box to blank
+                getDocument().addDocumentListener(new DocumentListener() {
+                    @Override
+                    public void insertUpdate(DocumentEvent e) {
+                        SwingUtilities.invokeLater(() -> {
+                            int maxLines = 6;
+                            int lineCount = getLineCount();
+                            if (lineCount > maxLines) {
+                                try {
+                                    int start = getLineStartOffset(0);
+                                    int end = getLineStartOffset(lineCount - 1);
+                                    replaceRange("", start, end);
+                                } catch (BadLocationException ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void removeUpdate(DocumentEvent e) {
+                    }
+
+                    @Override
+                    public void changedUpdate(DocumentEvent e) {
                     }
                 });
             }
