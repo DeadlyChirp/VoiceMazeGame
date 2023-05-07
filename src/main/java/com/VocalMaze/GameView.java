@@ -52,7 +52,7 @@ public class GameView extends JPanel implements KeyListener{
         labyrintheView = new LabyrintheView() ; 
         labyrintheView.decoupeImage();
         //labyrintheView.setLocation(250, 100);
-        add(labyrintheView) ; 
+        add(labyrintheView) ;
         labyrintheView.setVisible(true);
         setVisible(true);
 
@@ -180,163 +180,118 @@ public class GameView extends JPanel implements KeyListener{
     }
 
     public class PopUP extends JPanel {
-        private InfoTextArea infoTextArea;
+        private ZoneTexteInfo zoneTexteInfo;
 
         PopUP(String message) {
-
-            infoTextArea = new InfoTextArea(message);
+            zoneTexteInfo = new ZoneTexteInfo(message);
             setLayout(new GridBagLayout());
 
-            GridBagConstraints gbc = new GridBagConstraints(); // for placing components
+            GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridx = 0;
             gbc.gridy = 0;
             gbc.weightx = 1;
             gbc.weighty = 1;
-            gbc.anchor = GridBagConstraints.NORTH; // align the text at the top
+            gbc.anchor = GridBagConstraints.NORTH;
 
-            add(infoTextArea, gbc);
+            add(zoneTexteInfo, gbc);
             setBackground(new Color(0, 0, 0, 0));
             setOpaque(false);
-            setMaximumSize(new Dimension(600, 400)); // Adjust the maximum size of the PopUP panel
+            setMaximumSize(new Dimension(600, 400));
             setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
         }
 
         public void appendMessage(String message) {
-            System.out.println("Appending message: " + message); // Add this line to check if appendMessage in PopUP is called
-            infoTextArea.appendMessage(message);
+            System.out.println("Appending message: " + message);
+            zoneTexteInfo.appendMessage(message);
         }
 
-        private class InfoTextArea extends JTextArea {
-            private final String fullText;
-            private int textIndex = 0;
-            private ImageIcon imageIcon;
+        private class ZoneTexteInfo extends JTextArea {
+            private final String texteComplet;
+            private int indexTexte = 0;
 
-            public InfoTextArea(String text) {
+            public ZoneTexteInfo(String texte) {
                 super("");
-                fullText = text;
+                texteComplet = texte;
                 setEditable(false);
                 setOpaque(false);
 
-                int paddingTop = 15;
-                int paddingBottom = 15;
-                int paddingLeft = 15;
-                int paddingRight = 15;
-
-                setBorder(BorderFactory.createCompoundBorder(new RoundedBorder(15, 5), BorderFactory.createEmptyBorder(paddingTop, paddingLeft, paddingBottom, paddingRight)));
+                setBorder(BorderFactory.createCompoundBorder(new BordArrondi(15, 5), BorderFactory.createEmptyBorder(15, 15, 15, 15)));
 
                 try {
-                    File fontFile = new File("src/main/java/com/VocalMaze/Audio&Visuel/Font-police/PressStart2P-Regular.ttf");
-                    Font pressStart2P = Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(12f);
-                    Font pressStart2PWithSpacing = createFontWithIncreasedLineSpacing(pressStart2P, 3f);
+                    File fichierPolice = new File("src/main/java/com/VocalMaze/Audio&Visuel/Font-police/PressStart2P-Regular.ttf");
+                    Font pressStart2P = Font.createFont(Font.TRUETYPE_FONT, fichierPolice).deriveFont(12f);
+                    Font pressStart2PWithSpacing = creerPoliceAvecEspaceLigne(pressStart2P, 3f);
                     setFont(pressStart2PWithSpacing);
                 } catch (FontFormatException | IOException e) {
                     e.printStackTrace();
                 }
 
-                setForeground(new Color(0, 0, 0)); // Set the text color to white
+                setForeground(new Color(0, 0, 0));
                 setPreferredSize(new Dimension(600, 400));
                 setLineWrap(true);
                 setWrapStyleWord(true);
-                // Add space between lines
                 setRows(6);
-
-                // Add some space around the text inside the JTextArea
                 setMargin(new Insets(10, 10, 10, 10));
 
-                // Create the timer for the typing effect
-                int delay = 50; //milliseconds
-                ActionListener taskPerformer2 = new ActionListener() {
+                int delai = 50;
+                ActionListener actionEcrire = new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
-                        if (textIndex < fullText.length()) {
-                            setText(fullText.substring(0, textIndex));
-                            textIndex++;
+                        if (indexTexte < texteComplet.length()) {
+                            setText(texteComplet.substring(0, indexTexte));
+                            indexTexte++;
                         } else {
                             ((Timer) evt.getSource()).stop();
                         }
                     }
                 };
-                new Timer(delay, taskPerformer2).start();
-
-                // Listen for size changes
-                addComponentListener(new ComponentAdapter() {
-                    @Override
-                    public void componentResized(ComponentEvent e) {
-                        repaint();
-                    }
-                });
-
-                //reset chat box to blank
-
+                new Timer(delai, actionEcrire).start();
             }
 
-            @Override
-            protected void paintComponent(Graphics g) {
-                if (imageIcon != null) {
-                    Image image = imageIcon.getImage();
-                    int width = this.getWidth();
-                    int height = this.getHeight();
-                    int imgWidth = imageIcon.getIconWidth();
-                    int imgHeight = imageIcon.getIconHeight();
-                    double widthRatio = (double) width / imgWidth;
-                    double heightRatio = (double) height / imgHeight;
-                    double ratio = Math.min(widthRatio, heightRatio);
+            private class BordArrondi extends AbstractBorder {
+                private final int largeurArc;
+                private final int hauteurArc;
+                private final int epaisseur;
 
-                    int newWidth = (int) (imgWidth * ratio);
-                    int newHeight = (int) (imgHeight * ratio);
-
-                    g.drawImage(image, 0, 0, newWidth, newHeight, this);
-                    g.setColor(new Color(0, 0, 0, 200));
-                    g.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
-                }
-                super.paintComponent(g);
-            }
-
-            private class RoundedBorder extends AbstractBorder {
-                private final int arcWidth;
-                private final int arcHeight;
-                private final int thickness;
-
-                public RoundedBorder(int arcWidth, int thickness) {
-                    this.arcWidth = arcWidth;
-                    this.arcHeight = arcWidth;
-                    this.thickness = thickness;
+                public BordArrondi(int largeurArc, int epaisseur) {
+                    this.largeurArc = largeurArc;
+                    this.hauteurArc = largeurArc;
+                    this.epaisseur = epaisseur;
                 }
 
                 public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
                     g.setColor(Color.BLACK);
-                    for (int i = 0; i < thickness; i++) {
-                        g.drawRoundRect(x + i, y + i, width - 1 - (i * 2), height - 1 - (i * 2), arcWidth, arcHeight);
+                    for (int i = 0; i < epaisseur; i++) {
+                        g.drawRoundRect(x + i, y + i, width - 1 - (i * 2), height - 1 - (i * 2), largeurArc, hauteurArc);
                     }
                 }
             }
 
-            private Font createFontWithIncreasedLineSpacing(Font font, float spacing) {
-                Map<TextAttribute, Object> attributes = new HashMap<>(font.getAttributes());
-                attributes.put(TextAttribute.SIZE, font.getSize() + spacing);
-                return font.deriveFont(attributes);
+            private Font creerPoliceAvecEspaceLigne(Font police, float espacement) {
+                Map<TextAttribute, Object> attributs = new HashMap<>(police.getAttributes());
+                attributs.put(TextAttribute.SIZE, police.getSize() + espacement);
+                return police.deriveFont(attributs);
             }
 
             public void appendMessage(String message) {
-                int delay = 50; // milliseconds
-                int[] messageIndex = new int[]{0};
+                int delai = 50; // milliseconds
+                int[] indexMessage = new int[]{0};
 
-                ActionListener taskPerformer = new ActionListener() {
+                ActionListener actionAjouter = new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
-                        if (messageIndex[0] < message.length()) {
-                            append(String.valueOf(message.charAt(messageIndex[0])));
-                            messageIndex[0]++;
+                        if (indexMessage[0] < message.length()) {
+                            append(String.valueOf(message.charAt(indexMessage[0])));
+                            indexMessage[0]++;
 
-                            // Add the following code to monitor and update the text area
                             SwingUtilities.invokeLater(() -> {
-                                int maxLines = 6;
-                                int lineCount = getLineCount();
-                                if (lineCount > maxLines) {
+                                int maxLignes = 6;
+                                int nbLignes = getLineCount();
+                                if (nbLignes > maxLignes) {
                                     try {
-                                        int start = getLineStartOffset(0);
-                                        int end = getLineEndOffset(lineCount - maxLines);
-                                        replaceRange("", start, end);
+                                        int debut = getLineStartOffset(0);
+                                        int fin = getLineEndOffset(nbLignes - maxLignes);
+                                        replaceRange("", debut, fin);
                                         setCaretPosition(getDocument().getLength());
                                     } catch (BadLocationException ex) {
                                         ex.printStackTrace();
@@ -348,7 +303,7 @@ public class GameView extends JPanel implements KeyListener{
                         }
                     }
                 };
-                new Timer(delay, taskPerformer).start();
+                new Timer(delai, actionAjouter).start();
             }
         }
     }
@@ -372,7 +327,7 @@ public class GameView extends JPanel implements KeyListener{
         private int caseX2, ancienCaseX2;
         private int caseY2, ancienCaseY2;
         private int stepsAnim;
-        private int pourcentTailleEcranX, pourcentTailleEcranY; 
+        private int pourcentTailleEcranX, pourcentTailleEcranY;
 
         public LabyrintheView () throws IOException{
             setPreferredSize(TAILLE_ECRAN);
@@ -381,10 +336,10 @@ public class GameView extends JPanel implements KeyListener{
             imagePorte = ImageIO.read(new File("src/main/java/com/VocalMaze/Images/doors.png"));
             imagePassage = ImageIO.read(new File("src/main/java/com/VocalMaze/Images/M484ShmupTileset1.png"));
             porteLabyrinthe = new BufferedImage[25][26];
-            currentFrame = 0 ; 
-            lastTime = 0 ; 
-            dirAnim = Direction.BAS ; 
-            enDeplacement = false ; 
+            currentFrame = 0 ;
+            lastTime = 0 ;
+            dirAnim = Direction.BAS ;
+            enDeplacement = false ;
             pourcentTailleEcranX = (int) (2.18 * TAILLE_ECRAN.getWidth()/100); // proportion que doit occuper une case.
             pourcentTailleEcranY = (int) (3.91 * TAILLE_ECRAN.getHeight()/100);
             caseX = (int) -(0.85 * TAILLE_ECRAN.getWidth()/100) + pourcentTailleEcranX * controller.getGameModel().getLabyrinthe().getPointDepart().getY(); //place l'animation sur le point de départ.
@@ -398,7 +353,7 @@ public class GameView extends JPanel implements KeyListener{
                 enDeplacement2 = false;
             }
         }
-        
+
         private void decoupeImage() {
             for (int i = 0; i < sprites.length; i++) {
                 for (int j = 0; j < sprites[i].length; j++) {
@@ -424,7 +379,7 @@ public class GameView extends JPanel implements KeyListener{
                 }
             }
       }
-    
+
         private void animateMovement () {
             while(true) {
                 if (enDeplacement || enDeplacement2) {
@@ -436,11 +391,11 @@ public class GameView extends JPanel implements KeyListener{
                         e.printStackTrace();
                     }
                 }else{
-                    break ; 
+                    break ;
                 }
             }
         }
-    
+
         private void update() {
             long currentTime = System.currentTimeMillis();
             if (currentTime - lastTime > 500) {
@@ -453,19 +408,19 @@ public class GameView extends JPanel implements KeyListener{
                                 if (caseX  >= ancienCaseX + pourcentTailleEcranX * stepsAnim) enDeplacement = false;
                                 break;
                             }
-        
+
                             case GAUCHE : {
                                 caseX -= pourcentTailleEcranX;
                                 if (caseX <= ancienCaseX - pourcentTailleEcranX * stepsAnim) enDeplacement = false;
                                 break;
                             }
-        
+
                             case BAS : {
                                 caseY += pourcentTailleEcranY;
                                 if (caseY  >= ancienCaseY + pourcentTailleEcranY * stepsAnim) enDeplacement = false;
                                 break;
                             }
-        
+
                             case HAUT : {
                                 caseY -= pourcentTailleEcranY;
                                 if (caseY <= ancienCaseY - pourcentTailleEcranY * stepsAnim) enDeplacement = false;
@@ -485,19 +440,19 @@ public class GameView extends JPanel implements KeyListener{
                                 if (caseX2  >= ancienCaseX2 + pourcentTailleEcranX * stepsAnim) enDeplacement2 = false;
                                 break;
                             }
-        
+
                             case GAUCHE : {
                                 caseX2 -= pourcentTailleEcranX;
                                 if (caseX2 <= ancienCaseX2 - pourcentTailleEcranX * stepsAnim) enDeplacement2 = false;
                                 break;
                             }
-        
+
                             case BAS : {
                                 caseY2 += pourcentTailleEcranY;
                                 if (caseY2  >= ancienCaseY2 + pourcentTailleEcranY * stepsAnim) enDeplacement2 = false;
                                 break;
                             }
-        
+
                             case HAUT : {
                                 caseY2 -= pourcentTailleEcranY;
                                 if (caseY2 <= ancienCaseY2 - pourcentTailleEcranY * stepsAnim) enDeplacement2 = false;
@@ -509,9 +464,9 @@ public class GameView extends JPanel implements KeyListener{
                     }
                 }
             }
-            
+
         }
-    
+
         public void movePlayer(Direction dir, int steps) {
             if(controller.getGameModel().getTour()){
                 if (caseX < 0 || caseY < 0) {
@@ -535,7 +490,7 @@ public class GameView extends JPanel implements KeyListener{
             stepsAnim = steps;
             animateMovement();
             }
-      
+
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             for (int i = 0; i < porteLabyrinthe.length; i++) {
@@ -605,8 +560,25 @@ public class GameView extends JPanel implements KeyListener{
         Logger.getLogger("java.awt.Container").setLevel(Level.OFF);
         Logger.getLogger("java.awt.KeyboardFocusManager").setLevel(Level.OFF);
     }
+    static class ImagePanel extends JPanel {
+        private Image backgroundImage;
 
+        public ImagePanel(String imagePath) {
+            try {
+                backgroundImage = ImageIO.read(new File(imagePath));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if (backgroundImage != null) {
+                g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
+            }
+        }
+    }
     public static void main(String[] args) throws IOException {
         configureLogging();
     JFrame frame = new JFrame() ;
@@ -619,7 +591,6 @@ public class GameView extends JPanel implements KeyListener{
     }else{
         System.err.println("Le mode plein écran n'est pas compatible");
     }
-
     frame.setPreferredSize(TAILLE_ECRAN);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     GameView gameView = new GameView("test" , 2 , 2, true);
