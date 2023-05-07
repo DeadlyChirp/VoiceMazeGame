@@ -8,6 +8,9 @@ public class GameModel {
     
     private Labyrinthe labyrinthe;
     private Joueur joueur;
+    private Joueur joueur2;
+    private boolean tour;
+    private boolean multi;
     private Recorder recorder ; 
     private AudioAnalyser audioAnalyser ;
     @SuppressWarnings("unused")
@@ -15,29 +18,55 @@ public class GameModel {
     @SuppressWarnings("unused")
     private int nbFemellesTotal ; 
 
-    public GameModel (String pseudo , int nbMaleTotal , int nbFemellesTotal){
-        joueur = new Joueur(pseudo) ; 
-        this.labyrinthe = new Labyrinthe(joueur);
-        this.nbMaleTotal = nbMaleTotal ; 
-        this.nbFemellesTotal = nbFemellesTotal ; 
-        recorder = new Recorder() ;
-        audioAnalyser = new AudioAnalyser();
+    public GameModel (String pseudo , int nbMaleTotal , int nbFemellesTotal, boolean multi){
+            joueur = new Joueur(pseudo); 
+            tour = false;
+            this.multi = multi;
+            this.labyrinthe = new Labyrinthe(joueur, multi);
+            this.nbMaleTotal = nbMaleTotal ; 
+            this.nbFemellesTotal = nbFemellesTotal ; 
+            recorder = new Recorder() ;
+            audioAnalyser = new AudioAnalyser();
+            if(multi){
+                joueur2 = new Joueur("Joueur2");
+                this.labyrinthe = new Labyrinthe(joueur,joueur2, multi);
+            }
     }
 
     public Labyrinthe getLabyrinthe(){
         return this.labyrinthe ; 
     }
 
+    public boolean getTour(){
+        return tour;
+    }
+
+    public boolean getMulti(){
+        return multi;
+    }
+
+    public void changeTour(){
+        tour = !tour;
+    }
+
     public void movePlayer (Direction dir , int steps) {
-        joueur.move(dir, steps);
+        if(tour) {
+            joueur2.move(dir, steps);
+        } else {
+            joueur.move(dir, steps);
+        }
     }
 
     public boolean possible(Direction dir, int steps) {
-        return labyrinthe.possible(dir, steps) ; 
+        return labyrinthe.possible(dir, steps, tour) ; 
     }
 
-    public boolean endGame () {
-        return labyrinthe.endGame() ; 
+    public boolean endGame1 () {
+        return labyrinthe.endGame1() ; 
+    }
+
+     public boolean endGame2 () {
+        return labyrinthe.endGame2() ; 
     }
 
     public void startRecord () {
@@ -65,4 +94,3 @@ public class GameModel {
     }
 
 }
-
