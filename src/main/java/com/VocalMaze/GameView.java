@@ -3,8 +3,6 @@ package com.VocalMaze;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.AbstractBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 
 import java.awt.*;
@@ -56,7 +54,7 @@ public class GameView extends JPanel implements KeyListener{
         labyrintheView.setVisible(true);
         setVisible(true);
 
-        popUP = new PopUP("- Grand master : Salutations, mes chers aventuriers! Préparez-vous à trembler de terreur. Maintenant, commençons le jeu. Vous devez trouver la sortie avant que je ne vous trouve. Ahahaha... Vous êtes à moi maintenant..Osez-vous relever le défi ? Hahahaha!\n\n"  +
+        popUP = new PopUP("- Grand master : Salutations, mes chers aventuriers! Préparez-vous à trembler de terreur. Maintenant, commençons le jeu. Vous devez trouver la sortie avant que je ne vous trouve. Ahahaha... Vous êtes à moi maintenant..Osez-vous relever le défi ? Hahahaha!\n\n" +
         "- Jeu : Dans un premier temps , vous devez parler chacun votre tour afin de vous reconnaitre , ainsi gagner du temps de parole . Appuyez sur R pour commencer l'enregistrement , puis appuyez sur S quand vous avez fini !\n\n") ;
         add(popUP, BorderLayout.EAST);
         nbLocM_F = new int[2] ;
@@ -74,7 +72,7 @@ public class GameView extends JPanel implements KeyListener{
                 case 1 : return "- Grand Master : Vous etes timides ? Vous voulez que je ferme mes yeux pour que vous parliez ? Si vous voulez pas partir vous allez juste mourir ici...\n\n" ; 
             }
         }
-        switch(rm.nextInt(5)) {
+        switch(rm.nextInt(6)) {
             case 0 : return "- Grand Master : A ce que j'ai pu entendre vous etes " + nbLocM + " hommes ainsi que " + nbLocF + " femmes à etre coinsés ici .\n\n" ; 
             case 1 : return "- Grand Master : Ohh , vous etes que " + nbLocF + "femmes et " + nbLocM + "hommes , je pensais avoir plus de personnes coinsés ici avec moi .\n\n" ; 
             case 2 : return "- Grand Master : C'est toujours agréable de voir " + nbLocM + "hommes ainsi que " + nbLocF + " femmes essayer de s'échapper de ma demeure après etre entrés dedans avec tant d'insouciance...\n\n" ; 
@@ -86,7 +84,15 @@ public class GameView extends JPanel implements KeyListener{
     }
 
     public String step1 () {
-        return null ; 
+        Random rm = new Random() ; 
+        switch(rm.nextInt(5)) {
+            case 0 : return "- Grand Master : Vous etes toujours pas sortis d'ici ? Vous courez à votre perte...\n\n" ;
+            case 1 : return "- Grand Master : Personne a su s'échapper de ce dédale sans fin , vous serez pas les premiers à vous enfuir .\n\n" ;
+            case 2 : return "- Grand Master : Prenez à gauche la prochaine fois , croyez moi ça vous portera chance...\n\n" ; 
+            case 3 : return "- Grand Master : Vous avez du mal pour de jeunes explorateurs...Vous voulez un peu d'aide peut être un peu d'aide ?\n\n" ; 
+            case 4 : return "- Grand Master : Refléchir vous sera d'une grande utilité si vous tenez autant à vos vies comme vous le prétendez .\n\n" ;  
+        }
+        return "" ; 
     }
 
     @Override
@@ -96,11 +102,13 @@ public class GameView extends JPanel implements KeyListener{
                 switch(e.getKeyChar()) {
                     case 'r' : {                
                         if (isRecording) break ; 
-                        popUP.appendMessage("\n- Jeu : Enregistrement en cours...\n\n");
+                        popUP.appendMessage("- Jeu : Enregistrement en cours...\n\n");
                         if (timeMs == -1) {
                             controller.startRecord();
                             isRecording = true ;
                         }else{
+                            popUP.appendMessage("- Jeu : Vous disposez de " + (timeMs/1000) + " secondes pour " + 
+                            "donner les directions à suivre pour s'enfuire . L'enregistrement se finira au bout de ce temps .\n\n" );
                             controller.startRecord(timeMs);
                             isRecordingTime = true ; 
                             try {
@@ -118,8 +126,7 @@ public class GameView extends JPanel implements KeyListener{
                                 endGame();
                                 return ; 
                             }
-                            //TODO
-                            // faire apparaitre step1
+                            popUP.appendMessage(step1()+"- Jeu : Appuyez sur R pour vous enregistrer et S pour arrêter afin de gagner du temps de parole .\n\n");
                             timeMs = -1 ; 
                         }
                         break ; 
@@ -129,8 +136,7 @@ public class GameView extends JPanel implements KeyListener{
                         if (!isRecording || isRecordingTime) break ;
                         controller.stopRecord();
                         //Analyse du vocal
-                        nbLocM_F = controller.analyse1() ;
-                        // System.out.println("Mec => " + nbLocM_F[0] + " Meuf => " + nbLocM_F[1]);
+                        nbLocM_F = controller.analyse2() ;
                         //Entre 5 et 7.5 par Homme, et entre 6 et 9 par Femme
                         timeMs = nbLocM_F[0]*(5000+(new Random()).nextInt(2501)) + nbLocM_F[1]*(6000+(new Random()).nextInt(3001)) ;
                         popUP.appendMessage(step2(nbLocM_F[0], nbLocM_F[1]));
