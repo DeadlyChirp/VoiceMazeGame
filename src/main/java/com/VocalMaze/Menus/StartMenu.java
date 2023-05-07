@@ -43,6 +43,7 @@ public class StartMenu extends JFrame {
     private JButton playB;
     private JButton retryB;
 
+    //Partie essentiel au jeu
     static boolean sonON;
     static GraphicsDevice device;
     File file = new File("src/main/java/com/VocalMaze/Audio&Visuel/Musiques/Lost Voice OP - BigJay.wav");
@@ -53,16 +54,14 @@ public class StartMenu extends JFrame {
     AudioInputStream ais = AudioSystem.getAudioInputStream(file);
     public static AudioInputStream game;
     private static final Dimension TAILLE_ECRAN = Toolkit.getDefaultToolkit().getScreenSize();
-    // partie audio6
+
+    // partie audio
     private Recorder recorder;
     private AudioAnalyser audioAnalyser;
-
     public static Clip clip;
 
-    /*************************************************
-     * Fonction
-     * Principale***************************************************************
-     */
+    /*************************************************Fonction Principale****************************************************************/
+
     // Menu Principale
     public StartMenu() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         super();
@@ -231,6 +230,10 @@ public class StartMenu extends JFrame {
             }
             mute.removeAll();
             mute.setIcon(icon2);
+        });
+
+        twop.addActionListener(ev->{
+            multi = true;
         });
 
         // quitter.addActionListener(ev->{
