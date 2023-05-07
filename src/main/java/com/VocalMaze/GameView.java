@@ -107,8 +107,6 @@ public class GameView extends JPanel implements KeyListener{
                             controller.startRecord();
                             isRecording = true ;
                         }else{
-                            popUP.appendMessage("- Jeu : Vous disposez de " + (timeMs/1000) + " secondes pour " + 
-                            "donner les directions à suivre pour s'enfuire . L'enregistrement se finira au bout de ce temps .\n\n" );
                             controller.startRecord(timeMs);
                             isRecordingTime = true ; 
                             try {
@@ -139,7 +137,8 @@ public class GameView extends JPanel implements KeyListener{
                         nbLocM_F = controller.analyse2() ;
                         //Entre 5 et 7.5 par Homme, et entre 6 et 9 par Femme
                         timeMs = nbLocM_F[0]*(5000+(new Random()).nextInt(2501)) + nbLocM_F[1]*(6000+(new Random()).nextInt(3001)) ;
-                        popUP.appendMessage(step2(nbLocM_F[0], nbLocM_F[1]));
+                        popUP.appendMessage(step2(nbLocM_F[0], nbLocM_F[1])+ "- Jeu : Vous disposez de " + (timeMs/1000) + " secondes pour " + 
+                        "donner les directions à suivre pour s'enfuire . L'enregistrement se finira au bout de ce temps .\n\n");
                         isRecording = false ; 
                         break ;
                     }
