@@ -56,7 +56,7 @@ public class GameView extends JPanel implements KeyListener{
         labyrintheView.setVisible(true);
         setVisible(true);
 
-        popUP = new PopUP("- Grand master : Salutations, mes chers aventuriers! Préparez-vous à trembler de terreur. Maintenant, commençons le jeu. Vous devez trouver la sortie avant que je ne vous trouve. Ahahaha... Vous êtes à moi maintenant..Osez-vous relever le défi ? Hahahaha!\n\n" +
+        popUP = new PopUP("- Grand master : Salutations, mes chers aventuriers! Préparez-vous à trembler de terreur. Maintenant, commençons le jeu. Vous devez trouver la sortie avant que je ne vous trouve. Ahahaha... Vous êtes à moi maintenant..Osez-vous relever le défi ? Hahahaha!\n\n"  +
         "- Jeu : Dans un premier temps , vous devez parler chacun votre tour afin de vous reconnaitre , ainsi gagner du temps de parole . Appuyez sur R pour commencer l'enregistrement , puis appuyez sur S quand vous avez fini !\n\n") ;
         add(popUP, BorderLayout.EAST);
         nbLocM_F = new int[2] ;
@@ -96,7 +96,7 @@ public class GameView extends JPanel implements KeyListener{
                 switch(e.getKeyChar()) {
                     case 'r' : {                
                         if (isRecording) break ; 
-                        popUP.appendMessage("- Jeu : Enregistrement en cours...\n\n");
+                        popUP.appendMessage("\n- Jeu : Enregistrement en cours...\n\n");
                         if (timeMs == -1) {
                             controller.startRecord();
                             isRecording = true ;
@@ -251,33 +251,10 @@ public class GameView extends JPanel implements KeyListener{
                 });
 
                 //reset chat box to blank
-                getDocument().addDocumentListener(new DocumentListener() {
-                    @Override
-                    public void insertUpdate(DocumentEvent e) {
-                        SwingUtilities.invokeLater(() -> {
-                            int maxLines = 6;
-                            int lineCount = getLineCount();
-                            if (lineCount > maxLines) {
-                                try {
-                                    int start = getLineStartOffset(0);
-                                    int end = getLineStartOffset(lineCount - 1);
-                                    replaceRange("", start, end);
-                                } catch (BadLocationException ex) {
-                                    ex.printStackTrace();
-                                }
-                            }
-                        });
-                    }
 
-                    @Override
-                    public void removeUpdate(DocumentEvent e) {
-                    }
-
-                    @Override
-                    public void changedUpdate(DocumentEvent e) {
-                    }
-                });
             }
+
+
 
             @Override
             protected void paintComponent(Graphics g) {
@@ -327,26 +304,39 @@ public class GameView extends JPanel implements KeyListener{
             }
 
             public void appendMessage(String message) {
-                int delay = 50; //milliseconds
+                int delay = 50; // milliseconds
                 int[] messageIndex = new int[]{0};
 
                 ActionListener taskPerformer = new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
                         if (messageIndex[0] < message.length()) {
-                            infoTextArea.append(String.valueOf(message.charAt(messageIndex[0])));
+                            append(String.valueOf(message.charAt(messageIndex[0])));
                             messageIndex[0]++;
+
+                            // Add the following code to monitor and update the text area
+                            SwingUtilities.invokeLater(() -> {
+                                int maxLines = 6;
+                                int lineCount = getLineCount();
+                                if (lineCount > maxLines) {
+                                    try {
+                                        int start = getLineStartOffset(0);
+                                        int end = getLineEndOffset(lineCount - maxLines);
+                                        replaceRange("", start, end);
+                                        setCaretPosition(getDocument().getLength());
+                                    } catch (BadLocationException ex) {
+                                        ex.printStackTrace();
+                                    }
+                                }
+                            });
                         } else {
                             ((Timer) evt.getSource()).stop();
                         }
                     }
                 };
-
                 new Timer(delay, taskPerformer).start();
             }
-
         }
-    
     }
 
     private class LabyrintheView extends JPanel {
