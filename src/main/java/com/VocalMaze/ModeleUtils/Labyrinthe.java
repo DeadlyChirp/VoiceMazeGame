@@ -180,7 +180,7 @@ public class Labyrinthe {
     }
 
     public boolean possible(Direction dir , int steps) { //True si le deplacement est possible false sinon.
-        int sens = 0; // 
+        int sens = 0;
         switch(dir) {
             case HAUT : sens = -1; break;
             case BAS : sens = 1; break;
@@ -194,7 +194,7 @@ public class Labyrinthe {
                 }
             }
         } else {
-            for (int i = 0; i < steps; i++) {
+            for (int i = 1; i <= steps; i++) {
                 if (joueur.getY()+i*sens < 0 || joueur.getY()+i*sens >= plateau[joueur.getX()].length || !plateau[joueur.getX()][joueur.getY()+i*sens].getOuvert()) {
                     return false;
                 }
@@ -202,49 +202,6 @@ public class Labyrinthe {
         }
         return true;
     }
-
-    // void possible2(Direction dir , int steps) {
-    //     int cpt = 0;
-    //     switch(dir) {
-    //         case HAUT : for(int i = joueur.getX()-1; i>=0;i--) {
-    //             if(plateau[i][joueur.getY()].getOuvert()) {
-    //                 cpt++;
-    //             } else { 
-    //                 break;
-    //             }
-    //         }
-    //             break;
-    //         case BAS : for(int i = joueur.getX()+1; i<plateau.length;i++) {
-    //             if(plateau[i][joueur.getY()].getOuvert()) {
-    //                 cpt++;
-    //             } else { 
-    //                 break;
-    //             }
-    //         }
-    //             break;
-    //         case GAUCHE : for(int i = joueur.getY()-1; i>=0;i--) {
-    //             if(plateau[joueur.getX()][i].getOuvert()) {
-    //                 cpt++;
-    //             } else { 
-    //                 break;
-    //             }
-    //         }
-    //             break;
-    //         default : for(int i = joueur.getY()+1; i<plateau[joueur.getX()].length;i++) {
-    //             if(plateau[i][joueur.getX()].getOuvert()) {
-    //                 cpt++;
-    //             } else { 
-    //                 break;
-    //             }
-    //         }
-    //             break;
-    //     }
-    //     if(cpt >= steps){
-    //         joueur.move(dir, steps);
-    //     } else {
-    //         joueur.move(dir, cpt);
-    //     }
-    // }
 
     public boolean endGame() { // verifie si la partie est terminé.
         return joueur.getX() == pointArrivee.getX() && joueur.getY() == pointArrivee.getY();
