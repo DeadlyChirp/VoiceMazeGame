@@ -82,7 +82,7 @@ public class GameView extends JPanel implements KeyListener{
             case 1:
                 return "- Grand Maître : Vous êtes seulement " + nbLocF + " " + hommeFemme + " et " + nbLocM + " " + hommeHomme + "? Je pensais avoir attiré plus de victimes dans mon piège...\n\n";
             case 2:
-                return "- Grand Maître : " + nbLocM + " " + hommeHomme + " et " + nbLocF + " " + hommeFemme + " luttant désespérément pour échapper à mon antre macabre... quelle délicieuse agonie.\n\n";
+                return "- Grand Maître : " + nbLocM + " " + hommeHomme + " et " + nbLocF + " " + hommeFemme + " luttant désespérément pour échapper à mon antre macabre... quelle délicieuse agonie. \n\n";
             case 3:
                 return "- Grand Maître : Seulement " + nbLocF + " " + hommeFemme + " et " + nbLocM + " " + hommeHomme + "? Vos cris de terreur ne suffisent pas à apaiser mon appétit insatiable.\n\n";
             case 4:
