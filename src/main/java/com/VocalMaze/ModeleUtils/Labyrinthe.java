@@ -238,9 +238,11 @@ public class Labyrinthe {
                 if(deuxieme){
                     if (joueur2.getX()+i*sens < 0 || joueur2.getX()+i*sens >= plateau.length || !plateau[joueur2.getX()+i*sens][joueur2.getY()].getOuvert()) {
                         return false;
-                } else if (joueur.getX()+i*sens < 0 || joueur.getX()+i*sens >= plateau.length || !plateau[joueur.getX()+i*sens][joueur.getY()].getOuvert()) {
-                    return false;
-                }
+                    }
+                } else {
+                    if (joueur.getX()+i*sens < 0 || joueur.getX()+i*sens >= plateau.length || !plateau[joueur.getX()+i*sens][joueur.getY()].getOuvert()) {
+                     return false;
+                    }
                 }
             }
         } else {
@@ -248,9 +250,11 @@ public class Labyrinthe {
                 if(deuxieme){
                     if (joueur2.getY()+i*sens < 0 || joueur2.getY()+i*sens >= plateau[joueur2.getX()].length || !plateau[joueur2.getX()][joueur2.getY()+i*sens].getOuvert()) {
                         return false;
-                } else if (joueur.getY()+i*sens < 0 || joueur.getY()+i*sens >= plateau[joueur.getX()].length || !plateau[joueur.getX()][joueur.getY()+i*sens].getOuvert()) {
-                    return false;
-                }
+                    }
+                } else {
+                    if (joueur.getY()+i*sens < 0 || joueur.getY()+i*sens >= plateau[joueur.getX()].length || !plateau[joueur.getX()][joueur.getY()+i*sens].getOuvert()) {
+                       return false;
+                    }
                 }
             }
         }
