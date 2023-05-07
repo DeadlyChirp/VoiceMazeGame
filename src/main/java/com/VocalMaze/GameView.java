@@ -67,19 +67,28 @@ public class GameView extends JPanel implements KeyListener{
     }
 
     public String step2 (int nbLocM , int nbLocF) {
-        Random rm = new Random() ; 
+        Random rm = new Random() ;
+        String hommeFemme = nbLocF > 1 ? "femmes" : "femme";
+        String hommeHomme = nbLocM > 1 ? "hommes" : "homme";
         if (nbLocF == 0 && nbLocM == 0) {
             switch(rm.nextInt(2)) {
-                case 0 : return "- Grand Master : Le silence est pas is mal que ça parfois , entre temps personnes peut sortir d'ici .\n\n" ; 
-                case 1 : return "- Grand Master : Vous etes timides ? Vous voulez que je ferme mes yeux pour que vous parliez ? Si vous voulez pas partir vous allez juste mourir ici...\n\n" ; 
+                case 0:
+                    return "- Grand Maître : Le silence peut être aussi déchirant que les cris... Personne ne s'échappera d'ici.\n\n";
+                case 1:
+                    return "- Grand Maître : Vous tremblez de peur, n'est-ce pas? Si vous ne trouvez pas le courage de parler, la mort sera votre seule échappatoire...\n\n";
             }
         }
         switch(rm.nextInt(5)) {
-            case 0 : return "- Grand Master : A ce que j'ai pu entendre vous etes " + nbLocM + " hommes ainsi que " + nbLocF + " femmes à etre coinsés ici .\n\n" ; 
-            case 1 : return "- Grand Master : Ohh , vous etes que " + nbLocF + "femmes et " + nbLocM + "hommes , je pensais avoir plus de personnes coinsés ici avec moi .\n\n" ; 
-            case 2 : return "- Grand Master : C'est toujours agréable de voir " + nbLocM + "hommes ainsi que " + nbLocF + " femmes essayer de s'échapper de ma demeure après etre entrés dedans avec tant d'insouciance...\n\n" ; 
-            case 3 : return "- Grand Master : Que " + nbLocF + " femmes et " + nbLocM + " hommes ? ça fait pas beaucoup de monde , vous voulez pas vous échapper alors ?\n\n" ; 
-            case 4 : return "- Grand Master : " + nbLocM + "hommes et " + nbLocF + " femmes , moi je dis plus on est nombreux , plus on est heureux !\n\n" ;
+            case 0:
+                return "- Grand Maître : À ce que j'entends, " + nbLocM + " " + hommeHomme + " et " + nbLocF + " " + hommeFemme + " sont piégés ici, à attendre leur triste sort.\n\n";
+            case 1:
+                return "- Grand Maître : Vous êtes seulement " + nbLocF + " " + hommeFemme + " et " + nbLocM + " " + hommeHomme + "? Je pensais avoir attiré plus de victimes dans mon piège...\n\n";
+            case 2:
+                return "- Grand Maître : " + nbLocM + " " + hommeHomme + " et " + nbLocF + " " + hommeFemme + " luttant désespérément pour échapper à mon antre macabre... quelle délicieuse agonie.\n\n";
+            case 3:
+                return "- Grand Maître : Seulement " + nbLocF + " " + hommeFemme + " et " + nbLocM + " " + hommeHomme + "? Vos cris de terreur ne suffisent pas à apaiser mon appétit insatiable.\n\n";
+            case 4:
+                return "- Grand Maître : " + nbLocM + " " + hommeHomme + " et " + nbLocF + " " + hommeFemme + "... Les cris de terreur résonnent mieux lorsqu'ils sont partagés en groupe, n'est-ce pas?\n\n";
             case 5 : return "- Grand Master : Tang de personnes , Mootivés pour s'échapper , c'est Bel et bien " + nbLocF + "femmes et " + nbLocM + "hommes que j'entend...\n\n" ; 
         }
         return "" ; 
