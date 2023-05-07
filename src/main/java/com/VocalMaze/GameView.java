@@ -30,11 +30,12 @@ public class GameView extends JPanel implements KeyListener{
     private static final Dimension TAILLE_ECRAN = Toolkit.getDefaultToolkit().getScreenSize();
     private int [] nbLocM_F ; 
     private int timeMs ; 
+    private boolean multi ;
     private boolean isRecording , isRecordingTime ;
     static GraphicsDevice device;
     private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
-    //deactiver les logs
+    //desactiver les logs
     static {
         Logger.getLogger("LiumUtil").setLevel(Level.OFF);
         Logger.getLogger("java.awt.Component").setLevel(Level.OFF);
@@ -43,10 +44,11 @@ public class GameView extends JPanel implements KeyListener{
         Logger.getLogger("javax.swing.DefaultKeyboardFocusManager").setLevel(Level.OFF);
     }
     
-    public GameView(String pseudo , int nbMaleTotal , int nbFemelleTotal) throws IOException {
+    public GameView(String pseudo , int nbMaleTotal , int nbFemelleTotal, boolean multi) throws IOException {
         setSize(TAILLE_ECRAN);
         setLayout(new BorderLayout());
-        controller = new Controller(new GameModel(pseudo, nbMaleTotal, nbFemelleTotal), this) ; 
+        this.multi = multi;
+        controller = new Controller(new GameModel(pseudo, nbMaleTotal, nbFemelleTotal, multi), this) ; 
         labyrintheView = new LabyrintheView() ; 
         labyrintheView.decoupeImage();
         //labyrintheView.setLocation(250, 100);
@@ -65,7 +67,7 @@ public class GameView extends JPanel implements KeyListener{
     }
 
     public String step2 (int nbLocM , int nbLocF) {
-        Random rm = new Random() ;
+        Random rm = new Random() ; 
         String hommeFemme = nbLocF > 1 ? "femmes" : "femme";
         String hommeHomme = nbLocM > 1 ? "hommes" : "homme";
         if (nbLocF == 0 && nbLocM == 0) {
@@ -87,9 +89,9 @@ public class GameView extends JPanel implements KeyListener{
                 return "- Grand Maître : Seulement " + nbLocF + " " + hommeFemme + " et " + nbLocM + " " + hommeHomme + "? Vos cris de terreur ne suffisent pas à apaiser mon appétit insatiable.\n\n";
             case 4:
                 return "- Grand Maître : " + nbLocM + " " + hommeHomme + " et " + nbLocF + " " + hommeFemme + "... Les cris de terreur résonnent mieux lorsqu'ils sont partagés en groupe, n'est-ce pas?\n\n";
-            case 5 : return "- Grand Master : Tang de personnes , Mootivés pour s'échapper , c'est Bel et bien " + nbLocF + "femmes et " + nbLocM + "hommes que j'entend...\n\n" ;
+            case 5 : return "- Grand Master : Tang de personnes , Mootivés pour s'échapper , c'est Bel et bien " + nbLocF + "femmes et " + nbLocM + "hommes que j'entend...\n\n" ; 
         }
-        return "" ;
+        return "" ; 
     }
 
     public String step1 () {
@@ -128,11 +130,11 @@ public class GameView extends JPanel implements KeyListener{
                             //  si besoin mais c'est optionnel , ou bien des petites images qui donnent des conseils
                             // comme dans les menus de chargement des jeux a voir 
                             Direction [] directions = controller.transcrire() ; 
-                            boolean fin = controller.play(directions) ; 
-                            if (fin) {
-                                endGame();
+                            int fin = controller.play(directions) ; 
+                            if (fin == 1 || fin == 2) {
+                                endGame(fin);
                                 return ; 
-                            }
+                            } 
                             popUP.appendMessage(step1()+"- Jeu : Appuyez sur R pour vous enregistrer et S pour arrêter afin de gagner du temps de parole .\n\n");
                             timeMs = -1 ; 
                         }
@@ -169,10 +171,9 @@ public class GameView extends JPanel implements KeyListener{
         return ;
     }
 
-    public void endGame () {
-        //TODO qui fera apparaire l'ecran de fin du jeu
+    public void endGame (int fin) {
+        //TODO qui fera apparaire l'ecran de fin du jeu en fonction si il y a 2 équipes
     }
-
     public void movePlayer (Direction dir , int steps) {
         labyrintheView.movePlayer(dir, steps);
     }
@@ -268,8 +269,6 @@ public class GameView extends JPanel implements KeyListener{
 
             }
 
-
-
             @Override
             protected void paintComponent(Graphics g) {
                 if (imageIcon != null) {
@@ -355,16 +354,22 @@ public class GameView extends JPanel implements KeyListener{
 
     private class LabyrintheView extends JPanel {
         private boolean enDeplacement ;
+        private boolean enDeplacement2 ;
         private BufferedImage[][] sprites;
         private BufferedImage[][] porteLabyrinthe;
+        private BufferedImage[][] sprites2;
         private int currentFrame ;
         private long lastTime ;
         private BufferedImage imagePorte;
         private BufferedImage imagePassage;
         private BufferedImage imageSprite;
+        private BufferedImage imageSprite2;
         private Direction dirAnim ;
+        private Direction dirAnim2 ;
         private int caseX, ancienCaseX;
         private int caseY, ancienCaseY;
+        private int caseX2, ancienCaseX2;
+        private int caseY2, ancienCaseY2;
         private int stepsAnim;
         private int pourcentTailleEcranX, pourcentTailleEcranY; 
 
@@ -381,14 +386,23 @@ public class GameView extends JPanel implements KeyListener{
             enDeplacement = false ; 
             pourcentTailleEcranX = (int) (2.18 * TAILLE_ECRAN.getWidth()/100); // proportion que doit occuper une case.
             pourcentTailleEcranY = (int) (3.91 * TAILLE_ECRAN.getHeight()/100);
-            caseX = (int) -(1.24 * TAILLE_ECRAN.getWidth()/100) + pourcentTailleEcranX * controller.getGameModel().getLabyrinthe().getPointDepart().getY(); //place l'animation sur le point de départ.
-            caseY =  0;
+            caseX = (int) -(0.85 * TAILLE_ECRAN.getWidth()/100) + pourcentTailleEcranX * controller.getGameModel().getLabyrinthe().getPointDepart().getY(); //place l'animation sur le point de départ.
+            caseY =  15;
+            if(multi){
+                sprites2 = new BufferedImage[4][9];
+                imageSprite2= ImageIO.read(new File("src/main/java/com/VocalMaze/Images/professor_walk_cycle_no_hat.png"));
+                dirAnim2 = Direction.BAS;
+                caseX2 = (int) -(0.85 * TAILLE_ECRAN.getWidth()/100) + pourcentTailleEcranX * controller.getGameModel().getLabyrinthe().getPointDepart2().getY();
+                caseY2 = 15;
+                enDeplacement2 = false;
+            }
         }
         
         private void decoupeImage() {
             for (int i = 0; i < sprites.length; i++) {
                 for (int j = 0; j < sprites[i].length; j++) {
                     sprites[i][j] = imageSprite.getSubimage(j*64, i*64, 64, 64);
+                    if(multi) sprites2[i][j] = imageSprite2.getSubimage(j*64, i*64, 64, 64);
                 }
             }
 
@@ -396,11 +410,15 @@ public class GameView extends JPanel implements KeyListener{
                 for (int j = 0; j < porteLabyrinthe[i].length; j++) {
                     if (controller.getGameModel().getLabyrinthe().estPointArrivee(i, j)) {
                         porteLabyrinthe[i][j] = imagePorte.getSubimage(100, 70, pourcentTailleEcranX, pourcentTailleEcranY);
-                    }
-                    else if (controller.getOuvert(i, j)) {
+                    }else if (controller.getOuvert(i, j)) {
                         porteLabyrinthe[i][j] = imagePassage.getSubimage(1000, 70, pourcentTailleEcranX, pourcentTailleEcranY);
                     }else {
                         porteLabyrinthe[i][j] = imagePorte.getSubimage(0, 0, pourcentTailleEcranX, pourcentTailleEcranY);
+                    }
+                    if (multi) {
+                       if (controller.getGameModel().getLabyrinthe().estPointArrivee2(i, j)) {
+                          porteLabyrinthe[i][j] = imagePorte.getSubimage(200, 200, pourcentTailleEcranX, pourcentTailleEcranY);
+                       }
                     }
                 }
             }
@@ -408,7 +426,7 @@ public class GameView extends JPanel implements KeyListener{
     
         private void animateMovement () {
             while(true) {
-                if (enDeplacement) {
+                if (enDeplacement || enDeplacement2) {
                     update();
                     repaint();
                     try {
@@ -420,54 +438,101 @@ public class GameView extends JPanel implements KeyListener{
                     break ; 
                 }
             }
+            controller.getGameModel().changeTour();
         }
     
         private void update() {
             long currentTime = System.currentTimeMillis();
             if (currentTime - lastTime > 500) {
-                if (enDeplacement) currentFrame++;
-                if (currentFrame >= sprites[3].length) {
-                    switch(dirAnim) {
-                        case DROITE : {
-                            caseX += pourcentTailleEcranX;
-                            if (caseX  >= ancienCaseX + pourcentTailleEcranX * stepsAnim) enDeplacement = false;
-                            break;
+                if(!controller.getGameModel().getTour()){
+                    if (enDeplacement) currentFrame++;
+                    if (currentFrame >= sprites[3].length) {
+                        switch(dirAnim) {
+                            case DROITE : {
+                                caseX += pourcentTailleEcranX;
+                                if (caseX  >= ancienCaseX + pourcentTailleEcranX * stepsAnim) enDeplacement = false;
+                                break;
+                            }
+        
+                            case GAUCHE : {
+                                caseX -= pourcentTailleEcranX;
+                                if (caseX <= ancienCaseX - pourcentTailleEcranX * stepsAnim) enDeplacement = false;
+                                break;
+                            }
+        
+                            case BAS : {
+                                caseY += pourcentTailleEcranY;
+                                if (caseY  >= ancienCaseY + pourcentTailleEcranY * stepsAnim) enDeplacement = false;
+                                break;
+                            }
+        
+                            case HAUT : {
+                                caseY -= pourcentTailleEcranY;
+                                if (caseY <= ancienCaseY - pourcentTailleEcranY * stepsAnim) enDeplacement = false;
+                                break;
+                            }
                         }
-    
-                        case GAUCHE : {
-                            caseX -= pourcentTailleEcranX;
-                            if (caseX <= ancienCaseX - pourcentTailleEcranX * stepsAnim) enDeplacement = false;
-                            break;
-                        }
-    
-                        case BAS : {
-                            caseY += pourcentTailleEcranY;
-                            if (caseY  >= ancienCaseY + pourcentTailleEcranY * stepsAnim) enDeplacement = false;
-                            break;
-                        }
-    
-                        case HAUT : {
-                            caseY -= pourcentTailleEcranY;
-                            if (caseY <= ancienCaseY - pourcentTailleEcranY * stepsAnim) enDeplacement = false;
-                            break;
-                        }
+                        currentFrame = 0;
+                        lastTime = currentTime;
                     }
-                    currentFrame = 0;
-                    lastTime = currentTime;
+                }
+                if(controller.getGameModel().getTour()){
+                    if (enDeplacement2) currentFrame++;
+                    if (currentFrame >= sprites2[3].length) {
+                        switch(dirAnim2) {
+                            case DROITE : {
+                                caseX2 += pourcentTailleEcranX;
+                                if (caseX2  >= ancienCaseX2 + pourcentTailleEcranX * stepsAnim) enDeplacement2 = false;
+                                break;
+                            }
+        
+                            case GAUCHE : {
+                                caseX2 -= pourcentTailleEcranX;
+                                if (caseX2 <= ancienCaseX2 - pourcentTailleEcranX * stepsAnim) enDeplacement2 = false;
+                                break;
+                            }
+        
+                            case BAS : {
+                                caseY2 += pourcentTailleEcranY;
+                                if (caseY2  >= ancienCaseY2 + pourcentTailleEcranY * stepsAnim) enDeplacement2 = false;
+                                break;
+                            }
+        
+                            case HAUT : {
+                                caseY2 -= pourcentTailleEcranY;
+                                if (caseY2 <= ancienCaseY2 - pourcentTailleEcranY * stepsAnim) enDeplacement2 = false;
+                                break;
+                            }
+                        }
+                        currentFrame = 0;
+                        lastTime = currentTime;
+                    }
                 }
             }
+            
         }
     
         public void movePlayer(Direction dir, int steps) {
-            if (caseX < 0 || caseY < 0) {
-                caseY += controller.getGameModel().getLabyrinthe().getPointDepart().getX() * pourcentTailleEcranX;
-                caseX += controller.getGameModel().getLabyrinthe().getPointDepart().getY() * pourcentTailleEcranY;
+            if(controller.getGameModel().getTour()){
+                if (caseX < 0 || caseY < 0) {
+                    caseY2 += controller.getGameModel().getLabyrinthe().getPointDepart2().getX() * pourcentTailleEcranX;
+                    caseX2 += controller.getGameModel().getLabyrinthe().getPointDepart2().getY() * pourcentTailleEcranY;
+                }
+                enDeplacement2 = true;
+                dirAnim2 = dir;
+                ancienCaseX2 = caseX2;
+                ancienCaseY2 = caseY2;
+            } else {
+                if (caseX < 0 || caseY < 0) {
+                    caseY += controller.getGameModel().getLabyrinthe().getPointDepart().getX() * pourcentTailleEcranX;
+                    caseX += controller.getGameModel().getLabyrinthe().getPointDepart().getY() * pourcentTailleEcranY;
+                }
+                enDeplacement = true;
+                dirAnim = dir;
+                ancienCaseX = caseX;
+                ancienCaseY = caseY;
             }
-            enDeplacement = true;
-            dirAnim = dir;
             stepsAnim = steps;
-            ancienCaseX = caseX;
-            ancienCaseY = caseY;
             animateMovement();
             }
       
@@ -499,6 +564,30 @@ public class GameView extends JPanel implements KeyListener{
                 else g.drawImage(sprites[dirAnim.ordinal()][0], caseX, caseY + currentFrame, null);
                 break;
             }
+            }
+            if(multi){
+                switch(dirAnim2) {
+                    case DROITE : {
+                        if (enDeplacement2) g.drawImage(sprites2[dirAnim2.ordinal()][currentFrame], caseX2 + currentFrame * stepsAnim, caseY2, null);
+                        else g.drawImage(sprites2[dirAnim2.ordinal()][0], caseX2 + currentFrame, caseY2, null);
+                        break;
+                    }
+                    case GAUCHE : {
+                        if (enDeplacement2) g.drawImage(sprites2[dirAnim2.ordinal()][currentFrame], caseX2 - currentFrame * stepsAnim, caseY2, null);
+                        else g.drawImage(sprites2[dirAnim2.ordinal()][0], caseX2 - currentFrame, caseY, null);
+                        break;
+                    }
+                    case HAUT : {
+                        if (enDeplacement2) g.drawImage(sprites2[dirAnim2.ordinal()][currentFrame], caseX2, caseY2 - currentFrame * stepsAnim, null);
+                        else g.drawImage(sprites2[dirAnim2.ordinal()][0], caseX2, caseY2 - currentFrame, null);
+                        break;
+                    }
+                    case BAS : {
+                        if (enDeplacement2) g.drawImage(sprites2[dirAnim2.ordinal()][currentFrame], caseX2, caseY2 + currentFrame * stepsAnim, null);
+                        else g.drawImage(sprites2[dirAnim2.ordinal()][0], caseX2, caseY2 + currentFrame, null);
+                        break;
+                    }
+                }
             }
         }
     }
@@ -533,7 +622,7 @@ public class GameView extends JPanel implements KeyListener{
 
     frame.setPreferredSize(TAILLE_ECRAN);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    GameView gameView = new GameView("test" , 2 , 2);
+    GameView gameView = new GameView("test" , 2 , 2, true);
     frame.add(gameView);
     frame.addKeyListener(gameView); // important
     frame.pack();
