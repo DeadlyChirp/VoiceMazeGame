@@ -2,8 +2,9 @@ package com.VocalMaze.Menus;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 
+import com.VocalMaze.ModeleUtils.AudioAnalyser;
+import com.VocalMaze.ModeleUtils.AnalyseVocal.Recorder;
 import com.VocalMaze.ViewUtils.ImagePanel;
-import com.fasterxml.jackson.databind.ser.impl.StringArraySerializer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -49,6 +50,9 @@ public class StartMenu extends JFrame{
     AudioInputStream ais = AudioSystem.getAudioInputStream(file);
     public static AudioInputStream game;
     private static final Dimension TAILLE_ECRAN = Toolkit.getDefaultToolkit().getScreenSize();
+    // partie audio6
+    private Recorder recorder ; 
+    private AudioAnalyser audioAnalyser ; 
 
 
     public static Clip clip;
@@ -122,7 +126,8 @@ public class StartMenu extends JFrame{
         clip.loop(Clip.LOOP_CONTINUOUSLY);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-
+        recorder = new Recorder() ; 
+        audioAnalyser = new AudioAnalyser() ; 
     }
 
     //Menu 2
@@ -240,16 +245,19 @@ public class StartMenu extends JFrame{
             //Stop de la musique avant de rec
             clip.stop();
             sonON=true;
-            //Faire ce que Lium et recorder doit faire pour cvapter le son. 
+            recorder.startRecord();
         });
 
         stop.addActionListener(ev->{
             //Reprise de la musique
             clip.start();
             sonON = false;
+            recorder.stopRecording();
 
-            //ecrire commande pour stopper record et donner aux variables homme, femme les valeurs que l'on va utiliser pour le prochain menu et pour GameView
-            
+            int [] nbLocH_F = audioAnalyser.analyse1() ; 
+            homme = nbLocH_F[0] ; 
+            femme = nbLocH_F[1] ; 
+
             //Cleaning du menu 3
             back2.remove(stop);
             back2.remove(Record);
@@ -258,9 +266,6 @@ public class StartMenu extends JFrame{
             back3.setSize(TAILLE_ECRAN);
             add(back3);
             back3.setVisible(true);
-
-            homme = 4;
-            femme = 2;
 
             // Init des Scores
             JPanel chiffresPanel = new JPanel();
