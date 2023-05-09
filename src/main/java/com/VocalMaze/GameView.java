@@ -20,6 +20,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import com.VocalMaze.ModeleUtils.Direction;
+import com.VocalMaze.ViewUtils.SoundEffects;
 import com.sun.tools.javac.Main;
 
 
@@ -34,6 +35,7 @@ public class GameView extends JPanel implements KeyListener{
     private boolean isRecording , isRecordingTime ;
     static GraphicsDevice device;
     private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
+    private SoundEffects soundEffects ; 
 
     //desactiver les logs
     static {
@@ -63,7 +65,8 @@ public class GameView extends JPanel implements KeyListener{
         nbLocM_F[0] = 0 ; // nbLocM
         nbLocM_F[1] = 0 ; // nbLocF
         timeMs = -1 ; 
-        addKeyListener(this) ;    
+        addKeyListener(this) ;  
+        soundEffects = new SoundEffects() ; 
     }
 
     public String step2 (int nbLocM , int nbLocF) {
@@ -115,9 +118,11 @@ public class GameView extends JPanel implements KeyListener{
                         if (isRecording) break ; 
                         popUP.appendMessage("- Jeu : Enregistrement en cours...\n\n");
                         if (timeMs == -1) {
+                            soundEffects.soundStartRec();
                             controller.startRecord();
                             isRecording = true ;
                         }else{
+                            soundEffects.soundStartRec();
                             controller.startRecord(timeMs);
                             isRecordingTime = true ; 
                             try {
@@ -126,6 +131,7 @@ public class GameView extends JPanel implements KeyListener{
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
+                            soundEffects.soundStopRec(timeMs);
                             // Faire apparaitre un petit sablier qui tourne (un gif) qui dit transcription en cours
                             //  si besoin mais c'est optionnel , ou bien des petites images qui donnent des conseils
                             // comme dans les menus de chargement des jeux a voir 
@@ -144,6 +150,7 @@ public class GameView extends JPanel implements KeyListener{
 
                     case 's' :{
                         if (!isRecording || isRecordingTime) break ;
+                        soundEffects.soundStopRec();
                         controller.stopRecord();
                         //Analyse du vocal
                         nbLocM_F = controller.analyse2() ;
