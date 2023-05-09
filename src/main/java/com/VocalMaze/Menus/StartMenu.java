@@ -350,7 +350,6 @@ public class StartMenu extends JFrame {
                 gameView.controller.getGameModel().getLabyrinthe().printLabyrinthe();
                 System.out.println(TAILLE_ECRAN);
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 
@@ -408,11 +407,11 @@ public class StartMenu extends JFrame {
                 case 0:
                     return Color.RED;
                 case 1:
-                    return Color.GREEN;
+                    return Color.BLACK;
                 case 2:
                     return Color.BLUE;
                 default:
-                    return Color.BLACK;
+                    return Color.CYAN;
             }
         }
     }
