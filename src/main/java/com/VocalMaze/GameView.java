@@ -19,7 +19,9 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+import com.VocalMaze.Menus.StartMenu;
 import com.VocalMaze.ModeleUtils.Direction;
+import com.VocalMaze.ViewUtils.SoundEffects;
 import com.sun.tools.javac.Main;
 
 
@@ -34,6 +36,7 @@ public class GameView extends JPanel implements KeyListener{
     private boolean isRecording , isRecordingTime ;
     static GraphicsDevice device;
     private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
+    private SoundEffects soundEffects ; 
 
     //desactiver les logs
     static {
@@ -63,7 +66,8 @@ public class GameView extends JPanel implements KeyListener{
         nbLocM_F[0] = 0 ; // nbLocM
         nbLocM_F[1] = 0 ; // nbLocF
         timeMs = -1 ; 
-        addKeyListener(this) ;    
+        addKeyListener(this) ;  
+        soundEffects = new SoundEffects() ; 
     }
 
     public String step2 (int nbLocM , int nbLocF) {
@@ -78,7 +82,7 @@ public class GameView extends JPanel implements KeyListener{
                     return "- Grand Maître : Vous tremblez de peur, n'est-ce pas? Si vous ne trouvez pas le courage de parler, la mort sera votre seule échappatoire...\n\n";
             }
         }
-        switch(rm.nextInt(5)) {
+        switch(rm.nextInt(6)) {
             case 0:
                 return "- Grand Maître : À ce que j'entends, " + nbLocM + " " + hommeHomme + " et " + nbLocF + " " + hommeFemme + " sont piégés ici, à attendre leur triste sort.\n\n";
             case 1:
@@ -89,13 +93,10 @@ public class GameView extends JPanel implements KeyListener{
                 return "- Grand Maître : Seulement " + nbLocF + " " + hommeFemme + " et " + nbLocM + " " + hommeHomme + "? Vos cris de terreur ne suffisent pas à apaiser mon appétit insatiable.\n\n";
             case 4:
                 return "- Grand Maître : " + nbLocM + " " + hommeHomme + " et " + nbLocF + " " + hommeFemme + "... Les cris de terreur résonnent mieux lorsqu'ils sont partagés en groupe, n'est-ce pas?\n\n";
-            case 5 :
-                return "- Grand Master : Tang de personnes , Mootivés pour s'échapper , c'est Bel et bien " + nbLocF + "femmes et " + nbLocM + "hommes que j'entend...\n\n" ;
-            case 6:
-                return "- Grand Maître : " + nbLocM + " " + hommeHomme + " et " + nbLocF + " " + hommeFemme + " ? Et bien, on dirait que vous avez organisé une petite fête ici ! Quel dommage que ce soit pour votre dernière danse...\n\n";
-
+            case 5 : 
+                return "- Grand Master : Tang de personnes , Mootivés pour s'échapper , c'est Bel et bien " + nbLocF + "femmes et " + nbLocM + "hommes que j'entend...\n\n" ; 
         }
-        return "\n" ;
+        return "" ; 
     }
 
     public String step1 () {
@@ -105,11 +106,7 @@ public class GameView extends JPanel implements KeyListener{
             case 1 : return "- Grand Master : Personne a su s'échapper de ce dédale sans fin , vous serez pas les premiers à vous enfuir .\n\n" ;
             case 2 : return "- Grand Master : Prenez à gauche la prochaine fois , croyez moi ça vous portera chance...\n\n" ; 
             case 3 : return "- Grand Master : Vous avez du mal pour de jeunes explorateurs...Vous voulez un peu d'aide peut être un peu d'aide ?\n\n" ; 
-            case 4 : return "- Grand Master : Refléchir vous sera d'une grande utilité si vous tenez autant à vos vies comme vous le prétendez .\n\n" ;
-            case 5:  return "- Grand Master : Vous savez ce qu'on dit... Qui se perd ensemble, reste ensemble ! Ahahaha !\n\n";
-            case 6:  return "- Grand Master : Un conseil d'ami, ne faites pas confiance aux murs... Ils ont tendance à... bouger. Bonne chance !\n\n";
-            case 7:  return "- Grand Master : Si vous survivez à ce labyrinthe, je vous offre un abonnement à vie à mon club de gym spécialisé en course d'orientation ! Ahahaha !\n\n";
-
+            case 4 : return "- Grand Master : Refléchir vous sera d'une grande utilité si vous tenez autant à vos vies comme vous le prétendez .\n\n" ;  
         }
         return "" ; 
     }
@@ -121,11 +118,14 @@ public class GameView extends JPanel implements KeyListener{
                 switch(e.getKeyChar()) {
                     case 'r' : {                
                         if (isRecording) break ; 
+                        StartMenu.clip.stop();
                         popUP.appendMessage("- Jeu : Enregistrement en cours...\n\n");
                         if (timeMs == -1) {
+                            soundEffects.soundStartRec();
                             controller.startRecord();
                             isRecording = true ;
                         }else{
+                            soundEffects.soundStartRec();
                             controller.startRecord(timeMs);
                             isRecordingTime = true ; 
                             try {
@@ -134,6 +134,8 @@ public class GameView extends JPanel implements KeyListener{
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
+                            soundEffects.soundStopRec(timeMs);
+                            StartMenu.clip.start();
                             // Faire apparaitre un petit sablier qui tourne (un gif) qui dit transcription en cours
                             //  si besoin mais c'est optionnel , ou bien des petites images qui donnent des conseils
                             // comme dans les menus de chargement des jeux a voir 
@@ -152,14 +154,17 @@ public class GameView extends JPanel implements KeyListener{
 
                     case 's' :{
                         if (!isRecording || isRecordingTime) break ;
+                        soundEffects.soundStopRec();
                         controller.stopRecord();
+                        StartMenu.clip.start();
                         //Analyse du vocal
                         nbLocM_F = controller.analyse2() ;
                         //Entre 5 et 7.5 par Homme, et entre 6 et 9 par Femme
                         timeMs = nbLocM_F[0]*(5000+(new Random()).nextInt(2501)) + nbLocM_F[1]*(6000+(new Random()).nextInt(3001)) ;
-                        popUP.appendMessage(step2(nbLocM_F[0], nbLocM_F[1])+ "- Jeu : Vous disposez de " + (timeMs/1000) + " secondes pour " + 
-                        "donner les directions à suivre pour s'enfuire . L'enregistrement se finira au bout de ce temps .\n\n");
-                        isRecording = false ; 
+                        popUP.appendMessage(step2(nbLocM_F[0], nbLocM_F[1])+((timeMs > 0)?("- Jeu : Vous disposez de " + (timeMs/1000) + " secondes pour " + 
+                        "donner les directions à suivre pour s'enfuire . L'enregistrement se finira au bout de ce temps .\n\n"):("- Jeu : Dommage , vous avez loupé votre chance , Réessayez encore une fois , essayez de parler un peu plus fort cette fois.\n\n")));
+                        isRecording = false ;
+                        if (timeMs == 0) timeMs = -1 ;  
                         break ;
                     }
                     
@@ -183,6 +188,7 @@ public class GameView extends JPanel implements KeyListener{
     public void endGame (int fin) {
         //TODO qui fera apparaire l'ecran de fin du jeu en fonction si il y a 2 équipes
     }
+
     public void movePlayer (Direction dir , int steps) {
         labyrintheView.movePlayer(dir, steps);
     }
@@ -568,6 +574,7 @@ public class GameView extends JPanel implements KeyListener{
         Logger.getLogger("java.awt.Container").setLevel(Level.OFF);
         Logger.getLogger("java.awt.KeyboardFocusManager").setLevel(Level.OFF);
     }
+    
     static class ImagePanel extends JPanel {
         private Image backgroundImage;
 
