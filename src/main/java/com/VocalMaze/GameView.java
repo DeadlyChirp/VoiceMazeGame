@@ -89,9 +89,13 @@ public class GameView extends JPanel implements KeyListener{
                 return "- Grand Maître : Seulement " + nbLocF + " " + hommeFemme + " et " + nbLocM + " " + hommeHomme + "? Vos cris de terreur ne suffisent pas à apaiser mon appétit insatiable.\n\n";
             case 4:
                 return "- Grand Maître : " + nbLocM + " " + hommeHomme + " et " + nbLocF + " " + hommeFemme + "... Les cris de terreur résonnent mieux lorsqu'ils sont partagés en groupe, n'est-ce pas?\n\n";
-            case 5 : return "- Grand Master : Tang de personnes , Mootivés pour s'échapper , c'est Bel et bien " + nbLocF + "femmes et " + nbLocM + "hommes que j'entend...\n\n" ; 
+            case 5 :
+                return "- Grand Master : Tang de personnes , Mootivés pour s'échapper , c'est Bel et bien " + nbLocF + "femmes et " + nbLocM + "hommes que j'entend...\n\n" ;
+            case 6:
+                return "- Grand Maître : " + nbLocM + " " + hommeHomme + " et " + nbLocF + " " + hommeFemme + " ? Et bien, on dirait que vous avez organisé une petite fête ici ! Quel dommage que ce soit pour votre dernière danse...\n\n";
+
         }
-        return "" ; 
+        return "\n" ;
     }
 
     public String step1 () {
@@ -101,7 +105,11 @@ public class GameView extends JPanel implements KeyListener{
             case 1 : return "- Grand Master : Personne a su s'échapper de ce dédale sans fin , vous serez pas les premiers à vous enfuir .\n\n" ;
             case 2 : return "- Grand Master : Prenez à gauche la prochaine fois , croyez moi ça vous portera chance...\n\n" ; 
             case 3 : return "- Grand Master : Vous avez du mal pour de jeunes explorateurs...Vous voulez un peu d'aide peut être un peu d'aide ?\n\n" ; 
-            case 4 : return "- Grand Master : Refléchir vous sera d'une grande utilité si vous tenez autant à vos vies comme vous le prétendez .\n\n" ;  
+            case 4 : return "- Grand Master : Refléchir vous sera d'une grande utilité si vous tenez autant à vos vies comme vous le prétendez .\n\n" ;
+            case 5:  return "- Grand Master : Vous savez ce qu'on dit... Qui se perd ensemble, reste ensemble ! Ahahaha !\n\n";
+            case 6:  return "- Grand Master : Un conseil d'ami, ne faites pas confiance aux murs... Ils ont tendance à... bouger. Bonne chance !\n\n";
+            case 7:  return "- Grand Master : Si vous survivez à ce labyrinthe, je vous offre un abonnement à vie à mon club de gym spécialisé en course d'orientation ! Ahahaha !\n\n";
+
         }
         return "" ; 
     }
