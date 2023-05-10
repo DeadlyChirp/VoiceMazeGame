@@ -190,6 +190,18 @@ public class GameView extends ImagePanel implements KeyListener{
 
     public void endGame (int fin) {
         //TODO qui fera apparaire l'ecran de fin du jeu en fonction si il y a 2 équipes
+        if(fin == 1){
+            ImagePanel end = new ImagePanel("src/main/java/com/VocalMaze/Images/Bravo_Joueur_2_!-transformed.png");
+            end.setVisible(true);
+            this.add(end);
+        }
+        if(fin == 2){
+            ImagePanel end1 = new ImagePanel("src/main/java/com/VocalMaze/Images/2-gSn3ZsOPh-transformed.png"); //équipe 1
+            ImagePanel end2 = new ImagePanel("src/main/java/com/VocalMaze/Images/3-TscLc9hQxe-transformed.png"); //équipe 2
+            //TODO choisir end1 ou end2 en fonction de l'équipe gagnante
+            end1.setVisible(true);
+            this.add(end1);
+        }
     }
 
     public void movePlayer (Direction dir , int steps) {
