@@ -62,8 +62,7 @@ public class GameView extends ImagePanel implements KeyListener{
 //        labyrintheView.setVisible(true);
 //        setVisible(true);
 
-        popUP = new PopUP("- Grand master : Salutations, mes chers aventuriers! Préparez-vous à trembler de terreur. Maintenant, commençons le jeu. Vous devez trouver la sortie avant que je ne vous trouve.Hahahaha!\n\n" +
-        "- Mystérieux guide : Dans un premier temps , vous devez parler chacun votre tour afin de vous reconnaitre , ainsi gagner du temps de parole . Appuyez sur R pour commencer l'enregistrement , puis appuyez sur S quand vous avez fini !\n\n") ;
+        popUP = new PopUP(randomMessage()) ;
         add(popUP, BorderLayout.EAST);
         nbLocM_F = new int[2] ;
         nbLocM_F[0] = 0 ; // nbLocM
@@ -72,7 +71,27 @@ public class GameView extends ImagePanel implements KeyListener{
         addKeyListener(this) ;  
         soundEffects = new SoundEffects() ; 
     }
-
+    public String randomMessage() {
+        Random rm = new Random();
+        switch (rm.nextInt(5)) {
+            case 0:
+                return "- Grand Maître : Salutations, petits agneaux égarés! Préparez-vous à rire jaune... Ah, et aussi à trouver la sortie avant que je ne vous trouve... Hahaha!\n\n" +
+                        "- Mystérieux guide : D'abord, chantez-moi une petite chanson, une par une... Appuyez sur R pour commencer l'enregistrement, puis sur S pour arrêter. C'est parti!\n\n";
+            case 1:
+                return "- Grand Maître : Bienvenue, mes chers cobayes! Préparez-vous à des frissons... d'hilarité. Trouvez la sortie avant que je ne vous trouve... Mouahaha!\n\n" +
+                        "- Mystérieux guide : Le premier qui rit donne le ton. Parlez un par un, gagnez du temps de parole. Appuyez sur R pour commencer, puis sur S pour arrêter. Allez, faites-moi rire!\n\n";
+            case 2:
+                return "- Grand Maître : Salutations, mes chers aventuriers! Préparez-vous à trembler... de rire. Mais n'oubliez pas, trouvez la sortie avant que je ne vous trouve... Hahaha!\n\n" +
+                        "- Mystérieux guide : Allez, pas de timidité ici. Parlez chacun à votre tour, faites connaissance... et gagnez du temps de parole. Appuyez sur R pour commencer, puis sur S pour arrêter. À vos marques!\n\n";
+            case 3:
+                return "- Grand Maître : Bienvenue, mes petites souris! Préparez-vous à rire jusqu'à ce que ça fasse mal... Mais n'oubliez pas, il faut trouver la sortie avant que je ne vous trouve... Hahaha!\n\n" +
+                        "- Mystérieux guide : Allons, ne soyez pas timides. Présentez-vous, un à un, et gagnez du temps de parole. Appuyez sur R pour commencer, puis sur S pour arrêter. Allons-y!\n\n";
+            case 4:
+                return "- Grand Maître : Salutations, mes chers pigeons! Préparez-vous à rire aux éclats... Mais rappelez-vous, vous devez trouver la sortie avant que je ne vous trouve... Hahaha!\n\n" +
+                        "- Mystérieux guide : D'accord, mes amis. Parlez chacun à votre tour, faites-vous entendre... et gagnez du temps de parole. Appuyez sur R pour commencer, puis sur S pour arrêter. C'est parti!\n\n";
+        }
+        return "" ;
+    }
     public String step2 (int nbLocM , int nbLocF) {
         Random rm = new Random() ; 
         String hommeFemme = nbLocF > 1 ? "femmes" : "femme";
@@ -168,7 +187,7 @@ public class GameView extends ImagePanel implements KeyListener{
                                 return ; 
                             } 
                             if(multi)controller.getGameModel().changeTour();
-                            popUP.appendMessage(step1()+"- Mystérieux guide : Appuyez sur R pour commencer l'enregistrement, et sur S pour arrêter. Utilisez judicieusement votre temps de parole...");
+                            popUP.appendMessage(step1()+"- Mystérieux guide : Appuyez sur R pour commencer l'enregistrement, et sur S pour arrêter. Utilisez judicieusement votre temps de parole...\n\n");
                             timeMs = -1 ; 
                         }
                         break ; 
@@ -184,7 +203,7 @@ public class GameView extends ImagePanel implements KeyListener{
                         //Entre 5 et 7.5 par Homme, et entre 6 et 9 par Femme
                         timeMs = nbLocM_F[0]*(5000+(new Random()).nextInt(2501)) + nbLocM_F[1]*(6000+(new Random()).nextInt(3001)) ;
                         popUP.appendMessage(step2(nbLocM_F[0], nbLocM_F[1])+((timeMs > 0)?("- Mystérieux guide : Vous disposez de " + (timeMs/1000) + " secondes pour " +
-                        "donner les directions à suivre pour s'enfuire . L'enregistrement se finira au bout de ce temps .\n\n"):("- Jeu : Dommage , vous avez loupé votre chance , Réessayez encore une fois , essayez de parler un peu plus fort cette fois.\n\n")));
+                        "donner les directions à suivre pour s'enfuire . L'enregistrement se finira au bout de ce temps .\n\n"):("- Mystérieux guide : Dommage , vous avez loupé votre chance , Réessayez encore une fois , essayez de parler un peu plus fort cette fois.\n\n")));
                         isRecording = false ;
                         if (timeMs == 0) timeMs = -1 ;  
                         break ;
