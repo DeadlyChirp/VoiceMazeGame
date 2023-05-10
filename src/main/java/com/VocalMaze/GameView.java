@@ -21,11 +21,12 @@ import java.util.logging.Logger;
 
 import com.VocalMaze.Menus.StartMenu;
 import com.VocalMaze.ModeleUtils.Direction;
+import com.VocalMaze.ViewUtils.ImagePanel;
 import com.VocalMaze.ViewUtils.SoundEffects;
 import com.sun.tools.javac.Main;
 
 
-public class GameView extends JPanel implements KeyListener{
+public class GameView extends ImagePanel implements KeyListener{
     public Controller controller ; 
     private LabyrintheView labyrintheView ;
     private PopUP popUP ; 
@@ -48,6 +49,7 @@ public class GameView extends JPanel implements KeyListener{
     }
     
     public GameView(String pseudo , int nbMaleTotal , int nbFemelleTotal, boolean multi) throws IOException {
+        super("src/main/java/com/VocalMaze/Audio&Visuel/ImagesTextBox/dreamcast_theme_1c_by_masterq2_df81rup.png");
         setSize(TAILLE_ECRAN);
         setLayout(new BorderLayout());
         this.multi = multi;
@@ -55,9 +57,10 @@ public class GameView extends JPanel implements KeyListener{
         labyrintheView = new LabyrintheView() ; 
         labyrintheView.decoupeImage();
         //labyrintheView.setLocation(250, 100);
+        labyrintheView.setOpaque(false);
         add(labyrintheView) ;
-        labyrintheView.setVisible(true);
-        setVisible(true);
+//        labyrintheView.setVisible(true);
+//        setVisible(true);
 
         popUP = new PopUP("- Grand master : Salutations, mes chers aventuriers! Préparez-vous à trembler de terreur. Maintenant, commençons le jeu. Vous devez trouver la sortie avant que je ne vous trouve. Ahahaha... Vous êtes à moi maintenant..Osez-vous relever le défi ? Hahahaha!\n\n" +
         "- Mystérieux guide : Dans un premier temps , vous devez parler chacun votre tour afin de vous reconnaitre , ainsi gagner du temps de parole . Appuyez sur R pour commencer l'enregistrement , puis appuyez sur S quand vous avez fini !\n\n") ;
@@ -206,11 +209,12 @@ public class GameView extends JPanel implements KeyListener{
             gbc.weightx = 1;
             gbc.weighty = 1;
             gbc.anchor = GridBagConstraints.NORTH;
+            gbc.insets = new Insets(110, -50, 50, 70);
 
             add(zoneTexteInfo, gbc);
             setBackground(new Color(0, 0, 0, 0));
             setOpaque(false);
-            setMaximumSize(new Dimension(600, 400));
+            setMaximumSize(new Dimension(200, 200));
             setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
         }
 
@@ -240,8 +244,8 @@ public class GameView extends JPanel implements KeyListener{
                     e.printStackTrace();
                 }
 
-                setForeground(new Color(0, 0, 0));
-                setPreferredSize(new Dimension(600, 400));
+                setForeground(new Color(255,255,240));
+                setPreferredSize(new Dimension(565, 330));
                 setLineWrap(true);
                 setWrapStyleWord(true);
                 setRows(6);
