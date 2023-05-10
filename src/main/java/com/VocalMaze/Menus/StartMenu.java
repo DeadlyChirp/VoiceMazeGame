@@ -71,10 +71,10 @@ public class StartMenu extends JFrame {
         clip = AudioSystem.getClip();
         if (clip.isActive() || clip.isRunning()) {
             clip.stop();
-            sonON = true;
+            sonON = false;
         } else {
             clip.open(ais);
-            sonON = false;
+            sonON = true;
         }
 
         // Init de la Frame
@@ -157,7 +157,23 @@ public class StartMenu extends JFrame {
             background.add(twop);
             pack();
             setVisible(true);
+            setActionButtons();
             setActionButtons2();
+        });
+
+        mute.addActionListener(ev -> {
+            ImageIcon icon2;
+            if (sonON == true) {
+                icon2 = new ImageIcon("src/main/java/com/VocalMaze/Images/mute1.png");
+                clip.start();
+                sonON = false;
+            } else {
+                icon2 = new ImageIcon("src/main/java/com/VocalMaze/Images/mute2.png");
+                clip.stop();
+                sonON = true;
+            }
+            mute.removeAll();
+            mute.setIcon(icon2);
         });
     }
 
@@ -165,7 +181,6 @@ public class StartMenu extends JFrame {
     public void menuRec(){
         // Remove des anciens boutons/images
         remove(play);
-        remove(mute);
         remove(background);
 
         // Resize et ajout du background
@@ -217,7 +232,9 @@ public class StartMenu extends JFrame {
         recording = false;
         panel.setVisible(true);
         setVisible(true);
+        setActionButtons();
         setActionButtons3();
+        setActionButtons2();
     }
 
     public void setActionButtons2() {
@@ -307,11 +324,6 @@ public class StartMenu extends JFrame {
             playB.setBackground(new Color(0, 0, 0, 0));
             playB.setBounds(755, 892, p.getIconWidth(), p.getIconHeight());
 
-            ImageIcon r = new ImageIcon("src/main/java/com/VocalMaze/Images/retryB.png");
-            retryB = new JButton(r);
-            retryB.setBorderPainted(false);
-            retryB.setBackground(new Color(0, 0, 0, 0));
-            retryB.setBounds(1130, 892, r.getIconWidth(), r.getIconHeight());
 
             // Ajout du JPanel chiffresPanel au back3
             back3.add(ScoreH);
@@ -364,10 +376,6 @@ public class StartMenu extends JFrame {
 
             // elever les logs de lium utils
             System.setProperty("java.util.logging.config.file", "src/main/java/logging.properties");
-
-        });
-
-        retryB.addActionListener(ev -> {
 
         });
     }
