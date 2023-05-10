@@ -38,6 +38,7 @@ public class StartMenu extends JFrame {
     private JButton Record;
     private JButton exit;
     private JButton stop;
+    static boolean recording;
     // Pour le 4eme Menu
     private int homme, femme;
     private JButton playB;
@@ -161,63 +162,68 @@ public class StartMenu extends JFrame {
     }
 
     // Menu 3
+    public void menuRec(){
+        // Remove des anciens boutons/images
+        remove(play);
+        remove(mute);
+        remove(background);
+
+        // Resize et ajout du background
+        back2.setSize(TAILLE_ECRAN);
+        add(back2);
+
+        // Init du panel de texte
+        CustomPanel panel = new CustomPanel();
+        String[] paragraphs = {
+                "Les légendes mentionnent un lieu caché dans une citée antique qui date des anciens temps . Rares sont les ouvrages mentionnant son existance , mais son trésor est connu de tous...\n\n",
+                "Au fil des années son nom s'est perdu laissant ainsi dans la bouche de tous que son trésor qui regrouppe tout ce qu'un homme peut souhaiter : Fortune , Gloire et pouvoir . Mais un tel trésor doit bien etre protégé Contre toute éventuelle menace .",
+                "C'est ainsi que les artisants de cette citée ont fait sortir leurs talents de constructeurs , permettant ainsi d'établir des labyrinthes pour protéger l'accès à ce trésore dont la sortie de chacun donne sur un autre tout aussi grand",
+                "On raconte que plusieurs ouvriers se sont perdus en essayant de se rendre sur leur lieu de travail...Ce désir de protéction était si fort , qu'il ont invoqué un Esprit qui sera chargé de faire perdre toute personne essayant de penétrer dans cette salle afin de la pillier ",
+                "Par sa force il peut faire bouger les mures du labyrinthe...Ainsi, ce dernier n'est jamais le même peu importe combien de fois vous rentrez dedans ." , 
+                "C'est ainsi que dans notre présent une équipe d'archéologues ont pu retrouver la trace de cette citée perdue , entrés dans les labyrinthes sans préparation les membres se perdent un à un , et la folie commença à s'emparer de chacun..." , 
+                "Ainsi, Vous devez guider le dernier survivant vers la sortie , mais attention l'Esprit du labyrinthe <Grand Master> de son nom , ne vous lissera pas faire , il essaira par tous les moyens de limiter votre contact avec le survivant . C'est à vous de jouer !"
+        };
+        for (int i = 0; i < paragraphs.length; i++) {
+            panel.addParagraph(paragraphs[i]);
+        }
+
+        // Init des boutons
+        ImageIcon r = new ImageIcon("src/main/java/com/VocalMaze/Images/rec.png");
+        ImageIcon s = new ImageIcon("src/main/java/com/VocalMaze/Images/stop.png");
+        ImageIcon q = new ImageIcon("src/main/java/com/VocalMaze/Images/quitter.png");
+        // Init de rec
+        Record = new JButton(r);
+        Record.setBorderPainted(false);
+        Record.setBackground(new Color(0, 0, 0, 0));
+        // Init de stop
+        stop = new JButton(s);
+        stop.setBorderPainted(false);
+        stop.setBackground(new Color(0, 0, 0, 0));
+        // Init de quitter
+        exit = new JButton(q);
+        exit.setBorderPainted(false);
+        exit.setBackground(new Color(0, 0, 0, 0));
+        Record.setBounds(460, 957, r.getIconWidth(), r.getIconHeight());
+        exit.setBounds(1431, 957, q.getIconWidth(), q.getIconHeight());
+        stop.setBounds(955, 957, s.getIconWidth(), s.getIconHeight());
+
+        // Ajout du panel de texte et des boutons
+        back2.add(panel);
+        panel.setLocation(100, (int) TAILLE_ECRAN.getWidth() / 100);
+        back2.add(Record);
+        back2.add(stop);
+        back2.add(exit);
+        pack();
+        recording = false;
+        panel.setVisible(true);
+        setVisible(true);
+        setActionButtons3();
+    }
+
     public void setActionButtons2() {
         onep.addActionListener(ev -> {
             multi = false;
-            // Remove des anciens boutons/images
-            remove(play);
-            remove(mute);
-            remove(background);
-
-            // Resize et ajout du background
-            back2.setSize(TAILLE_ECRAN);
-            add(back2);
-
-            // Init du panel de texte
-            CustomPanel panel = new CustomPanel();
-            String[] paragraphs = {
-                    "Les légendes mentionnent un lieu caché dans une citée antique qui date des anciens temps . Rares sont les ouvrages mentionnant son existance , mais son trésor est connu de tous...\n\n",
-                    "Au fil des années son nom s'est perdu laissant ainsi dans la bouche de tous que son trésor qui regrouppe tout ce qu'un homme peut souhaiter : Fortune , Gloire et pouvoir . Mais un tel trésor doit bien etre protégé Contre toute éventuelle menace .",
-                    "C'est ainsi que les artisants de cette citée ont fait sortir leurs talents de constructeurs , permettant ainsi d'établir des labyrinthes pour protéger l'accès à ce trésore dont la sortie de chacun donne sur un autre tout aussi grand",
-                    "On raconte que plusieurs ouvriers se sont perdus en essayant de se rendre sur leur lieu de travail...Ce désir de protéction était si fort , qu'il ont invoqué un Esprit qui sera chargé de faire perdre toute personne essayant de penétrer dans cette salle afin de la pillier ",
-                    "Par sa force il peut faire bouger les mures du labyrinthe...Ainsi, ce dernier n'est jamais le même peu importe combien de fois vous rentrez dedans ." , 
-                    "C'est ainsi que dans notre présent une équipe d'archéologues ont pu retrouver la trace de cette citée perdue , entrés dans les labyrinthes sans préparation les membres se perdent un à un , et la folie commença à s'emparer de chacun..." , 
-                    "Ainsi, Vous devez guider le dernier survivant vers la sortie , mais attention l'Esprit du labyrinthe <Grand Master> de son nom , ne vous lissera pas faire , il essaira par tous les moyens de limiter votre contact avec le survivant . C'est à vous de jouer !"
-            };
-            for (int i = 0; i < paragraphs.length; i++) {
-                panel.addParagraph(paragraphs[i]);
-            }
-
-            // Init des boutons
-            ImageIcon r = new ImageIcon("src/main/java/com/VocalMaze/Images/rec.png");
-            ImageIcon s = new ImageIcon("src/main/java/com/VocalMaze/Images/stop.png");
-            ImageIcon q = new ImageIcon("src/main/java/com/VocalMaze/Images/quitter.png");
-            // Init de rec
-            Record = new JButton(r);
-            Record.setBorderPainted(false);
-            Record.setBackground(new Color(0, 0, 0, 0));
-            // Init de stop
-            stop = new JButton(s);
-            stop.setBorderPainted(false);
-            stop.setBackground(new Color(0, 0, 0, 0));
-            // Init de quitter
-            exit = new JButton(q);
-            exit.setBorderPainted(false);
-            exit.setBackground(new Color(0, 0, 0, 0));
-            Record.setBounds(460, 957, r.getIconWidth(), r.getIconHeight());
-            exit.setBounds(1431, 957, q.getIconWidth(), q.getIconHeight());
-            stop.setBounds(955, 957, s.getIconWidth(), s.getIconHeight());
-
-            // Ajout du panel de texte et des boutons
-            back2.add(panel);
-            panel.setLocation(100, (int) TAILLE_ECRAN.getWidth() / 100);
-            back2.add(Record);
-            back2.add(stop);
-            back2.add(exit);
-            pack();
-            panel.setVisible(true);
-            setVisible(true);
-            setActionButtons3();
+            menuRec();
         });
 
         mute.addActionListener(ev -> {
@@ -237,6 +243,7 @@ public class StartMenu extends JFrame {
 
         twop.addActionListener(ev->{
             multi = true;
+            menuRec();
         });
 
         // quitter.addActionListener(ev->{
@@ -251,6 +258,7 @@ public class StartMenu extends JFrame {
             // Stop de la musique avant de rec
             clip.stop();
             sonON = true;
+            recording = true;
             recorder.startRecord();
         });
 
@@ -258,8 +266,9 @@ public class StartMenu extends JFrame {
             // Reprise de la musique
             clip.start();
             sonON = false;
-            recorder.stopRecording();
-
+            if(recording){
+                recorder.stopRecording();
+            }
             int[] nbLocH_F = audioAnalyser.analyse1();
             homme = nbLocH_F[0];
             femme = nbLocH_F[1];
