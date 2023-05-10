@@ -60,7 +60,7 @@ public class GameView extends JPanel implements KeyListener{
         setVisible(true);
 
         popUP = new PopUP("- Grand master : Salutations, mes chers aventuriers! Préparez-vous à trembler de terreur. Maintenant, commençons le jeu. Vous devez trouver la sortie avant que je ne vous trouve. Ahahaha... Vous êtes à moi maintenant..Osez-vous relever le défi ? Hahahaha!\n\n" +
-        "- Jeu : Dans un premier temps , vous devez parler chacun votre tour afin de vous reconnaitre , ainsi gagner du temps de parole . Appuyez sur R pour commencer l'enregistrement , puis appuyez sur S quand vous avez fini !\n\n") ;
+        "- Mystérieux guide : Dans un premier temps , vous devez parler chacun votre tour afin de vous reconnaitre , ainsi gagner du temps de parole . Appuyez sur R pour commencer l'enregistrement , puis appuyez sur S quand vous avez fini !\n\n") ;
         add(popUP, BorderLayout.EAST);
         nbLocM_F = new int[2] ;
         nbLocM_F[0] = 0 ; // nbLocM
@@ -79,7 +79,7 @@ public class GameView extends JPanel implements KeyListener{
                 case 0:
                     return "- Grand Maître : Le silence peut être aussi déchirant que les cris... Personne ne s'échappera d'ici.\n\n";
                 case 1:
-                    return "- Grand Maître : Vous tremblez de peur, n'est-ce pas? Si vous ne trouvez pas le courage de parler, la mort sera votre seule échappatoire...\n\n";
+                    return "- Grand Maître : Vous semblez trembler comme un chihuahua dans le grand Nord... Si vous ne trouvez pas le courage de parler, votre destin sera aussi funeste qu'un gâteau brûlé...\n\n";
             }
         }
         switch(rm.nextInt(6)) {
@@ -88,11 +88,11 @@ public class GameView extends JPanel implements KeyListener{
             case 1:
                 return "- Grand Maître : Vous êtes seulement " + nbLocF + " " + hommeFemme + " et " + nbLocM + " " + hommeHomme + "? Je pensais avoir attiré plus de victimes dans mon piège...\n\n";
             case 2:
-                return "- Grand Maître : " + nbLocM + " " + hommeHomme + " et " + nbLocF + " " + hommeFemme + " luttant désespérément pour échapper à mon antre macabre... quelle délicieuse agonie. \n\n";
+                return "- Grand Maître : " + nbLocM + " " + hommeHomme + " et " + nbLocF + " " + hommeFemme + " s'agitant comme des poissons hors de l'eau... quel spectacle divertissant!\n\n";
             case 3:
-                return "- Grand Maître : Seulement " + nbLocF + " " + hommeFemme + " et " + nbLocM + " " + hommeHomme + "? Vos cris de terreur ne suffisent pas à apaiser mon appétit insatiable.\n\n";
+                return "- Grand Maître : Seulement " + nbLocF + " " + hommeFemme + " et " + nbLocM + " " + hommeHomme + "? C'est plus calme qu'un dimanche après-midi chez ma grand-mère.\n\n";
             case 4:
-                return "- Grand Maître : " + nbLocM + " " + hommeHomme + " et " + nbLocF + " " + hommeFemme + "... Les cris de terreur résonnent mieux lorsqu'ils sont partagés en groupe, n'est-ce pas?\n\n";
+                return "- Grand Maître : " + nbLocM + " " + hommeHomme + " et " + nbLocF + " " + hommeFemme + "... Rien de tel que des cris collectifs pour réchauffer l'ambiance, pas vrai?\n\n";
             case 5 : 
                 return "- Grand Master : Tang de personnes , Mootivés pour s'échapper , c'est Bel et bien " + nbLocF + "femmes et " + nbLocM + "hommes que j'entend...\n\n" ; 
         }
@@ -104,9 +104,9 @@ public class GameView extends JPanel implements KeyListener{
         switch(rm.nextInt(5)) {
             case 0 : return "- Grand Master : Vous etes toujours pas sortis d'ici ? Vous courez à votre perte...\n\n" ;
             case 1 : return "- Grand Master : Personne a su s'échapper de ce dédale sans fin , vous serez pas les premiers à vous enfuir .\n\n" ;
-            case 2 : return "- Grand Master : Prenez à gauche la prochaine fois , croyez moi ça vous portera chance...\n\n" ; 
-            case 3 : return "- Grand Master : Vous avez du mal pour de jeunes explorateurs...Vous voulez un peu d'aide peut être un peu d'aide ?\n\n" ; 
-            case 4 : return "- Grand Master : Refléchir vous sera d'une grande utilité si vous tenez autant à vos vies comme vous le prétendez .\n\n" ;  
+            case 2 : return "- Grand Master : Prenez à gauche la prochaine fois , croyez moi ça vous portera chance...\n\n" ;
+            case 3 : return "- Grand Maître : Vous semblez aussi perdus qu'un pingouin dans un désert... Un petit coup de pouce, peut-être ?\n\n";
+            case 4 : return "- Grand Maître : Si vous tenez à la vie autant que vous tenez à vos chaussettes, un peu de réflexion ne vous ferait pas de mal...\n\n";
         }
         return "" ; 
     }
@@ -119,7 +119,7 @@ public class GameView extends JPanel implements KeyListener{
                     case 'r' : {                
                         if (isRecording) break ; 
                         StartMenu.clip.stop();
-                        popUP.appendMessage("- Jeu : Enregistrement en cours...\n\n");
+                        popUP.appendMessage("- Mystérieux guide : Chuchote-moi tes pensées... Je guiderai ton chemin...\\n\\n\n\n");
                         if (timeMs == -1) {
                             soundEffects.soundStartRec();
                             controller.startRecord();
@@ -146,7 +146,7 @@ public class GameView extends JPanel implements KeyListener{
                                 return ; 
                             } 
                             if(multi)controller.getGameModel().changeTour();
-                            popUP.appendMessage(step1()+"- Jeu : Appuyez sur R pour vous enregistrer et S pour arrêter afin de gagner du temps de parole .\n\n");
+                            popUP.appendMessage(step1()+"- Mystérieux guide : Appuyez sur R pour commencer l'enregistrement, et sur S pour arrêter. Utilisez judicieusement votre temps de parole...\n\n");
                             timeMs = -1 ; 
                         }
                         break ; 
