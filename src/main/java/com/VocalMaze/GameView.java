@@ -97,7 +97,7 @@ public class GameView extends ImagePanel implements KeyListener{
             case 4:
                 return "- Grand Maître : " + nbLocM + " " + hommeHomme + " et " + nbLocF + " " + hommeFemme + "... Rien de tel que des cris collectifs pour réchauffer l'ambiance, pas vrai?\n\n";
             case 5 : 
-                return "- Grand Master : Tang de personnes , Mootivés pour s'échapper , c'est Bel et bien " + nbLocF + "femmes et " + nbLocM + "hommes que j'entend...\n\n" ; 
+                return "- Grand Maître : Tang de personnes , Mootivés pour s'échapper , c'est Bel et bien " + nbLocF + "femmes et " + nbLocM + "hommes que j'entend...\n\n" ;
         }
         return "" ; 
     }
@@ -105,14 +105,33 @@ public class GameView extends ImagePanel implements KeyListener{
     public String step1 () {
         Random rm = new Random() ; 
         switch(rm.nextInt(5)) {
-            case 0 : return "- Grand Master : Vous etes toujours pas sortis d'ici ? Vous courez à votre perte...\n\n" ;
-            case 1 : return "- Grand Master : Personne a su s'échapper de ce dédale sans fin , vous serez pas les premiers à vous enfuir .\n\n" ;
-            case 2 : return "- Grand Master : Prenez à gauche la prochaine fois , croyez moi ça vous portera chance...\n\n" ;
+            case 0 : return "- Grand Maître : Vous etes toujours pas sortis d'ici ? Vous courez à votre perte...\n\n" ;
+            case 1 : return "- Grand Maître : Personne a su s'échapper de ce dédale sans fin , vous serez pas les premiers à vous enfuir .\n\n" ;
+            case 2 : return "- Grand Maître : Prenez à gauche la prochaine fois , croyez moi ça vous portera chance...\n\n" ;
             case 3 : return "- Grand Maître : Vous semblez aussi perdus qu'un pingouin dans un désert... Un petit coup de pouce, peut-être ?\n\n";
             case 4 : return "- Grand Maître : Si vous tenez à la vie autant que vous tenez à vos chaussettes, un peu de réflexion ne vous ferait pas de mal...\n\n";
         }
         return "" ; 
     }
+
+    public String mysteriousGuideMessage() {
+        Random rm = new Random();
+        switch (rm.nextInt(5)) {
+            case 0:
+                return "- Mystérieux guide : Parle-moi de tes pensées... Elles sont comme le beurre, meilleures quand elles sont étalées... Mais attention, certaines routes sont glissantes...\n\n";
+            case 1:
+                return "- Mystérieux guide : Pourquoi gardes-tu tes pensées pour toi ? Elles ne sont pas comme les vieilles chaussettes, tu sais... Mais souviens-toi, même les chaussettes peuvent cacher des surprises effrayantes...\n\n";
+            case 2:
+                return "- Mystérieux guide : Laisse tes mots traverser les ténèbres... C'est comme une promenade nocturne, sauf que tu n'as pas besoin de lampe torche... Mais n'oublie pas, certaines ombres sont plus sombres que d'autres...\n\n";
+            case 3:
+                return "- Mystérieux guide : Pourquoi restes-tu silencieux ? C'est comme si tu étais une carotte dans un concours de beauté... Mais n'oublie pas, même les carottes peuvent te donner des frissons...\n\n";
+            case 4:
+                return "- Mystérieux guide : Exprime-toi... Ne laisse pas le silence te consumer... C'est comme essayer de manger une baguette sans fromage... Mais attention, certains fromages ont un goût mortel...\n\n";
+        }
+        return "";
+    }
+
+
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -122,7 +141,7 @@ public class GameView extends ImagePanel implements KeyListener{
                     case 'r' : {                
                         if (isRecording) break ; 
                         StartMenu.clip.stop();
-                        popUP.appendMessage("- Mystérieux guide : Chuchote-moi tes pensées... Je guiderai ton chemin...\\n\\n\n\n");
+                        popUP.appendMessage(mysteriousGuideMessage());
                         if (timeMs == -1) {
                             soundEffects.soundStartRec();
                             controller.startRecord();
@@ -149,7 +168,7 @@ public class GameView extends ImagePanel implements KeyListener{
                                 return ; 
                             } 
                             if(multi)controller.getGameModel().changeTour();
-                            popUP.appendMessage(step1()+"- Mystérieux guide : Appuyez sur R pour commencer l'enregistrement, et sur S pour arrêter. Utilisez judicieusement votre temps de parole...\n\n");
+                            popUP.appendMessage(step1()+"- Mystérieux guide : Appuyez sur R pour commencer l'enregistrement, et sur S pour arrêter. Utilisez judicieusement votre temps de parole...");
                             timeMs = -1 ; 
                         }
                         break ; 
@@ -164,7 +183,7 @@ public class GameView extends ImagePanel implements KeyListener{
                         nbLocM_F = controller.analyse2() ;
                         //Entre 5 et 7.5 par Homme, et entre 6 et 9 par Femme
                         timeMs = nbLocM_F[0]*(5000+(new Random()).nextInt(2501)) + nbLocM_F[1]*(6000+(new Random()).nextInt(3001)) ;
-                        popUP.appendMessage(step2(nbLocM_F[0], nbLocM_F[1])+((timeMs > 0)?("- Jeu : Vous disposez de " + (timeMs/1000) + " secondes pour " + 
+                        popUP.appendMessage(step2(nbLocM_F[0], nbLocM_F[1])+((timeMs > 0)?("- Mystérieux guide : Vous disposez de " + (timeMs/1000) + " secondes pour " +
                         "donner les directions à suivre pour s'enfuire . L'enregistrement se finira au bout de ce temps .\n\n"):("- Jeu : Dommage , vous avez loupé votre chance , Réessayez encore une fois , essayez de parler un peu plus fort cette fois.\n\n")));
                         isRecording = false ;
                         if (timeMs == 0) timeMs = -1 ;  
@@ -315,7 +334,7 @@ public class GameView extends ImagePanel implements KeyListener{
                             indexMessage[0]++;
 
                             SwingUtilities.invokeLater(() -> {
-                                int maxLignes = 4;
+                                int maxLignes = 5;
                                 int nbLignes = getLineCount();
                                 if (nbLignes > maxLignes) {
                                     try {
