@@ -81,7 +81,7 @@ public class GameView extends JPanel implements KeyListener{
                     return "- Grand Maître : Vous tremblez de peur, n'est-ce pas? Si vous ne trouvez pas le courage de parler, la mort sera votre seule échappatoire...\n\n";
             }
         }
-        switch(rm.nextInt(5)) {
+        switch(rm.nextInt(6)) {
             case 0:
                 return "- Grand Maître : À ce que j'entends, " + nbLocM + " " + hommeHomme + " et " + nbLocF + " " + hommeFemme + " sont piégés ici, à attendre leur triste sort.\n\n";
             case 1:
@@ -92,7 +92,8 @@ public class GameView extends JPanel implements KeyListener{
                 return "- Grand Maître : Seulement " + nbLocF + " " + hommeFemme + " et " + nbLocM + " " + hommeHomme + "? Vos cris de terreur ne suffisent pas à apaiser mon appétit insatiable.\n\n";
             case 4:
                 return "- Grand Maître : " + nbLocM + " " + hommeHomme + " et " + nbLocF + " " + hommeFemme + "... Les cris de terreur résonnent mieux lorsqu'ils sont partagés en groupe, n'est-ce pas?\n\n";
-            case 5 : return "- Grand Master : Tang de personnes , Mootivés pour s'échapper , c'est Bel et bien " + nbLocF + "femmes et " + nbLocM + "hommes que j'entend...\n\n" ; 
+            case 5 : 
+                return "- Grand Master : Tang de personnes , Mootivés pour s'échapper , c'est Bel et bien " + nbLocF + "femmes et " + nbLocM + "hommes que j'entend...\n\n" ; 
         }
         return "" ; 
     }
@@ -156,9 +157,10 @@ public class GameView extends JPanel implements KeyListener{
                         nbLocM_F = controller.analyse2() ;
                         //Entre 5 et 7.5 par Homme, et entre 6 et 9 par Femme
                         timeMs = nbLocM_F[0]*(5000+(new Random()).nextInt(2501)) + nbLocM_F[1]*(6000+(new Random()).nextInt(3001)) ;
-                        popUP.appendMessage(step2(nbLocM_F[0], nbLocM_F[1])+ "- Jeu : Vous disposez de " + (timeMs/1000) + " secondes pour " + 
-                        "donner les directions à suivre pour s'enfuire . L'enregistrement se finira au bout de ce temps .\n\n");
-                        isRecording = false ; 
+                        popUP.appendMessage(step2(nbLocM_F[0], nbLocM_F[1])+((timeMs > 0)?("- Jeu : Vous disposez de " + (timeMs/1000) + " secondes pour " + 
+                        "donner les directions à suivre pour s'enfuire . L'enregistrement se finira au bout de ce temps .\n\n"):("- Jeu : Dommage , vous avez loupé votre chance , Réessayez encore une fois , essayez de parler un peu plus fort cette fois.\n\n")));
+                        isRecording = false ;
+                        if (timeMs == 0) timeMs = -1 ;  
                         break ;
                     }
                     
@@ -182,6 +184,7 @@ public class GameView extends JPanel implements KeyListener{
     public void endGame (int fin) {
         //TODO qui fera apparaire l'ecran de fin du jeu en fonction si il y a 2 équipes
     }
+
     public void movePlayer (Direction dir , int steps) {
         labyrintheView.movePlayer(dir, steps);
     }
@@ -567,6 +570,7 @@ public class GameView extends JPanel implements KeyListener{
         Logger.getLogger("java.awt.Container").setLevel(Level.OFF);
         Logger.getLogger("java.awt.KeyboardFocusManager").setLevel(Level.OFF);
     }
+    
     static class ImagePanel extends JPanel {
         private Image backgroundImage;
 
