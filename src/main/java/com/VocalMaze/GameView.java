@@ -49,7 +49,7 @@ public class GameView extends ImagePanel implements KeyListener{
     }
     
     public GameView(String pseudo , int nbMaleTotal , int nbFemelleTotal, boolean multi) throws IOException {
-        super("src/main/java/com/VocalMaze/Audio&Visuel/ImagesTextBox/dreamcast_theme_1c_by_masterq2_df81rup.png");
+        super("src/main/java/com/VocalMaze/Audio&Visuel/ImagesTextBox/pip_boy_fallout_twitch_theme_png_by_masterq2_df8mrdv (1).png");
         setSize(TAILLE_ECRAN);
         setLayout(new BorderLayout());
         this.multi = multi;
@@ -62,7 +62,7 @@ public class GameView extends ImagePanel implements KeyListener{
 //        labyrintheView.setVisible(true);
 //        setVisible(true);
 
-        popUP = new PopUP("- Grand master : Salutations, mes chers aventuriers! Préparez-vous à trembler de terreur. Maintenant, commençons le jeu. Vous devez trouver la sortie avant que je ne vous trouve. Ahahaha... Vous êtes à moi maintenant..Osez-vous relever le défi ? Hahahaha!\n\n" +
+        popUP = new PopUP("- Grand master : Salutations, mes chers aventuriers! Préparez-vous à trembler de terreur. Maintenant, commençons le jeu. Vous devez trouver la sortie avant que je ne vous trouve.Hahahaha!\n\n" +
         "- Mystérieux guide : Dans un premier temps , vous devez parler chacun votre tour afin de vous reconnaitre , ainsi gagner du temps de parole . Appuyez sur R pour commencer l'enregistrement , puis appuyez sur S quand vous avez fini !\n\n") ;
         add(popUP, BorderLayout.EAST);
         nbLocM_F = new int[2] ;
@@ -221,12 +221,12 @@ public class GameView extends ImagePanel implements KeyListener{
             gbc.weightx = 1;
             gbc.weighty = 1;
             gbc.anchor = GridBagConstraints.NORTH;
-            gbc.insets = new Insets(110, -50, 50, 70);
+            gbc.insets = new Insets(107, -50, 50, 65);
 
             add(zoneTexteInfo, gbc);
             setBackground(new Color(0, 0, 0, 0));
             setOpaque(false);
-            setMaximumSize(new Dimension(200, 200));
+            setMaximumSize(new Dimension(400, 300));
             setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
         }
 
@@ -257,11 +257,11 @@ public class GameView extends ImagePanel implements KeyListener{
                 }
 
                 setForeground(new Color(255,255,240));
-                setPreferredSize(new Dimension(565, 330));
+                setPreferredSize(new Dimension(470, 335));
                 setLineWrap(true);
                 setWrapStyleWord(true);
                 setRows(6);
-                setMargin(new Insets(10, 10, 10, 10));
+                setMargin(new Insets(20, 20, 20, 20));
 
                 int delai = 50;
                 ActionListener actionEcrire = new ActionListener() {
@@ -290,7 +290,7 @@ public class GameView extends ImagePanel implements KeyListener{
                 }
 
                 public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-                    g.setColor(Color.BLACK);
+                    g.setColor(Color.GREEN);
                     for (int i = 0; i < epaisseur; i++) {
                         g.drawRoundRect(x + i, y + i, width - 1 - (i * 2), height - 1 - (i * 2), largeurArc, hauteurArc);
                     }
@@ -315,7 +315,7 @@ public class GameView extends ImagePanel implements KeyListener{
                             indexMessage[0]++;
 
                             SwingUtilities.invokeLater(() -> {
-                                int maxLignes = 6;
+                                int maxLignes = 4;
                                 int nbLignes = getLineCount();
                                 if (nbLignes > maxLignes) {
                                     try {
@@ -590,7 +590,7 @@ public class GameView extends ImagePanel implements KeyListener{
         Logger.getLogger("java.awt.Container").setLevel(Level.OFF);
         Logger.getLogger("java.awt.KeyboardFocusManager").setLevel(Level.OFF);
     }
-    
+
     static class ImagePanel extends JPanel {
         private Image backgroundImage;
 
@@ -610,6 +610,7 @@ public class GameView extends ImagePanel implements KeyListener{
             }
         }
     }
+
     public static void main(String[] args) throws IOException {
         configureLogging();
     JFrame frame = new JFrame() ;
