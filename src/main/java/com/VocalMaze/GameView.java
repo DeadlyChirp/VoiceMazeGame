@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+import com.VocalMaze.Menus.StartMenu;
 import com.VocalMaze.ModeleUtils.Direction;
 import com.VocalMaze.ViewUtils.SoundEffects;
 import com.sun.tools.javac.Main;
@@ -117,6 +118,7 @@ public class GameView extends JPanel implements KeyListener{
                 switch(e.getKeyChar()) {
                     case 'r' : {                
                         if (isRecording) break ; 
+                        StartMenu.clip.stop();
                         popUP.appendMessage("- Jeu : Enregistrement en cours...\n\n");
                         if (timeMs == -1) {
                             soundEffects.soundStartRec();
@@ -133,6 +135,7 @@ public class GameView extends JPanel implements KeyListener{
                                 ex.printStackTrace();
                             }
                             soundEffects.soundStopRec(timeMs);
+                            StartMenu.clip.start();
                             // Faire apparaitre un petit sablier qui tourne (un gif) qui dit transcription en cours
                             //  si besoin mais c'est optionnel , ou bien des petites images qui donnent des conseils
                             // comme dans les menus de chargement des jeux a voir 
@@ -153,6 +156,7 @@ public class GameView extends JPanel implements KeyListener{
                         if (!isRecording || isRecordingTime) break ;
                         soundEffects.soundStopRec();
                         controller.stopRecord();
+                        StartMenu.clip.start();
                         //Analyse du vocal
                         nbLocM_F = controller.analyse2() ;
                         //Entre 5 et 7.5 par Homme, et entre 6 et 9 par Femme
