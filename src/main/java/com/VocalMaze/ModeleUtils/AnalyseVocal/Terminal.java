@@ -17,9 +17,7 @@ public class Terminal {
     }
 
     // Transforme la commande en String []
-    private static String [] getCommand (String command) {
-        return command.trim().split(" ") ; 
-    }
+    private static String [] getCommand (String command) {return command.trim().split("\\s+");}
 
     // Affiche le resultat de la commande sur la Sortie de commande
     private void showOutput () throws IOException {

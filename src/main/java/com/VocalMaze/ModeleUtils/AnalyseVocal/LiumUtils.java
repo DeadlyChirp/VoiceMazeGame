@@ -94,7 +94,6 @@ public class LiumUtils {
         if (Objects.equals(parameter.getParameterDiarization().getSystem(), ParameterBNDiarization.SystemString[1])) {
             parameter.getParameterSegmentationSplit().setSegmentMaximumLength(10 * parameter.getParameterSegmentationInputFile().getRate());
         }
-
         final ClusterSet fullClusterSet = diarization.initialize(parameter);
         ArrayList<ClusterSet> clusterSets = MainTools.splitHypotesis(fullClusterSet);
         for (ClusterSet clusterSet : clusterSets) {
@@ -126,6 +125,8 @@ public class LiumUtils {
 
     //Test LiumUtil seulement, pas d'utilisation dans le jeu
     public static void main(String[] args) throws Exception {
+        System.setProperty("java.util.logging.config.file", "src/main/java/logging.properties");
+
         args = new String[]{
                 "--fInputMask=test/test(3).wav",
         };
@@ -145,9 +146,7 @@ public class LiumUtils {
         System.out.println("2: " + resultFromSegment("test.seg"));
         System.out.println("Done");
     }
-
     public static class Result {
-
         public int unknown = 0;
         public int male = 0;
         public int female = 0;
@@ -157,7 +156,6 @@ public class LiumUtils {
             male = 0;
             female = 0;
         }
-
         public void increase(String gender) {
             if (Cluster.genderStrings[1].equals(gender)) {
                 male++;
@@ -167,7 +165,6 @@ public class LiumUtils {
                 unknown++;
             }
         }
-
         @Override
         public String toString() {
             return "Result{" + "unknown=" + unknown + ", male=" + male + ", female=" + female + '}';

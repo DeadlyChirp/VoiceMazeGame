@@ -41,7 +41,7 @@ public class TranscriberV3 {
     public Direction [] transcription () {
         Direction [] res = {} ; 
         try {
-            res = getDirections(transcriber("src/main/java/com/VocalMaze/Records/Audio.wav")); 
+            res = getDirections(transcriber("src/main/java/com/VocalMaze/Records/Audio.wav"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -52,7 +52,8 @@ public class TranscriberV3 {
         String[] words = transcriptText.split("\\s+");
         ArrayList<Direction> direction = new ArrayList<Direction>();
         for (String word : words) {
-            if (word.contains("haut")) {
+            word = word.toLowerCase() ; 
+            if (word.contains("haut") || word.contains("haw")) {
                 direction.add(Direction.HAUT);
                 continue ; 
             }
