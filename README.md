@@ -33,6 +33,13 @@ Pour lancer le jeu, il faut compiler le fichier StartMenu.java à l'aide d'un ID
 javac StartMenu.java
 java StartMenu
 ```
+Aussi, pour lancer le jeu, vous pouvez utiliser l'executable que vous allez obtenir après avoir lancer le fichier .sh. Pour cela vous devrez lui donner les droits d'executions et donc faire les commandes suivantes : 
+
+```bash
+chmod +x target/VocalMaze-1.0-SNAPSHOT.jar
+mvn clean package
+java -cp target/VocalMaze-1.0-SNAPSHOT.jar com.VocalMaze.Menus.StartMenu
+```
 
 
 ## 🙇 Prérequis      
