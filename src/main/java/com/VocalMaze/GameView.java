@@ -56,12 +56,8 @@ public class GameView extends ImagePanel implements KeyListener{
         controller = new Controller(new GameModel(pseudo, nbMaleTotal, nbFemelleTotal, multi), this) ; 
         labyrintheView = new LabyrintheView() ; 
         labyrintheView.decoupeImage();
-        //labyrintheView.setLocation(250, 100);
         labyrintheView.setOpaque(false);
         add(labyrintheView) ;
-//        labyrintheView.setVisible(true);
-//        setVisible(true);
-
         popUP = new PopUP(randomMessage()) ;
         add(popUP, BorderLayout.EAST);
         nbLocM_F = new int[2] ;
@@ -177,9 +173,6 @@ public class GameView extends ImagePanel implements KeyListener{
                                 ex.printStackTrace();
                             }
                             StartMenu.startMusic();
-                            // Faire apparaitre un petit sablier qui tourne (un gif) qui dit transcription en cours
-                            //  si besoin mais c'est optionnel , ou bien des petites images qui donnent des conseils
-                            // comme dans les menus de chargement des jeux a voir 
                             Direction [] directions = controller.transcrire() ; 
                             int fin = controller.play(directions) ; 
                             if (fin == 1 || fin == 2) {
@@ -693,11 +686,8 @@ public class GameView extends ImagePanel implements KeyListener{
     frame.add(gameView);
     frame.addKeyListener(gameView); // important
     frame.pack();
-    //frame.setFocusable(true);// pas tres important au final jsp a voir
     frame.setVisible(true);
     gameView.controller.getGameModel().getLabyrinthe().printLabyrinthe();
-    System.out.println(TAILLE_ECRAN);
-
     //elever les logs de lium utils
       System.setProperty("java.util.logging.config.file", "src/main/java/logging.properties");
   }

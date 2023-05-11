@@ -31,7 +31,6 @@ public class StartMenu extends JFrame {
 
     // Pour le 1er Menu
     private JButton play;
-    private JButton quitter;
     private JButton mute;
     // Pour le 2ème Menu
     private JButton onep;
@@ -45,7 +44,6 @@ public class StartMenu extends JFrame {
     // Pour le 4eme Menu
     private int homme, femme;
     private JButton playB;
-    private JButton retryB;
 
     //Partie essentiel au jeu
     static boolean sonON;
