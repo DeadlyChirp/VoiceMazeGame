@@ -1,6 +1,7 @@
 package com.VocalMaze.Menus;
 
 import java.awt.*;
+import java.awt.font.TextAttribute;
 import java.awt.geom.RoundRectangle2D;
 
 import com.VocalMaze.GameView;
@@ -17,6 +18,8 @@ import javax.swing.JPanel;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -190,13 +193,23 @@ public class StartMenu extends JFrame {
         // Init du panel de texte
         CustomPanel panel = new CustomPanel();
         String[] paragraphs = {
-                "Les légendes mentionnent un lieu caché dans une citée antique qui date des anciens temps . Rares sont les ouvrages mentionnant son existance , mais son trésor est connu de tous...\n\n",
-                "Au fil des années son nom s'est perdu laissant ainsi dans la bouche de tous que son trésor qui regrouppe tout ce qu'un homme peut souhaiter : Fortune , Gloire et pouvoir . Mais un tel trésor doit bien etre protégé Contre toute éventuelle menace .",
-                "C'est ainsi que les artisants de cette citée ont fait sortir leurs talents de constructeurs , permettant ainsi d'établir des labyrinthes pour protéger l'accès à ce trésore dont la sortie de chacun donne sur un autre tout aussi grand",
-                "On raconte que plusieurs ouvriers se sont perdus en essayant de se rendre sur leur lieu de travail...Ce désir de protéction était si fort , qu'il ont invoqué un Esprit qui sera chargé de faire perdre toute personne essayant de penétrer dans cette salle afin de la pillier ",
-                "Par sa force il peut faire bouger les mures du labyrinthe...Ainsi, ce dernier n'est jamais le même peu importe combien de fois vous rentrez dedans ." , 
-                "C'est ainsi que dans notre présent une équipe d'archéologues ont pu retrouver la trace de cette citée perdue , entrés dans les labyrinthes sans préparation les membres se perdent un à un , et la folie commença à s'emparer de chacun..." , 
-                "Ainsi, Vous devez guider le dernier survivant vers la sortie , mais attention l'Esprit du labyrinthe <Grand Master> de son nom , ne vous lissera pas faire , il essaira par tous les moyens de limiter votre contact avec le survivant . C'est à vous de jouer !"
+                " ",
+                "Les légendes mentionnent un lieu caché dans une citée antique qui date des anciens temps . Rares sont ",
+                "les ouvrages mentionnant son existance , mais son trésor est connu de tous...\n\n",
+                "Au fil des années son nom s'est perdu laissant ainsi dans la bouche de tous que son trésor qui regrouppe ",
+                "tout ce qu'un homme peut souhaiter : Fortune , Gloire et pouvoir . Mais un tel trésor doit bien etre protégé ",
+                "Contre toute éventuelle menace .C'est ainsi que les artisants de cette citée ont fait sortir leurs talents ",
+                "de constructeurs , permettant ainsi d'établir des labyrinthes pour protéger l'accès à ce trésore dont la " , 
+                "sortie de chacun donne sur un autre tout aussi grand. On raconte que plusieurs ouvriers se sont perdus " , 
+                "en essayant de se rendre sur leur lieu de travail...Ce désir de protéction était si fort , qu'il ont ",
+                "invoqué un Esprit qui sera chargé de faire perdre toute personne essayant de penétrer dans cette salle",
+                " afin de la pillier . Par sa force il peut faire bouger les mures du labyrinthe...Ainsi, ce dernier n'est",
+                " jamais le même peu importe combien de fois vous rentrez dedans . C'est ainsi que dans notre présent une ",
+                "équipe d'archéologues ont pu retrouver la trace de cette citée perdue , entrés dans les labyrinthes sans ",
+                "préparation les membres se perdent un à un , et la folie commença à s'emparer de chacun.. Ainsi, Vous devez ",
+                "guider le dernier survivant vers la sortie , mais attention l'Esprit du labyrinthe <Grand Master> de son nom ,",
+                " ne vous lissera pas faire , il essaira par tous les moyens de limiter votre contact avec le survivant . ",
+                "C'est à vous de jouer !"
         };
         for (int i = 0; i < paragraphs.length; i++) {
             panel.addParagraph(paragraphs[i]);
@@ -394,6 +407,7 @@ public class StartMenu extends JFrame {
         }
 
         public void addParagraph(String paragraph) {
+            repaint();
             paragraphs.add(paragraph);
             repaint();
         }
@@ -415,8 +429,23 @@ public class StartMenu extends JFrame {
             for (int i = 0; i < paragraphs.size(); i++) {
                 g2d.setColor(getColorForParagraph(i));
                 g2d.drawString(paragraphs.get(i), x, y);
+                File fichierPolice = new File("src/main/java/com/VocalMaze/Audio&Visuel/Font-police/PressStart2P-Regular.ttf");
+                try {
+                    Font pressStart2P = Font.createFont(Font.TRUETYPE_FONT, fichierPolice).deriveFont(12f);
+                    Font pressStart2PWithSpacing = creerPoliceAvecEspaceLigne(pressStart2P, 3f);
+                    g2d.setFont(pressStart2PWithSpacing);
+                } catch (FontFormatException | IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
                 y += 30; // ajuster la position verticale pour le paragraphe suivant
             }
+        }
+
+        private Font creerPoliceAvecEspaceLigne(Font police, float espacement) {
+            Map<TextAttribute, Object> attributs = new HashMap<>(police.getAttributes());
+            attributs.put(TextAttribute.SIZE, police.getSize() + espacement);
+            return police.deriveFont(attributs);
         }
 
         private Color getColorForParagraph(int index) {
@@ -433,25 +462,6 @@ public class StartMenu extends JFrame {
         }
     }
 
-    private static class TextPanel extends JPanel {
-        private final String text;
-        private final Color color;
-
-        public TextPanel(String text, Color color, int x, int y, int width, Font font) {
-            this.text = text;
-            this.color = color;
-            setBounds(x, y, width, 0);
-            setFont(font);
-        }
-
-        @Override
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            g.setColor(color);
-            g.drawString(text, 0, g.getFontMetrics().getHeight());
-            setPreferredSize(new Dimension(getWidth(), g.getFontMetrics().getHeight()));
-        }
-    }
 
     /****************************************************************************************************************************** */
     public static void main(String[] args) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
