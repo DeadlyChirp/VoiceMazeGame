@@ -8,6 +8,7 @@ import com.VocalMaze.GameView;
 import com.VocalMaze.ModeleUtils.AudioAnalyser;
 import com.VocalMaze.ModeleUtils.AnalyseVocal.Recorder;
 import com.VocalMaze.ViewUtils.ImagePanel;
+import com.sun.tools.javac.Main;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -16,10 +17,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -62,6 +67,7 @@ public class StartMenu extends JFrame {
     private Recorder recorder;
     private AudioAnalyser audioAnalyser;
     public static Clip clip;
+    private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
     /*************************************************Fonction Principale****************************************************************/
 
@@ -442,7 +448,6 @@ public class StartMenu extends JFrame {
                     Font pressStart2PWithSpacing = creerPoliceAvecEspaceLigne(pressStart2P, 3f);
                     g2d.setFont(pressStart2PWithSpacing);
                 } catch (FontFormatException | IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 y += 30; // ajuster la position verticale pour le paragraphe suivant
@@ -468,11 +473,33 @@ public class StartMenu extends JFrame {
             }
         }
     }
+    //enlever les logs
+    private static void configureLogging() {
+        try {
+            FileInputStream configFile = new FileInputStream("src/main/java/logging.properties");
+            LogManager.getLogManager().readConfiguration(configFile);
+        } catch (IOException e) {
+            LOGGER.warning("Could not load logging configuration file. Using default logging settings.");
+        }
 
+        // Disable specific loggers
+        Logger.getLogger("java.awt.Component").setLevel(Level.OFF);
+        Logger.getLogger("java.awt.Container").setLevel(Level.OFF);
+        Logger.getLogger("java.awt.KeyboardFocusManager").setLevel(Level.OFF);
+    }
+    static {
+        Logger.getLogger("LiumUtil").setLevel(Level.OFF);
+        Logger.getLogger("java.awt.Component").setLevel(Level.OFF);
+        Logger.getLogger("java.awt.Container").setLevel(Level.OFF);
+        Logger.getLogger("java.awt.KeyboardFocusManager").setLevel(Level.OFF);
+        Logger.getLogger("javax.swing.DefaultKeyboardFocusManager").setLevel(Level.OFF);
+    }
 
     /****************************************************************************************************************************** */
     public static void main(String[] args) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         @SuppressWarnings("unused")
         StartMenu background = new StartMenu();
+        configureLogging();
+        System.setProperty("java.util.logging.config.file", "src/main/java/logging.properties");
     }
 }

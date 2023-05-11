@@ -10,20 +10,18 @@ import java.awt.event.*;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
+
 
 import com.VocalMaze.Menus.StartMenu;
 import com.VocalMaze.ModeleUtils.Direction;
 import com.VocalMaze.ViewUtils.ImagePanel;
 import com.VocalMaze.ViewUtils.SoundEffects;
-import com.sun.tools.javac.Main;
+
 
 
 public class GameView extends ImagePanel implements KeyListener{
@@ -36,17 +34,8 @@ public class GameView extends ImagePanel implements KeyListener{
     private boolean multi ;
     private boolean isRecording , isRecordingTime ;
     static GraphicsDevice device;
-    private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
-    private SoundEffects soundEffects ; 
+    private SoundEffects soundEffects ;
 
-    //desactiver les logs
-    static {
-        Logger.getLogger("LiumUtil").setLevel(Level.OFF);
-        Logger.getLogger("java.awt.Component").setLevel(Level.OFF);
-        Logger.getLogger("java.awt.Container").setLevel(Level.OFF);
-        Logger.getLogger("java.awt.KeyboardFocusManager").setLevel(Level.OFF);
-        Logger.getLogger("javax.swing.DefaultKeyboardFocusManager").setLevel(Level.OFF);
-    }
     
     public GameView(String pseudo , int nbMaleTotal , int nbFemelleTotal, boolean multi) throws IOException {
         super("src/main/java/com/VocalMaze/Audio&Visuel/ImagesTextBox/pip_boy_fallout_twitch_theme_png_by_masterq2_df8mrdv (1).png");
@@ -634,19 +623,7 @@ public class GameView extends ImagePanel implements KeyListener{
         }
     }
     
-    private static void configureLogging() {
-        try {
-            FileInputStream configFile = new FileInputStream("src/main/java/logging.properties");
-            LogManager.getLogManager().readConfiguration(configFile);
-        } catch (IOException e) {
-            LOGGER.warning("Could not load logging configuration file. Using default logging settings.");
-        }
 
-        // Disable specific loggers
-        Logger.getLogger("java.awt.Component").setLevel(Level.OFF);
-        Logger.getLogger("java.awt.Container").setLevel(Level.OFF);
-        Logger.getLogger("java.awt.KeyboardFocusManager").setLevel(Level.OFF);
-    }
 
     static class ImagePanel extends JPanel {
         private Image backgroundImage;
@@ -658,7 +635,6 @@ public class GameView extends ImagePanel implements KeyListener{
                 e.printStackTrace();
             }
         }
-
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -668,28 +644,5 @@ public class GameView extends ImagePanel implements KeyListener{
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        configureLogging();
-    JFrame frame = new JFrame() ;
-    frame.getContentPane().setLayout(null);
-
-    //Pour le plein écran
-    device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-    if(device.isFullScreenSupported()){
-        device.setFullScreenWindow(frame);
-    }else{
-        System.err.println("Le mode plein écran n'est pas compatible");
-    }
-    frame.setPreferredSize(TAILLE_ECRAN);
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    GameView gameView = new GameView("test" , 2 , 2, true);
-    frame.add(gameView);
-    frame.addKeyListener(gameView); // important
-    frame.pack();
-    frame.setVisible(true);
-    gameView.controller.getGameModel().getLabyrinthe().printLabyrinthe();
-    //elever les logs de lium utils
-      System.setProperty("java.util.logging.config.file", "src/main/java/logging.properties");
-  }
 
 }

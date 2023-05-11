@@ -3,8 +3,7 @@ package com.VocalMaze;
 import com.VocalMaze.ModeleUtils.Direction;
 
 public class Controller {
-    private GameModel model ; 
-    @SuppressWarnings("unused")
+    private GameModel model ;
     private GameView gameView ; 
 
     public Controller(GameModel model, GameView gameView){

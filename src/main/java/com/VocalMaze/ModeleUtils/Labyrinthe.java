@@ -307,21 +307,4 @@ public class Labyrinthe {
         System.out.println();
 
     }
-
-    public static void main(String[] args) {
-        Joueur j = new Joueur("Bawww");
-        Joueur j2 = new Joueur("test");
-        Labyrinthe l = new Labyrinthe(j,j2,true);
-        l.genereLabyrinthe();
-        l.printLabyrinthe();
-        System.out.println(l.joueur.getX() + " " + l.joueur.getY());
-        System.out.println("\n" + l.pointArrivee.getX() + " " + l.pointArrivee.getY());
-        System.out.println("\n" + l.joueur2.getX() + " " + l.joueur2.getY());
-       // System.out.println("\n" + l.pointArrivee2.getX() + " " + l.pointArrivee2.getY());
-        // l.possible2(Direction.BAS, 90);
-        // l.printLabyrinthe();
-        //System.out.println(l.joueur.getX() + " " + l.joueur.getY());
-    }
-
-
 }

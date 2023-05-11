@@ -119,7 +119,6 @@ public class TranscriberV3 {
             PutObjectRequest request = new PutObjectRequest(bucketName, keyName, file)
                     .withMetadata(metadata);
             s3Client.putObject(request);
-            // System.out.println("Upload réussi");
         } catch (AmazonServiceException e) {
             e.printStackTrace();
         } catch (SdkClientException e) {
@@ -148,7 +147,6 @@ public class TranscriberV3 {
                             .withTranscriptionJobName(transcriptionJobName))
                     .getTranscriptionJob();
             jobStatus = transcriptionJob.getTranscriptionJobStatus();
-            System.out.println("Statut de la traduction: " + jobStatus);
         } while (jobStatus.equals("IN_PROGRESS"));
 
         // On récupère le resultat de la traduction
@@ -174,7 +172,7 @@ public class TranscriberV3 {
             e.printStackTrace();
         }
 
-        return ("\nTRADUCTION : " + transcriptText);
+        return (transcriptText);
 
     }
 }
