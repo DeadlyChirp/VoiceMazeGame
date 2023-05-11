@@ -157,6 +157,8 @@ public class GameView extends ImagePanel implements KeyListener{
         Thread th = new Thread(new Runnable() {
             public void run() {
                 switch(e.getKeyChar()) {
+                    //case 't' : endGame(1);
+                    case 't' : endGame(2); break;
                     case 'r' : {                
                         if (isRecording) break ; 
                         StartMenu.clip.stop();
@@ -228,18 +230,32 @@ public class GameView extends ImagePanel implements KeyListener{
 
     public void endGame (int fin) {
         //TODO qui fera apparaire l'ecran de fin du jeu en fonction si il y a 2 équipes
+        ImageIcon quitter = new ImageIcon("src/main/java/com/VocalMaze/Images/quitter.png");
+        JButton quit = new JButton(quitter);
+        quit.setBorderPainted(false);
+        quit.setBackground(new Color(0, 0, 0, 0));
         if(fin == 1){
             ImagePanel end = new ImagePanel("src/main/java/com/VocalMaze/Images/Bravo_Joueur_2_!-transformed.png");
             end.setVisible(true);
             this.add(end);
+            end.add(quit);
         }
         if(fin == 2){
             ImagePanel end1 = new ImagePanel("src/main/java/com/VocalMaze/Images/2-gSn3ZsOPh-transformed.png"); //équipe 1
             ImagePanel end2 = new ImagePanel("src/main/java/com/VocalMaze/Images/3-TscLc9hQxe-transformed.png"); //équipe 2
-            //TODO choisir end1 ou end2 en fonction de l'équipe gagnante
-            end1.setVisible(true);
-            this.add(end1);
+            if(!controller.getGameModel().getTour()){
+                end1.setVisible(true);
+                this.add(end1);
+                end1.add(quit);
+            } else {
+                end2.setVisible(true);
+                this.add(end2); 
+                end2.add(quit);
+            }
         }
+        quit.addActionListener(ev ->{
+            System.exit(0);
+        });
     }
 
     public void movePlayer (Direction dir , int steps) {
