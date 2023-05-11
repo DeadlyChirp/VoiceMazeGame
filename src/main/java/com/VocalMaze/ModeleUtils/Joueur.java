@@ -5,7 +5,6 @@ public class Joueur {
     private int x; //position du joueur dans le labyrinthe (Ordonnée = x, Abssices = y)
     private int y;
 
-
     public Joueur(String pseudo) {
         this.pseudo = pseudo;
     }
@@ -34,4 +33,5 @@ public class Joueur {
             case GAUCHE : y -= steps; break;
         }
     }
+
 }

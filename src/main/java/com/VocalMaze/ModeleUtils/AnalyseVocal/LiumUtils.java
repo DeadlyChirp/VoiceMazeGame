@@ -146,6 +146,7 @@ public class LiumUtils {
         System.out.println("2: " + resultFromSegment("test.seg"));
         System.out.println("Done");
     }
+    
     public static class Result {
         public int unknown = 0;
         public int male = 0;
@@ -156,6 +157,7 @@ public class LiumUtils {
             male = 0;
             female = 0;
         }
+
         public void increase(String gender) {
             if (Cluster.genderStrings[1].equals(gender)) {
                 male++;
@@ -165,9 +167,12 @@ public class LiumUtils {
                 unknown++;
             }
         }
+
         @Override
         public String toString() {
             return "Result{" + "unknown=" + unknown + ", male=" + male + ", female=" + female + '}';
         }
+
     }
+    
 }

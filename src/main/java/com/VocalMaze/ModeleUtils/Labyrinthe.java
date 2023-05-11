@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Labyrinthe {
-    
     private Case[][] plateau;
     private Joueur joueur;
     private Joueur joueur2;
@@ -12,7 +11,6 @@ public class Labyrinthe {
     private Case pointDepart;
     private Case pointDepart2;
     private boolean multi;
-
 
     public Labyrinthe(Joueur joueur, boolean multi) {
         this.joueur = joueur;
@@ -50,7 +48,6 @@ public class Labyrinthe {
     public Case getPointDepart2() {
         return pointDepart2;
     }
-
 
     public boolean estPointArrivee(int i, int j) {
         return pointArrivee.getX() == i && pointArrivee.getY() == j;
@@ -107,7 +104,6 @@ public class Labyrinthe {
         }
     }
         
-
     public void fermeBordsHautBas() {
         int i = 0;
         int a = 0;
@@ -153,7 +149,6 @@ public class Labyrinthe {
             i++;
         }
     }
-    
     
     private void genereLabyrinthe() { //genere un labyrinthe aleatoire avec l'algorithme de Prim.
         ArrayList<Case> ensembleCaseTraitée = new ArrayList<Case>();
@@ -224,7 +219,6 @@ public class Labyrinthe {
         }
     }
 
-
     public boolean possible(Direction dir , int steps, boolean deuxieme) { //True si le deplacement est possible false sinon.
         int sens = 0; // 
         switch(dir) {
@@ -282,20 +276,20 @@ public class Labyrinthe {
                 if (c.getOuvert()) {
                     if (joueur.getX() == i && joueur.getY() == j) {
                         System.out.print("|");
-                     } else if (c == pointArrivee) {
+                    } else if (c == pointArrivee) {
                         System.out.print("A");
-                     } else if (multi){
+                    } else if (multi){
                         if (joueur2.getX() == i && joueur2.getY() == j) {
                             System.out.print("x");
-                         } else if (c == pointArrivee2) {
+                        } else if (c == pointArrivee2) {
                             System.out.print("P");
-                         } else {
+                        } else {
                             System.out.print(" ");
-                         }
-                     } else {
+                        }
+                    }else {
                         System.out.print(" ");
-                     }
-                } else System.out.print("▓");
+                    }
+                }else System.out.print("▓");
             }
             System.out.println("▓");
         }
@@ -303,8 +297,7 @@ public class Labyrinthe {
         for (int i = 0; i< plateau[0].length+2; i++) {
             System.out.print("▓");
         }
-
         System.out.println();
-
     }
+
 }

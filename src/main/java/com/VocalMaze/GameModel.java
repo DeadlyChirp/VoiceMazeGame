@@ -3,9 +3,7 @@ package com.VocalMaze;
 import com.VocalMaze.ModeleUtils.*;
 import com.VocalMaze.ModeleUtils.AnalyseVocal.Recorder;
 
-
 public class GameModel {
-    
     private Labyrinthe labyrinthe;
     private Joueur joueur;
     private Joueur joueur2;
@@ -27,7 +25,7 @@ public class GameModel {
             this.nbFemellesTotal = nbFemellesTotal ; 
             recorder = new Recorder() ;
             audioAnalyser = new AudioAnalyser();
-            if(multi){
+            if (multi) {
                 joueur2 = new Joueur("Joueur2");
                 this.labyrinthe = new Labyrinthe(joueur,joueur2, multi);
             }
@@ -50,7 +48,7 @@ public class GameModel {
     }
 
     public void movePlayer (Direction dir , int steps) {
-        if(tour) {
+        if (tour) {
             joueur2.move(dir, steps);
         } else {
             joueur.move(dir, steps);

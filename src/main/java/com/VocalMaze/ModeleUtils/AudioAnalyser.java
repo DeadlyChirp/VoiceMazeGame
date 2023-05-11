@@ -28,7 +28,6 @@ public class AudioAnalyser {
             e.printStackTrace();
         }
         return new int[] {segAnalyser.getNbLocMale() , segAnalyser.getNbLocFemale()} ;
-
     }
 
     public Direction [] transcrire () {

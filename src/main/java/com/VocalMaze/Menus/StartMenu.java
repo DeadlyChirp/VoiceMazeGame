@@ -473,6 +473,7 @@ public class StartMenu extends JFrame {
             }
         }
     }
+
     //enlever les logs
     private static void configureLogging() {
         try {
@@ -487,6 +488,7 @@ public class StartMenu extends JFrame {
         Logger.getLogger("java.awt.Container").setLevel(Level.OFF);
         Logger.getLogger("java.awt.KeyboardFocusManager").setLevel(Level.OFF);
     }
+    
     static {
         Logger.getLogger("LiumUtil").setLevel(Level.OFF);
         Logger.getLogger("java.awt.Component").setLevel(Level.OFF);

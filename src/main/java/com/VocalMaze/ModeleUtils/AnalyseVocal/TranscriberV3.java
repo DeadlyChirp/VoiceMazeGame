@@ -171,8 +171,8 @@ public class TranscriberV3 {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return (transcriptText);
 
     }
+    
 }

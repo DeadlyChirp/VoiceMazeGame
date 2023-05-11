@@ -16,13 +16,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-
 import com.VocalMaze.Menus.StartMenu;
 import com.VocalMaze.ModeleUtils.Direction;
 import com.VocalMaze.ViewUtils.ImagePanel;
 import com.VocalMaze.ViewUtils.SoundEffects;
-
-
 
 public class GameView extends ImagePanel implements KeyListener{
     public Controller controller ; 
@@ -36,7 +33,6 @@ public class GameView extends ImagePanel implements KeyListener{
     static GraphicsDevice device;
     private SoundEffects soundEffects ;
 
-    
     public GameView(String pseudo , int nbMaleTotal , int nbFemelleTotal, boolean multi) throws IOException {
         super("src/main/java/com/VocalMaze/Audio&Visuel/ImagesTextBox/pip_boy_fallout_twitch_theme_png_by_masterq2_df8mrdv (1).png");
         setSize(TAILLE_ECRAN);
@@ -56,6 +52,7 @@ public class GameView extends ImagePanel implements KeyListener{
         addKeyListener(this) ;  
         soundEffects = new SoundEffects() ; 
     }
+    
     public String randomMessage() {
         Random rm = new Random();
         switch (rm.nextInt(5)) {
@@ -77,6 +74,7 @@ public class GameView extends ImagePanel implements KeyListener{
         }
         return "" ;
     }
+    
     public String step2 (int nbLocM , int nbLocF) {
         Random rm = new Random() ; 
         String hommeFemme = nbLocF > 1 ? "femmes" : "femme";
@@ -134,8 +132,6 @@ public class GameView extends ImagePanel implements KeyListener{
         }
         return "";
     }
-
-
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -205,7 +201,7 @@ public class GameView extends ImagePanel implements KeyListener{
                 }
         }
     });
-    th.start();
+        th.start();
     }
     
     @Override
@@ -338,6 +334,7 @@ public class GameView extends ImagePanel implements KeyListener{
                         g.drawRoundRect(x + i, y + i, width - 1 - (i * 2), height - 1 - (i * 2), largeurArc, hauteurArc);
                     }
                 }
+            
             }
 
             private Font creerPoliceAvecEspaceLigne(Font police, float espacement) {
@@ -378,7 +375,9 @@ public class GameView extends ImagePanel implements KeyListener{
                 };
                 new Timer(delai, actionAjouter).start();
             }
+        
         }
+    
     }
 
     private class LabyrintheView extends JPanel {
@@ -454,7 +453,7 @@ public class GameView extends ImagePanel implements KeyListener{
                     }
                 }
             }
-      }
+        }
 
         private void animateMovement () {
             while(true) {
@@ -544,7 +543,7 @@ public class GameView extends ImagePanel implements KeyListener{
         }
 
         public void movePlayer(Direction dir, int steps) {
-            if(controller.getGameModel().getTour()){
+            if (controller.getGameModel().getTour()) {
                 if (caseX < 0 || caseY < 0) {
                     caseY2 += controller.getGameModel().getLabyrinthe().getPointDepart2().getX() * pourcentTailleEcranX;
                     caseX2 += controller.getGameModel().getLabyrinthe().getPointDepart2().getY() * pourcentTailleEcranY;
@@ -553,7 +552,7 @@ public class GameView extends ImagePanel implements KeyListener{
                 dirAnim2 = dir;
                 ancienCaseX2 = caseX2;
                 ancienCaseY2 = caseY2;
-            } else {
+            }else {
                 if (caseX < 0 || caseY < 0) {
                     caseY += controller.getGameModel().getLabyrinthe().getPointDepart().getX() * pourcentTailleEcranX;
                     caseX += controller.getGameModel().getLabyrinthe().getPointDepart().getY() * pourcentTailleEcranY;
@@ -565,7 +564,7 @@ public class GameView extends ImagePanel implements KeyListener{
             }
             stepsAnim = steps;
             animateMovement();
-            }
+        }
 
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -575,27 +574,32 @@ public class GameView extends ImagePanel implements KeyListener{
                 }
             }
             switch(dirAnim) {
-            case DROITE : {
-                if (enDeplacement) g.drawImage(sprites[dirAnim.ordinal()][currentFrame], caseX + currentFrame * stepsAnim, caseY, null);
-                else g.drawImage(sprites[dirAnim.ordinal()][0], caseX + currentFrame, caseY, null);
-                break;
+                case DROITE : {
+                    if (enDeplacement) g.drawImage(sprites[dirAnim.ordinal()][currentFrame], caseX + currentFrame * stepsAnim, caseY, null);
+                    else g.drawImage(sprites[dirAnim.ordinal()][0], caseX + currentFrame, caseY, null);
+                    break;
+                }
+                
+                case GAUCHE : {
+                    if (enDeplacement) g.drawImage(sprites[dirAnim.ordinal()][currentFrame], caseX - currentFrame * stepsAnim, caseY, null);
+                    else g.drawImage(sprites[dirAnim.ordinal()][0], caseX - currentFrame, caseY, null);
+                    break;
+                }
+
+                case HAUT : {
+                    if (enDeplacement) g.drawImage(sprites[dirAnim.ordinal()][currentFrame], caseX, caseY - currentFrame * stepsAnim, null);
+                    else g.drawImage(sprites[dirAnim.ordinal()][0], caseX, caseY - currentFrame, null);
+                    break;
+                }
+
+                case BAS : {
+                    if (enDeplacement) g.drawImage(sprites[dirAnim.ordinal()][currentFrame], caseX, caseY + currentFrame * stepsAnim, null);
+                    else g.drawImage(sprites[dirAnim.ordinal()][0], caseX, caseY + currentFrame, null);
+                    break;
+                }
+
             }
-            case GAUCHE : {
-                if (enDeplacement) g.drawImage(sprites[dirAnim.ordinal()][currentFrame], caseX - currentFrame * stepsAnim, caseY, null);
-                else g.drawImage(sprites[dirAnim.ordinal()][0], caseX - currentFrame, caseY, null);
-                break;
-            }
-            case HAUT : {
-                if (enDeplacement) g.drawImage(sprites[dirAnim.ordinal()][currentFrame], caseX, caseY - currentFrame * stepsAnim, null);
-                else g.drawImage(sprites[dirAnim.ordinal()][0], caseX, caseY - currentFrame, null);
-                break;
-            }
-            case BAS : {
-                if (enDeplacement) g.drawImage(sprites[dirAnim.ordinal()][currentFrame], caseX, caseY + currentFrame * stepsAnim, null);
-                else g.drawImage(sprites[dirAnim.ordinal()][0], caseX, caseY + currentFrame, null);
-                break;
-            }
-            }
+            
             if(multi){
                 switch(dirAnim2) {
                     case DROITE : {
@@ -621,9 +625,8 @@ public class GameView extends ImagePanel implements KeyListener{
                 }
             }
         }
-    }
     
-
+    }
 
     static class ImagePanel extends JPanel {
         private Image backgroundImage;
@@ -635,6 +638,7 @@ public class GameView extends ImagePanel implements KeyListener{
                 e.printStackTrace();
             }
         }
+
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -642,7 +646,7 @@ public class GameView extends ImagePanel implements KeyListener{
                 g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
             }
         }
-    }
 
+    }
 
 }

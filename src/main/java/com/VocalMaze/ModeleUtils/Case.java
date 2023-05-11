@@ -1,8 +1,6 @@
 package com.VocalMaze.ModeleUtils;
 
 public class Case {
-
-   
     private boolean ouvert;
     private int x;
     private int y;
@@ -40,7 +38,5 @@ public class Case {
     public void setY(int y) {
         this.y = y;
     }
-
-
 
 }
