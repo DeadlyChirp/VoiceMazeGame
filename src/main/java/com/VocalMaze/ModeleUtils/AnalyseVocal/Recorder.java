@@ -46,6 +46,7 @@ public class Recorder {
     }
 
     private void record() {
+        recording = true ; 
         try {
             AudioFormat format = getAudioFormat();
             DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);

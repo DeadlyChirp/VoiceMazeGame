@@ -53,6 +53,9 @@ public class TranscriberV3 {
         ArrayList<Direction> direction = new ArrayList<Direction>();
         for (String word : words) {
             word = word.toLowerCase() ; 
+            if (word.charAt(word.length()-1) == '.' || word.charAt(word.length()-1) == ',') {
+                word = word.substring(0, word.length()-1) ;     
+            }
             if (word.contains("haut") || word.contains("haw")) {
                 direction.add(Direction.HAUT);
                 continue ; 

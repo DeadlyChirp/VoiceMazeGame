@@ -152,7 +152,7 @@ public class GameView extends ImagePanel implements KeyListener{
                             isRecordingTime = true ;
                             soundEffects.soundStopRec(timeMs);
                             try {
-                                Thread.sleep(timeMs);
+                                Thread.sleep(timeMs+1000);
                                 isRecordingTime = false ; 
                             } catch (Exception ex) {
                                 ex.printStackTrace();
