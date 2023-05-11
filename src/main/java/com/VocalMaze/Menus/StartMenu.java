@@ -58,6 +58,7 @@ public class StartMenu extends JFrame {
     AudioInputStream ais = AudioSystem.getAudioInputStream(file);
     public static AudioInputStream game;
     private static final Dimension TAILLE_ECRAN = Toolkit.getDefaultToolkit().getScreenSize();
+    public static boolean muted = false ; 
 
     // partie audio
     private Recorder recorder;
@@ -391,6 +392,17 @@ public class StartMenu extends JFrame {
 
         });
     }
+
+    public static void startMusic () {
+        if (muted) return ; 
+        clip.start();
+    } 
+
+    public static void stopMusic () {
+        if (muted) return ; 
+        clip.stop();
+    }
+
 
     /************************************************* Fonction ANNEXE*************************************************************/
 

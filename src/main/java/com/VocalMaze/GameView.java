@@ -157,11 +157,9 @@ public class GameView extends ImagePanel implements KeyListener{
         Thread th = new Thread(new Runnable() {
             public void run() {
                 switch(e.getKeyChar()) {
-                    //case 't' : endGame(1);
-                    case 't' : endGame(2); break;
                     case 'r' : {                
                         if (isRecording) break ; 
-                        StartMenu.clip.stop();
+                        StartMenu.stopMusic();
                         popUP.appendMessage(mysteriousGuideMessage());
                         if (timeMs == -1) {
                             soundEffects.soundStartRec();
@@ -170,15 +168,15 @@ public class GameView extends ImagePanel implements KeyListener{
                         }else{
                             soundEffects.soundStartRec();
                             controller.startRecord(timeMs);
-                            isRecordingTime = true ; 
+                            isRecordingTime = true ;
+                            soundEffects.soundStopRec(timeMs);
                             try {
                                 Thread.sleep(timeMs);
                                 isRecordingTime = false ; 
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
-                            soundEffects.soundStopRec(timeMs);
-                            StartMenu.clip.start();
+                            StartMenu.startMusic();
                             // Faire apparaitre un petit sablier qui tourne (un gif) qui dit transcription en cours
                             //  si besoin mais c'est optionnel , ou bien des petites images qui donnent des conseils
                             // comme dans les menus de chargement des jeux a voir 
@@ -199,7 +197,7 @@ public class GameView extends ImagePanel implements KeyListener{
                         if (!isRecording || isRecordingTime) break ;
                         soundEffects.soundStopRec();
                         controller.stopRecord();
-                        StartMenu.clip.start();
+                        StartMenu.startMusic();
                         //Analyse du vocal
                         nbLocM_F = controller.analyse2() ;
                         //Entre 5 et 7.5 par Homme, et entre 6 et 9 par Femme
@@ -209,6 +207,16 @@ public class GameView extends ImagePanel implements KeyListener{
                         isRecording = false ;
                         if (timeMs == 0) timeMs = -1 ;  
                         break ;
+                    }
+
+                    case 'm':{
+                        if (StartMenu.muted) {
+                            StartMenu.muted = false ; 
+                            StartMenu.startMusic();
+                        }else{
+                            StartMenu.muted = true ; 
+                            StartMenu.clip.stop();
+                        }
                     }
                     
                     default : break ; 
@@ -229,7 +237,6 @@ public class GameView extends ImagePanel implements KeyListener{
     }
 
     public void endGame (int fin) {
-        //TODO qui fera apparaire l'ecran de fin du jeu en fonction si il y a 2 équipes
         ImageIcon quitter = new ImageIcon("src/main/java/com/VocalMaze/Images/quitter.png");
         JButton quit = new JButton(quitter);
         quit.setBorderPainted(false);
