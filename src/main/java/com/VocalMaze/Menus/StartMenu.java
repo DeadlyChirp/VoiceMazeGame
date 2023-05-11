@@ -344,7 +344,6 @@ public class StartMenu extends JFrame {
             back3.add(ScoreF);
             ScoreF.setVisible(true);
             back3.add(playB);
-            back3.add(retryB);
             pack();
             setVisible(true);
             setActionButtons4();
