@@ -412,6 +412,7 @@ public class GameView extends ImagePanel implements KeyListener{
         private int caseY2, ancienCaseY2;
         private int stepsAnim;
         private int pourcentTailleEcranX, pourcentTailleEcranY;
+        private int decalageX, decalageY;
 
         public LabyrintheView () throws IOException{
             setPreferredSize(TAILLE_ECRAN);
@@ -419,21 +420,23 @@ public class GameView extends ImagePanel implements KeyListener{
             sprites = new BufferedImage[4][9];
             imagePorte = ImageIO.read(new File("src/main/java/com/VocalMaze/Images/doors.png"));
             imagePassage = ImageIO.read(new File("src/main/java/com/VocalMaze/Images/M484ShmupTileset1.png"));
-            porteLabyrinthe = new BufferedImage[25][26];
+            porteLabyrinthe = new BufferedImage[17][29];
             currentFrame = 0 ;
             lastTime = 0 ;
             dirAnim = Direction.BAS ;
             enDeplacement = false ;
             pourcentTailleEcranX = (int) (2.18 * TAILLE_ECRAN.getWidth()/100); // proportion que doit occuper une case.
             pourcentTailleEcranY = (int) (3.91 * TAILLE_ECRAN.getHeight()/100);
-            caseX = (int) -(0.85 * TAILLE_ECRAN.getWidth()/100) + pourcentTailleEcranX * controller.getGameModel().getLabyrinthe().getPointDepart().getY(); //place l'animation sur le point de départ.
-            caseY =  15;
+            decalageX = (int) (1.24 * TAILLE_ECRAN.getWidth()/100);
+            decalageY = (int) (6.38 * TAILLE_ECRAN.getHeight()/100);
+            caseX =  pourcentTailleEcranX * controller.getGameModel().getLabyrinthe().getPointDepart().getY() + 11; //place l'animation sur le point de départ.
+            caseY =  (int) (7.60 * TAILLE_ECRAN.getHeight()/100);
             if(multi){
                 sprites2 = new BufferedImage[4][9];
                 imageSprite2= ImageIO.read(new File("src/main/java/com/VocalMaze/Images/professor_walk_cycle_no_hat.png"));
                 dirAnim2 = Direction.BAS;
-                caseX2 = (int) -(0.85 * TAILLE_ECRAN.getWidth()/100) + pourcentTailleEcranX * controller.getGameModel().getLabyrinthe().getPointDepart2().getY();
-                caseY2 = 15;
+                caseX2 =  pourcentTailleEcranX * controller.getGameModel().getLabyrinthe().getPointDepart2().getY()+11;
+                caseY2 = (int) (7.60 * TAILLE_ECRAN.getHeight()/100);
                 enDeplacement2 = false;
             }
         }
@@ -579,7 +582,7 @@ public class GameView extends ImagePanel implements KeyListener{
             super.paintComponent(g);
             for (int i = 0; i < porteLabyrinthe.length; i++) {
                 for (int j = 0; j < porteLabyrinthe[i].length; j++) {
-                    g.drawImage(porteLabyrinthe[i][j], j * pourcentTailleEcranX , i * pourcentTailleEcranY, null);
+                    g.drawImage(porteLabyrinthe[i][j], j * pourcentTailleEcranX + decalageX, i * pourcentTailleEcranY + decalageY, null);
                 }
             }
             switch(dirAnim) {

@@ -17,7 +17,7 @@ public class Labyrinthe {
     public Labyrinthe(Joueur joueur, boolean multi) {
         this.joueur = joueur;
         this.joueur2 = new Joueur("");
-        plateau = new Case[25][26];
+        plateau = new Case[17][29];
         for (int i = 0; i < plateau.length; i++) {
             for (int j = 0; j < plateau[i].length; j++) {
                 plateau[i][j] = new Case(i, j);
@@ -30,7 +30,7 @@ public class Labyrinthe {
         this.joueur = joueur;
         this.joueur2 = joueur2;
         this.multi = multi;
-        plateau = new Case[25][26];
+        plateau = new Case[17][29];
         for (int i = 0; i < plateau.length; i++) {
             for (int j = 0; j < plateau[i].length; j++) {
                 plateau[i][j] = new Case(i, j);

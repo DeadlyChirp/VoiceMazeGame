@@ -13,16 +13,21 @@ public class ImagePanel extends JPanel {
   
     public ImagePanel(Image img) {
       this.img = img;
-      Dimension size = new Dimension(img.getWidth(null), img.getHeight(null));
-      setPreferredSize(size);
-      setMinimumSize(size);
-      setMaximumSize(size);
-      setSize(size);
+
+      // Get the screen size
+      Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+      // Set the size of the panel to the screen size
+      setPreferredSize(screenSize);
+      setMinimumSize(screenSize);
+      setMaximumSize(screenSize);
+      setSize(screenSize);
+
       setLayout(null);
-    }
-  
-    public void paintComponent(Graphics g) {
-      g.drawImage(img, 0, 0, null);
-    }
+  }
+
+  public void paintComponent(Graphics g) {
+      g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), null);
+  } 
   
 }
