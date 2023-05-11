@@ -379,8 +379,6 @@ public class StartMenu extends JFrame {
                 frame.pack();
                 frame.setFocusable(true);// pas tres important au final jsp a voir
                 frame.setVisible(true);
-                gameView.controller.getGameModel().getLabyrinthe().printLabyrinthe();
-                System.out.println(TAILLE_ECRAN);
             } catch (IOException e) {
                 e.printStackTrace();
             }
