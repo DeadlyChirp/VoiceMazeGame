@@ -5,7 +5,7 @@ import java.io.*;
  
 public class Recorder {
     private TargetDataLine line;// the line from which audio data is captured
- 
+    private volatile boolean recording = false;
     //Format audio. 
     private AudioFormat getAudioFormat() {
         float sampleRate = 16000;//Fréquence d'échantillonage du son, CAD la compression du nombre de 0 ou 1 du signal binaire 
@@ -60,15 +60,16 @@ public class Recorder {
             line.start();   // start capturing
  
             System.out.println("Captation du son en cours...");
-            AudioInputStream ais = new AudioInputStream(line);
-            System.out.println("Enregistrement du son en cours...");
-
             //Ici on va simplement prendre tout les bits qu'on a capturé juste avant et on va les écrire sur le fichier AUDIO
-            AudioSystem.write(ais,AudioFileFormat.Type.WAVE, new File("src/main/java/com/VocalMaze/Records/Audio.wav"));
-        } catch (LineUnavailableException ex) {
+            try (AudioInputStream ais = new AudioInputStream(line)) {
+                System.out.println("Enregistrement du son en cours...");
+                AudioSystem.write(ais, AudioFileFormat.Type.WAVE, new File("src/main/java/com/VocalMaze/Records/Audio.wav"));
+            }
+        } catch (LineUnavailableException | IOException ex) {
             ex.printStackTrace();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
+        } finally { //finally dans la méthode pour appeler stopRecording() lorsque la méthode se termine,
+            // garantissant la libération des ressources en cas d'exceptions.
+            stopRecording();
         }
     }
  
@@ -89,15 +90,20 @@ public class Recorder {
                 }                
                 stopRecording();
             }
-        }) ; 
+        }) ;
+        threadRecorder.setDaemon(true);
+        threadTimer.setDaemon(true);
         threadRecorder.start();
         threadTimer.start();
     }
 
     public void stopRecording() {
         //ici on ferme le dateline pour finaliser le traitement du son et finaliser l'enregistrement. 
+        if (recording) {
         line.stop(); // arrete de capturer le son
         line.close(); // libere les ressources audio que le systeme utilise
+        recording = false;
+        }
     }
 
 }
