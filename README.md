@@ -1,4 +1,3 @@
-
 # <p align="center">Lost Voice -  2022-SB2-G2-Lost_Voices</p>
   
 Voici le répertoire git de notre projet de programmation de L2 en Java. En effet, nous avons eu le sujet SB2 qui consiste en la création d'un labyrinthe qui se dirige à l'aide d'une détection vocal du genre et des commandes. Vous verrez plus loin que le jeu possède plusieurs facettes intéréssantes.
@@ -32,7 +31,7 @@ Pour lancer le jeu, il faut compiler le fichier StartMenu.java à l'aide d'un ID
 
 ```bash
 javac StartMenu.java
-java StartMenu.java
+java StartMenu
 ```
 
 
